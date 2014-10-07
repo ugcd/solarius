@@ -1,0 +1,17 @@
+pedindex.out                                          
+ 5 IBDID                 IBDID                       I
+ 1 BLANK                 BLANK                       C
+ 5 FATHER'S IBDID        FIBDID                      I
+ 1 BLANK                 BLANK                       C
+ 5 MOTHER'S IBDID        MIBDID                      I
+ 1 BLANK                 BLANK                       C
+ 1 SEX                   SEX                         I
+ 1 BLANK                 BLANK                       C
+ 3 MZTWIN                MZTWIN                      I
+ 1 BLANK                 BLANK                       C
+ 5 PEDIGREE NUMBER       PEDNO                       I
+ 1 BLANK                 BLANK                       C
+ 5 GENERATION NUMBER     GEN                         I
+ 1 BLANK                 BLANK                       C
+ 3 FAMILY ID             FAMID                       C
+ 4 ID                    ID                          C

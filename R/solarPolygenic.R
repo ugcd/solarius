@@ -54,12 +54,12 @@ solarPolygenic <- function(formula, data,
     dir <- tempfile(pattern = "solarPolygenic-")
   }
   if(verbose) cat(" * solarPolygenic: parameter `dir` is missing.\n")
-  if(verbose > 1) cat("  -- temporary directory `", dir, "` created.\n")
+  if(verbose > 1) cat("  -- temporary directory `", dir, "` created\n")
   
   ### clean 
-  if(is.tmp) {
+  if(is.tmpdir) {
     unlink(dir, recursive = TRUE)
-    if(verbose > 1) cat(" * solarPolygenic: temporary directory `", dir, "` unlinked.\n")
+    if(verbose > 1) cat("  -- solarPolygenic: temporary directory `", dir, "` unlinked\n")
   }
   
   oldClass(out) <- "solarPolygenic"  
