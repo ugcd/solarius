@@ -1,0 +1,14 @@
+Package: solarius
+Type: Package
+Title: R package wrapper to SOLAR
+Version: 0.1
+Date: 2014-10-07
+Author: Andrey Ziyatdinov
+Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
+Description: R package wrapper to SOLAR
+License: GPL (>= 3)
+Depends:
+    plyr,
+    ggplot2
+Collate:
+    'solarPolygenic.R'
