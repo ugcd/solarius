@@ -22,7 +22,7 @@ R package wrapper to SOLAR
 
 Done:
 
-1. `df2solar` function
+1. `df2solar` function, which export both pedigree and phenotype data into a folder of `SOLAR` format
 2. simple polygenic model (univariate, bivariate, etc); see `solarPolygenic` function
 
 ### TODO
@@ -33,4 +33,13 @@ Polygenic model:
 * add option of trait-specific covariates
 * add data frames with h2r, p-values, etc
 
+Association model:
 
+* think of which formats to support except the `SOLAR` one
+* parallelize calculations
+* check out if `SOLAR` supports dosage format
+
+Linkage model:
+
+* make use of all linkage options availabe in `SOLAR`: second-path, adjustment of inflated scores
+* parallel computations
