@@ -2,6 +2,10 @@
 
 R package wrapper to SOLAR
 
+References:
+
+* [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
+
 ### Ideas
 
 * do not automate things in R, which `SOLAR` has already automated
@@ -43,3 +47,13 @@ Linkage model:
 
 * make use of all linkage options availabe in `SOLAR`: second-path, adjustment of inflated scores
 * parallel computations
+
+
+### Content of Software Manual
+
+* Polygenic model (univariate)
+  * house-hold effect
+* Polygenic model (bivariate)
+  * trait-specific covariates
+* Association model
+* Linkage model
