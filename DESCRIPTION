@@ -7,8 +7,13 @@ Author: Andrey Ziyatdinov
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
 Description: R package wrapper to SOLAR
 License: GPL (>= 3)
+LazyData: true
 Depends:
     plyr,
     ggplot2
 Collate:
+    'support.lib.R'
+    'solar.lib.R'
     'solarPolygenic.R'
+    'classSolarPolygenic.R'
+    'polygenic.lib.R'
