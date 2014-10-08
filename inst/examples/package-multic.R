@@ -27,7 +27,15 @@ solar2multic(phi2 = file.path(dat.dir, "phi2.gz"),
   output.directory = multic.dir)
   
 ### run `multic`
-mod <- multic(trait1 ~ sex + age, data = dat[with(dat, order(famid)), ], subset = (famid < 30),
+mod1 <- multic(trait1 ~ sex + age, data = dat[with(dat, order(famid)), ], subset = (famid < 30),
   famid, id, fa, mo, sex,
   #mloci.out = file.path(dirInput, "mloci.out"),
   share.out = file.path(multic.dir, "share.out"))
+  
+mod2 <- multic(trait1 ~ sex + age, data = dat[with(dat, order(famid)), ], subset = (famid < 30),
+  famid, id, fa, mo, sex,
+  mloci.out = file.path(multic.dir, "mloci.out"),
+  share.out = file.path(multic.dir, "share.out"))
+
+### plots
+p2 <- ggplot(mod2$log.liks, aes(distance, lod.score)) + geom_point() + geom_line()
