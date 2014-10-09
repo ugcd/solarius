@@ -37,6 +37,7 @@ Polygenic model:
 * add house-hold effect
 * add option of trait-specific covariates
 * add data frames with h2r, p-values, etc
+* track `PROBND`, `MZTWIN`, `HHID` info; see `polygenic.lib.R` in `salamboR` package
 
 Association model:
 
