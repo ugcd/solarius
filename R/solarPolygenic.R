@@ -3,6 +3,8 @@
 #' @export
 solarPolygenic <- function(formula, data, 
   dir,
+  covtest = FALSE, screen = FALSE, household = FALSE,
+  alpha = 0.05,
   polygenic.settings = "",  polygenic.options = "",
   verbose = 0,
   ...) 
@@ -25,18 +27,30 @@ solarPolygenic <- function(formula, data,
   covlist <- unlist(strsplit(formula.str[[3]], "\\+"))
   covlist <- gsub(" ", "", covlist)
 
-  # default values of some par
-  if(polygenic.options == "" & length(traits) == 1) {
-    polygenic.options <- "-screen -all"
+  # process `polygenic.settings`/`polygenic.options`
+  polygenic.options <- paste(polygenic.options, "-prob", alpha)
+  
+
+  # parse `covtest`/`screen`/`household` par
+  if(covtest) {
+    polygenic.options <- paste(polygenic.options, "-screen -all")
+  }
+  if(screen) {
+    polygenic.options <- paste(polygenic.options, "-screen")
+  }
+  if(household) {
+    polygenic.settings <- c(polygenic.settings, "house")
+    polygenic.options <- paste(polygenic.options, "-keephouse")
   }
 
-  out <- list(traits = traits, covlist = covlist, 
-    polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
-    call = mc)
-  
   # check `traits`, `covlist`
   check_var_names(traits, covlist, names(data))
 
+  out <- list(traits = traits, covlist = covlist, 
+    polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
+    solar = list(model.filename = "null0.mod"),
+    call = mc)
+  
   ### step 2: set up SOLAR dir
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarPolygenic-")

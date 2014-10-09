@@ -12,6 +12,9 @@ print.solarPolygenic <- function(x, ...)
   cat("\nCall: ")
   print(x$call)
   
-  cat("\npolygenic.out:\n")
-  l_ply(x$files$model$polygenic.out, function(x) cat(x, "\n"))
+  cat("\nFile polygenic.out:\n")
+  l_ply(x$solar$files$model$polygenic.out, function(x) cat(x, "\n"))
+  
+  cat("\n Covariates Table:\n")
+  print(x$cf)
 }
