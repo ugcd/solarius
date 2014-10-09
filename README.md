@@ -53,7 +53,8 @@ Linkage model:
 ### Content of Software Manual
 
 * Polygenic model (univariate)
-  * `SOLAR` way to introduce covariates [link](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#covariate)
+  * `SOLAR` way to introduce covariates [link](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#covariate), e.g. `age#sex = age + sex + age*sex` and `age*sex = age*sex`
+  * difference between `*.mod` files
   * house-hold effect
 * Polygenic model (bivariate)
   * trait-specific covariates
