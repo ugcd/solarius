@@ -61,3 +61,48 @@ Linkage model:
   * trait-specific covariates
 * Association model
 * Linkage model
+
+## Examples 
+
+### Univariate Model
+
+```
+> solarPolygenic(trait1 ~ age + sex, dat30, dir = "solar", covtest=T)
+
+Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30, dir = "solar", 
+    covtest = T)
+
+File polygenic.out:
+	Pedigree:    dat.ped 
+	Phenotypes:  dat.phe 
+	Trait:       trait1                Individuals:  174 
+ 
+			 H2r is 0.8061621  p = 6.1167535e-10  (Significant) 
+	       H2r Std. Error:  0.1100465 
+ 
+                                      age  p = 0.9753082  (Not Sig., but fixed) 
+                                      sex  p = 0.1455341  (Not Sig., but fixed) 
+ 
+	Proportion of Variance Due to All Final Covariates Is 
+				  0.0330070 
+ 
+	Loglikelihoods and chi's are in trait1/polygenic.logs.out 
+	Best model is named poly and null0 
+	Final models are named poly, spor, nocovar 
+	Initial sporadic and polygenic models are s0 and p0 
+	Constrained covariate models are named no<covariate name> 
+ 
+	Residual Kurtosis is -0.3603, within normal range 
+
+ Covariates Table:
+  covariate      Estimate         SE    Chi      pval
+1       age  0.0004591117 0.01483782 0.0010 0.9753082
+2       sex -0.4559509166 0.31250456 2.1184 0.1455341
+
+ Variance Components Table:
+  varcomp       Var        SE         pval
+1     h2r 0.8061621 0.1100465 6.116753e-10
+2      e2 0.1938379 0.1100465           NA
+```
+
+```
