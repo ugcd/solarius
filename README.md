@@ -64,6 +64,14 @@ Linkage model:
 
 ## Examples 
 
+Examples given here make use of `dat30` data set distributed with `solarius` package. These are simulated data, and this data set was originally created in `multic` package and stored there in files. The version `dat30` of the data set is a subset for `famid < 30`, and it is stired in `*.RData` file.
+
+`dat30` data set is lazy loaded. Hence, the user just needs to load the package:
+
+```
+library(solarius)
+```
+
 ### Univariate Model
 
 ```
