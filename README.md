@@ -67,7 +67,7 @@ Linkage model:
 ### Univariate Model
 
 ```
-> solarPolygenic(trait1 ~ age + sex, dat30, dir = "solar", covtest=T)
+> solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 
 Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30, dir = "solar", 
     covtest = T)
