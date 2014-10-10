@@ -112,4 +112,48 @@ File polygenic.out:
 2      e2 0.1938379 0.1100465           NA
 ```
 
+### Bivariate model
+
+
+```
+> solarPolygenic(trait1 + trait2 ~ sex, dat30)
+
+Call: solarPolygenic(formula = trait1 + trait2 ~ sex, data = dat30)
+
+File polygenic.out:
+	Pedigree:    dat.ped 
+	Phenotypes:  dat.phe 
+	Trait:       trait1 trait2         Individuals:  174 
+ 
+			 H2r(trait1) is 0.7953058   
+	       H2r(trait1) Std. Error:  0.1125756 
+ 
+			 H2r(trait2) is 0.6074364   
+	       H2r(trait2) Std. Error:  0.1214936 
+ 
+			 RhoE is 0.4524437   
+	       RhoE Std. Error:  0.1797011 
+ 
+			 RhoG is 0.9691782 
+	       RhoG Std. Error:  0.0401070 
+ 
+	       Derived Estimate of RhoP is 0.8018840 
+ 
+ 
+	Loglikelihoods and chi's are in trait1.trait2/polygenic.logs.out 
+	Best model is named poly and null0 
+	Final models are named poly, spor 
+
+ Covariates Table:
+  covariate
+1       sex
+
+ Variance Components Table:
+      varcomp  Estimate
+1 h2r(trait1) 0.7953058
+2  e2(trait1) 0.2046942
+3 h2r(trait2) 0.6074364
+4  e2(trait2) 0.3925636
+5        rhog 0.9691782
+6        rhoe 0.4524437
 ```
