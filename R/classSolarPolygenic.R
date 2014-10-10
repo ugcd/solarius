@@ -17,4 +17,8 @@ print.solarPolygenic <- function(x, ...)
   
   cat("\n Covariates Table:\n")
   print(x$cf)
+
+  cat("\n Variance Components Table:\n")
+  print(x$vcf)
+
 }

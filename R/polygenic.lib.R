@@ -27,10 +27,17 @@ solar_polygenic <- function(dir, out)
     "write_globals")
   
   if(length(out$traits) == 1) {
-    cmd.proc_def <- c(cmd.proc_def, get_proc_write_param_univar())
+    cmd.proc_def <- c(cmd.proc_def, get_proc_write_param_univar(),
+      get_proc_write_varcomp_univar())
     cmd.proc_call <- c(cmd.proc_call, 
-      paste("write_param_univar ", "\"", out$solar$model.filename, "\"", sep = ""))
+      paste("write_param_univar ", "\"", out$solar$model.filename, "\"", sep = ""), 
+      "write_varcomp_univar")
+  } else if(length(out$traits) == 2) {
+    cmd.proc_def <- c(cmd.proc_def, get_proc_write_param_bivar())
+    cmd.proc_call <- c(cmd.proc_call, 
+      paste("write_param_bivar ", "\"", out$solar$model.filename, "\"", sep = "")) 
   }
+  
   
   # cmd
   cmd <- c(paste("trait", paste(out$traits, collapse = " ")),
@@ -49,6 +56,7 @@ solar_polygenic <- function(dir, out)
   
   ### extract vars from output files
   out$cf <- extactCovariateFrame(dir, out)
+  out$vcf <- extractVarCompFrame(dir, out)
   
   ### update `out`
   out$ret <- ret
@@ -103,14 +111,134 @@ extactCovariateFrame <- function(dir, out)
     ind <- which(tab[, 1] %in% SEnames)
     cf$SE <- tab[ind, 2]
     
-    # P-values of betas
+    ### read `out.globals` to get p-values of covariates
     lines <- readLines(file.path(dir, "out.globals"))
+#> lines
+#[1] "SOLAR_Individuals 174"               "SOLAR_H2r_P 6.1167535e-10"          
+#[3] "SOLAR_Kurtosis -0.3603"              "SOLAR_Covlist_P 0.9753082 0.1455341"
+#[5] "SOLAR_Covlist_Chi 0.0010 2.1184"     "SOLAR_RhoP "                        
+#[7] "SOLAR_RhoP_SE 0"                     "SOLAR_RhoP_P "                      
+#[9] "SOLAR_RhoP_OK 0"    
+    
+    # Chi-values of betas
+    line <- grep("SOLAR_Covlist_Chi", lines, value = TRUE)
+    stopifnot(length(line) == 1)
+
+    vals <- strsplit(line, "\\s")[[1]]
+    stopifnot(vals[1] == "SOLAR_Covlist_Chi")
+    if(length(vals) > 1) {
+      stopifnot(length(vals) == ncov + 1)
+      cf$Chi <- as.numeric(vals[-1])
+    } else {
+      cf$Chi <- as.numeric(NA)
+    }
+
+    # P-values of betas
+    line <- grep("SOLAR_Covlist_P", lines, value = TRUE)
+    stopifnot(length(line) == 1)
+
+    vals <- strsplit(line, "\\s")[[1]]
+    stopifnot(vals[1] == "SOLAR_Covlist_P")
+    if(length(vals) > 1) {
+      stopifnot(length(vals) == ncov + 1)
+      cf$pval <- as.numeric(vals[-1])
+    } else {
+      cf$pval <- as.numeric(NA)
+    }
+    
   }  
   
   return(cf)
 }
 
+extractVarCompFrame <- function(dir, out)
+{
+  vcf <- data.frame()
   
+  if(length(out$traits) == 1) {
+    vals <- scan(file.path(dir, "out.varcomp.univar"), character(), quiet = TRUE)
+    stopifnot(vals[1] == "varcomp")
+  
+    if(length(vals) == 1) {
+      return(data.frame())
+    }
+  
+    varcomp <- vals[-1]
+    nvarcomp <- length(varcomp)
+  
+    vcf <- data.frame(varcomp = varcomp)
+  
+
+    tab <- read.table(file.path(dir, "out.param.univar"), colClasses = c("character", "numeric"))
+#       V1            V2
+#1 loglike -2.108689e+02
+#2     h2r  8.061621e-01
+#3   h2rSE  1.100465e-01
+#4      e2  1.938379e-01
+#5    e2SE  1.100465e-01
+#6    bage  4.591117e-04
+#7  bageSE  1.483783e-02
+#8    bsex -4.559509e-01
+#9  bsexSE  3.125045e-01
+    
+    # Estimate of var
+    varnames <- varcomp
+    stopifnot(all(varnames %in% tab[, 1]))
+
+    ind <- which(tab[, 1] %in% varnames)
+    vcf$Var <- tab[ind, 2]
+    
+    # SE of var
+    SEnames <- paste(varcomp, "SE", sep = "")
+    stopifnot(all(SEnames %in% tab[, 1]))
+
+    ind <- which(tab[, 1] %in% SEnames)
+    vcf$SE <- tab[ind, 2]
+    
+   ### read `out.globals` to get p-values of varcomp
+   vcf$pval <- as.numeric(NA)
+       
+   lines <- readLines(file.path(dir, "out.globals"))
+#> lines
+#[1] "SOLAR_Individuals 174"               "SOLAR_H2r_P 6.1167535e-10"          
+#[3] "SOLAR_Kurtosis -0.3603"              "SOLAR_Covlist_P 0.9753082 0.1455341"
+#[5] "SOLAR_Covlist_Chi 0.0010 2.1184"     "SOLAR_RhoP "                        
+#[7] "SOLAR_RhoP_SE 0"                     "SOLAR_RhoP_P "                      
+#[9] "SOLAR_RhoP_OK 0"    
+    
+    # p-value of `h2r`
+    stopifnot("h2r" %in% vcf$varcomp)
+    ind <- which(vcf$varcomp == "h2r")
+    
+    line <- grep("SOLAR_H2r_P", lines, value = TRUE)
+    stopifnot(length(line) == 1)
+
+    vals <- strsplit(line, "\\s")[[1]]
+    stopifnot(vals[1] == "SOLAR_H2r_P")
+    
+    
+    if(length(vals) > 1) {
+      stopifnot(length(vals) == 2)
+      vcf$pval[ind] <- as.numeric(vals[2])
+    }
+  }
+
+  if(length(out$traits) == 2) {
+    tab <- read.table(file.path(dir, "out.param.bivar"), colClasses = c("character", "numeric"))
+#           V1        V2
+#1 h2r(trait1) 0.7953058
+#2  e2(trait1) 0.2046942
+#3 h2r(trait2) 0.6074364
+#4  e2(trait2) 0.3925636
+#5        rhog 0.9691782
+#6        rhoe 0.4524437
+    
+    # Estimate of varcomp
+    vcf <- data.frame(varcomp = tab[, 1], Estimate = tab[, 2])
+  }  
+  
+  return(vcf)
+}
   
 #----------------------------------
 # Solar proc
@@ -121,7 +249,6 @@ get_proc_write_globals <- function()
 "proc write_globals {} {\
 \
   global SOLAR_Individuals\
-  global SOLAR_H2r_P\
   global SOLAR_Kurtosis\
   global SOLAR_Covlist_P\
   global SOLAR_Covlist_Chi\
@@ -134,7 +261,12 @@ get_proc_write_globals <- function()
 	set f [open \"out.globals\" \"w\"]\
 \
   puts $f \"SOLAR_Individuals $SOLAR_Individuals\"\
-  puts $f \"SOLAR_H2r_P $SOLAR_H2r_P\"\
+  if {[if_global_exists SOLAR_H2r_P]} {\
+    global SOLAR_H2r_P\
+    puts $f \"SOLAR_H2r_P $SOLAR_H2r_P\"\
+  } else {\
+    puts $f \"SOLAR_H2r_P \"\
+  }\
   puts $f \"SOLAR_Kurtosis $SOLAR_Kurtosis\"\
   puts $f \"SOLAR_Covlist_P $SOLAR_Covlist_P\"\
   puts $f \"SOLAR_Covlist_Chi $SOLAR_Covlist_Chi\"\
@@ -170,12 +302,19 @@ get_proc_write_varcomp_univar <- function()
 {
 "proc write_varcomp_univar {} {\
 \
- 	set covariates [covariate]\
-\
   ### write to file\
-	set f [open \"out.varcomp\" \"w\"]\
+	set f [open \"out.varcomp.univar\" \"w\"]\
+  puts $f \"varcomp\"\
 \
-  puts $f \"covariate $covariates\"\
+ 	if {[if_parameter_exists h2r]} {\
+    puts $f \"h2r\"\
+  }\
+ 	if {[if_parameter_exists c2]} {\
+    puts $f \"c2\"\
+  }\
+ 	if {[if_parameter_exists e2]} {\
+    puts $f \"e2\"\
+  }\
 \
 	close $f\
 }\
@@ -223,6 +362,57 @@ get_proc_write_param_univar <- function()
       puts $f \"b$covi $bi\"\
       puts $f \"b${covi}SE $biSE\"\
      }\
+  }\
+\
+	close $f\
+}\
+"
+}
+
+get_proc_write_param_bivar <- function() 
+{
+"proc write_param_bivar {model} {\
+\
+ 	set traits [trait]\
+\
+  ### write to file\
+	set f [open \"out.param.bivar\" \"w\"]\
+\
+  for {set i 0} {$i < 2} {incr i} {\
+  	set ti [lindex $traits $i]\
+\
+  	set h2ri \"h2r(${ti})\"\
+  	if {[if_parameter_exists $h2ri]} {\
+      set vali [read_model $model $h2ri]\
+      puts $f \"$h2ri $vali\"\
+     }\
+\
+  	set e2i \"e2(${ti})\"\
+  	if {[if_parameter_exists $e2i]} {\
+      set vali [read_model $model $e2i]\
+      puts $f \"$e2i $vali\"\
+     }\
+\
+  	set c2i \"c2(${ti})\"\
+  	if {[if_parameter_exists $c2i]} {\
+      set vali [read_model $model $c2i]\
+      puts $f \"$c2i $vali\"\
+     }\
+  }\
+\
+ 	if {[if_parameter_exists rhog]} {\
+    set val [read_model $model rhog]\
+    puts $f \"rhog $val\"\
+  }\
+\
+ 	if {[if_parameter_exists rhoc]} {\
+    set val [read_model $model rhoc]\
+    puts $f \"rhoc $val\"\
+  }\
+\
+ 	if {[if_parameter_exists rhoe]} {\
+    set val [read_model $model rhoe]\
+    puts $f \"rhoe $val\"\
   }\
 \
 	close $f\
