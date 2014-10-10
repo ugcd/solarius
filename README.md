@@ -69,8 +69,7 @@ Linkage model:
 ```
 > solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 
-Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30, dir = "solar", 
-    covtest = T)
+Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30, covtest = TRUE)
 
 File polygenic.out:
 	Pedigree:    dat.ped 
