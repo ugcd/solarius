@@ -21,6 +21,8 @@ References:
   * lost version-control traces
   * dependence on old-school code from previous mantainers
   * dependence on (many) tcl scripts
+* get rud of `SOLAR` artifacts
+  * store models/phenos in folders/files
 * make use of github infrastructure: collaborative coding, issues, gh-pages, etc
 
 ### Current status
