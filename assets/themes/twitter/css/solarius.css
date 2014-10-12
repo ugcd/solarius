@@ -1,0 +1,75 @@
+.main-header{
+  position:relative;
+  padding:30px 15px;
+  color:#cdbfe3;
+  text-align:center;
+  text-shadow:0 1px 0 rgba(0,0,0,.1);
+  background-color:#4682B4;
+  background-repeat:repeat-x
+}
+
+.main-header h1{
+  font-weight:300;
+  line-height:1;
+  color:#fff
+}
+
+.main-header h1{
+  margin-top:0;color:#fff
+}
+
+.main-header p{
+  margin-bottom:0;
+  font-weight:300;
+  line-height:1.4
+}
+  
+.main-header .container{
+  position:relative
+}
+
+@media (min-width:768px) {
+  .main-header{
+    padding-top:60px;
+    padding-bottom:60px;
+    font-size:24px;
+    text-align:left
+  }
+  .main-header h1{
+    font-size:60px;
+    line-height:1
+  }
+}
+
+@media (min-width:992px){
+  .main-header h1, .main-header p{
+    margin-right:380px
+  }
+}
+
+/*
+* Navigation bars 
+*/
+
+.nav-tutorial ul ul {/* Add a margin for any <ul> inside another <ul> */
+    margin-left: 20px;
+}
+
+/*
+* Code blocks
+*/
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}

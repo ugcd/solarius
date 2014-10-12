@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }} &#8212; R package solarius</title>
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    <meta name="author" content="{{ site.author.name }}">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <!--<link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">-->
+    <!-- <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all"> -->
+
+    <!-- Le fav and touch icons -->
+
+    <link href="{{ ASSET_PATH }}/css/solarius.css" rel="stylesheet" type="text/css" media="all">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional Bootstrap Theme 
+    <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+    -->
+    <!-- Documentation extras 
+    <link href="{{ ASSET_PATH }}/bootstrap/css/docs.min.css" rel="stylesheet">
+    -->
+  </head>
+
+  <body>
+  
+  <!-- Docs master nav -->
+  <header class="navbar navbar-static-top" id="top" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <a href="/" class="navbar-brand">solarius</a>
+      </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/pages/tutorial.html">Tutorial</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://ugcd.github.io">UGCD group</a></li>
+      </ul>
+    </nav>
+    </div>
+  </header>
+
+
+
+  <!-- Page layout -->
+  <div class="main-header" id="content">
+    <div class="container">
+      <h1>solarius</h1>
+      <p>R package to inerface SOLAR</p>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="row">
+			
+  {{ content }}
+    
+  </div>
+  </div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{ ASSET_PATH }}/bootstrap/js/bootstrap.min.js"></script>
+<!--
+<script src="{{ ASSET_PATH }}/bootstrap/js/docs.min.js"></script>
+-->
+</body>
+
+</html>
