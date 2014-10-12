@@ -4,7 +4,7 @@ title: Tutorial
 title_id: tutorial
 ---
 
-Tutorial will present a *howto* for computing three main models available in `SOLAR` program via R package `solarius`:
+Tutorial presents a *howto* for computing three main models available in `SOLAR` program via R package `solarius`:
 
 * polygenic [univariate]({{ site.baseurl }}/pages/polygenic/polygenic.html) and [bivariate]({{ site.baseurl }}/pages/bivariate/bivariate.html);
 * association; 

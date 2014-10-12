@@ -17,8 +17,7 @@ The idea of `solarius` is simple. Do calculus in `SOLAR` at back-end. Make user 
 
 ### Pages
 
-[Tutorial]({{site.baseurl}}/pages/tutorial.html), given as a R package vignette in the *html* format,
-shows use-cases of main functions of the package.
+[Tutorial]({{site.baseurl}}/pages/tutorial.html) shows use-cases of main functions of the package.
 
 ### Source code
 
