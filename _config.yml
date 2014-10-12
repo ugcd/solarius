@@ -13,6 +13,7 @@ author : Andrey Ziyatdinov
 github : variani
 
 production_url : http://ugcd.github.io/solarius
+baseurl: /solarius
 
 # Tell Github to use the kramdown markdown interpreter
 # (see https://help.github.com/articles/migrating-your-pages-site-from-maruku)
