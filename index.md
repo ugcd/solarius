@@ -17,10 +17,12 @@ The idea of `solarius` is simple. Do calculus in `SOLAR` at back-end. Make user 
 
 ### Pages
 
-[Tutorial](/pages/tutorial.html), given as a R package vignette in the *html* format,
+[Tutorial]({{site.baseurl}}/pages/tutorial.html), given as a R package vignette in the *html* format,
 shows use-cases of main functions of the package.
 
 ### Source code
 
 `solarius` is an open-source [R package](http://cran.r-project.org/) distributed under GPL (>= 3) license.
 Source code is hosted on [github](https://github.com/ugcd/solarius).
+
+`solarius` is not yet complete, as it is still an ongoing project.
