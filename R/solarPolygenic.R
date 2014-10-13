@@ -28,9 +28,12 @@ solarPolygenic <- function(formula, data,
   covlist <- gsub(" ", "", covlist)
 
   # process `polygenic.settings`/`polygenic.options`
-  polygenic.options <- paste(polygenic.options, "-prob", alpha)
+  if(length(traits) == 1) {
+    polygenic.options <- paste(polygenic.options, "-prob", alpha)
+  } else if(length(traits) == 2) {
+    polygenic.options <- paste(polygenic.options, "-rhopse")
+  }
   
-
   # parse `covtest`/`screen`/`household` par
   if(covtest) {
     polygenic.options <- paste(polygenic.options, "-screen -all")

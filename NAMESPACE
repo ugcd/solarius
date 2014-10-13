@@ -1,6 +1,8 @@
 S3method(print,solarPolygenic)
+S3method(summary,solarPolygenic)
 export(df2solar)
 export(loadMulticData)
 export(solar)
 export(solarPolygenic)
+export(solarReadFiles)
 exportClasses(solarPolygenic)

@@ -9,7 +9,8 @@ Description: R package wrapper to SOLAR
 License: GPL (>= 3)
 LazyData: true
 Depends:
-    plyr,
+    plyr
+Suggests:
     ggplot2
 Collate:
     'support.lib.R'
