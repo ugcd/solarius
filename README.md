@@ -36,10 +36,11 @@ Done:
 
 Polygenic model:
 
-* add house-hold effect
+* add house-hold effect (start with `df2solar` function)
 * add option of trait-specific covariates
-* add data frames with h2r, p-values, etc
+* add a slot with Log-likelihoods (see `polygenic.logs.out` file of a model)
 * track `PROBND`, `MZTWIN`, `HHID` info; see `polygenic.lib.R` in `salamboR` package
+* extract residuals and make plots for them
 
 Association model:
 
