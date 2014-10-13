@@ -15,7 +15,6 @@ library(solarius)
 
 ~~~
 ## Loading required package: plyr
-
 ~~~
 
 
@@ -53,7 +52,6 @@ mod
 ## 	Final models are named poly, spor, nocovar 
 ##  
 ## 	Residual Kurtosis is -0.3603, within normal range
-
 ~~~
 
 

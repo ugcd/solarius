@@ -8,7 +8,8 @@ title_id: polygenic_bivar
 
 
 ~~~ r
-library(solarius)~~~
+library(solarius)
+~~~
 
 
 
@@ -19,12 +20,14 @@ library(solarius)~~~
 
 
 ~~~ r
-mod <- solarPolygenic(trait1 + trait2 ~ 1, dat30)~~~
+mod <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
+~~~
 
 
 
 ~~~ r
-mod~~~
+mod
+~~~
 
 
 
