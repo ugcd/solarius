@@ -4,15 +4,6 @@ title: Polygenic model (univariate)
 title_id: polygenic_univar
 ---
 
-```{r, echo = FALSE}
-hook.t <- function(x, options) stringr::str_c("\n\n~~~\n", x, "~~~\n\n")
-hook.r <- function(x, options) stringr::str_c("\n\n~~~ ", 
-  tolower(options$engine), "\n", x, "\n~~~\n\n")
-
-knitr::knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
-  error = hook.t, message = hook.t)
-```
-
 ```{r}
 library(solarius)
 mod <- solarPolygenic(trait1 ~ age + sex, dat30)

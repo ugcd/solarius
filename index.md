@@ -31,4 +31,6 @@ The following commands will install the development (master branch) version from
 `solarius` is an open-source [R package](http://cran.r-project.org/) distributed under GPL (>= 3) license.
 Source code is hosted on [github](https://github.com/ugcd/solarius).
 
+### Notes
+
 `solarius` is not yet complete, as it is still an ongoing project.
