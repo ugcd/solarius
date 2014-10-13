@@ -8,23 +8,27 @@ title_id: polygenic_univar
 
 
 ~~~ r
-library(solarius)~~~
+library(solarius)
+~~~
 
 
 
 ~~~
 ## Loading required package: plyr
+
 ~~~
 
 
 
 ~~~ r
-mod <- solarPolygenic(trait1 ~ age + sex, dat30)~~~
+mod <- solarPolygenic(trait1 ~ age + sex, dat30)
+~~~
 
 
 
 ~~~ r
-mod~~~
+mod
+~~~
 
 
 
@@ -49,6 +53,7 @@ mod~~~
 ## 	Final models are named poly, spor, nocovar 
 ##  
 ## 	Residual Kurtosis is -0.3603, within normal range
+
 ~~~
 
 
