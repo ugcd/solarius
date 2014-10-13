@@ -19,13 +19,8 @@ The idea of `solarius` is simple. Do calculus in `SOLAR` at back-end. Make user 
 
 The following commands will install the development (master branch) version from [https://github.com/ugcd/solarius/](https://github.com/ugcd/solarius/):
 
-```
-library(devtools)
-```
-
-```
-install_github("ugcd/solarius")
-```
+    library(devtools)
+    install_github("ugcd/solarius")
 
 ### Pages
 
