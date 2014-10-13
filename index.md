@@ -15,6 +15,15 @@ in the Department of [Genetics](http://www.txbiomed.org/departments/genetics) of
 The idea of `solarius` is simple. Do calculus in `SOLAR` at back-end. Make user interface in `R` at front-end. That is.
 <s>Too little science here.</s>
 
+### Installation
+
+The following commands will install the development (master branch) version from [https://github.com/ugcd/solarius/](https://github.com/ugcd/solarius/):
+
+```
+library(devtools)
+install_github("ugcd/solarius")
+```
+
 ### Pages
 
 [Tutorial]({{site.baseurl}}/pages/tutorial.html) shows use-cases of main functions of the package.
