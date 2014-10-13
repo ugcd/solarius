@@ -31,6 +31,31 @@ Note that testing site locally now is like:
 $ jekyll serve --baseurl ''
 ```
 
+### git issues
+
+```
+> $ git pull
+You asked me to pull without telling me which branch you
+want to merge with, and 'branch.gh-pages.merge' in
+your configuration file does not tell me, either. Please
+specify which branch you want to use on the command line and
+try again (e.g. 'git pull <repository> <refspec>').
+See git-pull(1) for details.
+```
+
+Notes: [https://github.com/regebro/die-git-die](https://github.com/regebro/die-git-die).
+
+Solution: edit `.gitconfig` file
+
+```
+[push]
+	default = current
+[branch "gh-pages"]
+  remote = origin
+  merge = refs/heads/gh-pages
+  rebase = true	
+```  
+
 ### Rmarkdown chunks:
 
 * Issue [Code not properly displayed for R lessons using Jekyll #524](https://github.com/swcarpentry/bc/issues/524)
