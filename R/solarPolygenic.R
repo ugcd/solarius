@@ -3,6 +3,7 @@
 #' @export
 solarPolygenic <- function(formula, data, 
   dir,
+  traits, covlist = "1",
   covtest = FALSE, screen = FALSE, household = FALSE,
   alpha = 0.05,
   polygenic.settings = "",  polygenic.options = "",
@@ -12,21 +13,25 @@ solarPolygenic <- function(formula, data,
   ### step 1: process par & create `out`
   mc <- match.call()
   
-  stopifnot(!missing(formula), !missing(data))
+  stopifnot(!missing(data))
   stopifnot(class(data) == "data.frame")
   stopifnot(length(polygenic.options) == 1)
+  
+  stopifnot(!missing(formula) | (!missing(traits)))
   
   is.tmpdir <- missing(dir)
   
   # extract `traits`, `covlist`
-  formula.str <- as.character(as.list(formula))
+  if(!missing(formula)) {
+    formula.str <- as.character(as.list(formula))
 
-  traits <- unlist(strsplit(formula.str[[2]], "\\+"))
-  traits <- gsub(" ", "", traits)
+    traits <- unlist(strsplit(formula.str[[2]], "\\+"))
+    traits <- gsub(" ", "", traits)
 
-  covlist <- unlist(strsplit(formula.str[[3]], "\\+"))
-  covlist <- gsub(" ", "", covlist)
-
+    covlist <- unlist(strsplit(formula.str[[3]], "\\+"))
+    covlist <- gsub(" ", "", covlist)
+  }
+  
   # process `polygenic.settings`/`polygenic.options`
   if(length(traits) == 1) {
     polygenic.options <- paste(polygenic.options, "-prob", alpha)

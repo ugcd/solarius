@@ -69,7 +69,18 @@ check_var_names <- function(traits, covlist, dnames) {
   if(length(ind) > 0) { 
     covlist2 <- covlist2[-ind] 
   }
-  stopifnot(all(covlist2 %in% dnames))
+  
+  # filter out covariates like `c("sex(trait1)", "age(trait2)")`
+  if(length(covlist2)) {
+    covlist3 <- covlist2
+    
+    ind <- grep("\\(", covlist2)
+    if(length(ind)) {
+      covlist3[ind] <- laply(strsplit(covlist3[ind], "\\("), function(x) x[1])
+    }
+  }
+  
+  stopifnot(all(covlist3 %in% dnames))
   
   return(invisible())
 }
