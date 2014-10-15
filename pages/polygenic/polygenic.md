@@ -6,7 +6,10 @@ title_id: polygenic_univar
 
 
 
+
+
   
+
 
 
 
@@ -40,6 +43,7 @@ mod
 ##  
 ## 	Residual Kurtosis is -0.3603, within normal range
 ~~~
+
 
 
 

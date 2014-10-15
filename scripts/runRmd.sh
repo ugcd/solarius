@@ -5,12 +5,15 @@ wdir=$(pwd)
 
 chunks=$wdir/scripts/chunks.Rmd
 
+#pat="Rmd"
+pat="trait-specific-covariates.Rmd"
+
 for dir in ${dirs[@]} ; do
   echo " * dir: $dir"
 
   cd $dir
 
-  files=$(ls | grep Rmd)
+  files=$(ls | grep $pat)
   for file in $files ; do
     echo "  -- processing file: $file"
    
