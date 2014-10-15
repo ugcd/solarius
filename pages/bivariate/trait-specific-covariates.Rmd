@@ -61,4 +61,4 @@ mod2.par <- solarPolygenic(traits = c("trait1", "trait2"),
   covlist = c("sex(trait1)", "age(trait2)"), data = dat30)
 ```
 
-Covariates for `mod2` model  are trait-specific.
+Covariates for `mod2.par` model  are trait-specific.
