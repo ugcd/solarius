@@ -1,12 +1,28 @@
 ```{r, echo = FALSE}
-hook.t <- function(x, options) stringr::str_c("\n\n~~~\n", x, "~~~\n\n")
-hook.r <- function(x, options) stringr::str_c("\n\n~~~ ", 
-  tolower(options$engine), "\n", x, "~~~\n\n")
+# @ https://github.com/swcarpentry/bc/issues/524#issuecomment-49807722
+# If you want to stick with kramdown as the parser, 
+# why not just tell knitr to use kramdown-compatible syntax for code blocks?
 
-knitr::knit_hooks$set(source = hook.r, output = hook.t, warning = hook.t,
-  error = hook.t, message = hook.t)
+hook.t <- function(x, options) paste0("\n\n~~~\n", paste0(x, collapse="\n"), "~~~\n\n")
+hook.r <- function(x, options) { 
+  paste0("\n\n~~~ ", tolower(options$engine), "\n", paste0(x,collapse="\n"), "\n~~~\n\n")
+}
+
+knitr::knit_hooks$set(source=hook.r, output=hook.t, warning=hook.t,
+  error=hook.t, message=hook.t)
 ```
 
+```{r setup, include = FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/', cache.path = 'cache/', 
+  echo = TRUE, cache = FALSE, 
+  fig.width = 12, fig.height = 12, dev = 'png',
+  warning = FALSE, message = FALSE,
+  collapse = TRUE)
+# upload images automatically? (identity/imgur_upload)
+opts_knit$set(upload.fun = identity)
+```
+  
 ```{r, echo = FALSE, message = FALSE, warnings = FALSE}
 library(solarius)
 ```
