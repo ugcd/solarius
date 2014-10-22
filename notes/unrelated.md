@@ -2,7 +2,9 @@
 
 References:
 
-* `SOLAR` man page [matrix](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#matrix)
+* `SOLAR` man page:
+  * [matrix](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#matrix)
+  * [pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/04.chapter.html#pedigree)
 
 From `SOLAR` man page [pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#pedigree):
 
