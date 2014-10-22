@@ -104,13 +104,42 @@ match_id_names <- function(fields)
     return(names)
   }
   
-  out <- c("ID", "FAMID", "MO", "FA", "SEX")
-  out.names <- c(find_name("^id$|^ID$", fields),
-    find_name("^famid$|^FAMID$", fields),
-    find_name("^mo$|^MO$|^mother$|^MOTHER$", fields),
-    find_name("^fa$|^FA$|^father$|^FATHER$", fields),
-    find_name("^sex$|^SEX$", fields))
-  names(out) <- out.names
+  ### option 1
+  #out <- c("ID", "FAMID", "MO", "FA", "SEX")
+  #out.names <- c(find_name("^id$|^ID$", fields),
+  #  find_name("^famid$|^FAMID$", fields),
+  #  find_name("^mo$|^MO$|^mother$|^MOTHER$", fields),
+  #  find_name("^fa$|^FA$|^father$|^FATHER$", fields),
+  #  find_name("^sex$|^SEX$", fields))
+  #names(out) <- out.names
 
+  ### option 2
+  out <- c("ID")
+  # ID field (obligatory)
+  pat <- "^id$|^ID$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) == 0) stop("ID name not found; grep pattern '", pat, "'")
+  if(length(names) > 1)  stop("more than one ID names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
+  out.names <- names
+  # FAMID (optional)
+  pat <- "^famid$|^FAMID$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one FAMID names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "FAMID")
+    out.names <- c(out.names, names)
+  }
+  # SEX field (obligatory)
+  pat <- "^sex$|^SEX$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) == 0) stop("SEX name not found; grep pattern '", pat, "'")
+  if(length(names) > 1)  stop("more than one SEX names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
+  if(length(names) == 1) {
+    out <- c(out, "SEX")
+    out.names <- c(out.names, names)
+  }
+  
+  names(out) <- out.names    
+  
   return(out)
 }
