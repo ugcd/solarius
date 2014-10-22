@@ -1,0 +1,32 @@
+---
+layout: tutorial
+title: Data
+title_id: data
+---
+
+### Data set `dat30`
+
+```{r}
+data(dat30)
+```
+
+```{r}
+str(dat30)
+```
+
+### Data set `dat50`
+
+```{r}
+data(dat50)
+```
+
+```{r image_kin}
+library(Matrix)
+image(Matrix(kin))
+```
+
+
+```{r hist_kin}
+library(ggplot2)
+qplot(as.vector(kin))
+```
