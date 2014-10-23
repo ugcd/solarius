@@ -1,0 +1,17 @@
+---
+layout: tutorial
+title: Custom kinship matrix
+title_id: custom_kinship
+---
+
+```{r}
+data(dat50)
+```
+
+```{r}
+mod <- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
+summary(mod)
+```
+
+
+
