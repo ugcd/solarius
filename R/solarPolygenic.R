@@ -12,6 +12,7 @@ solarPolygenic <- function(formula, data, dir,
 {
   ### step 1: process par & create `out`
   mc <- match.call()
+  is.kinship <- hasArg(kinship)
   
   stopifnot(!missing(data))
   stopifnot(class(data) == "data.frame")
@@ -50,13 +51,19 @@ solarPolygenic <- function(formula, data, dir,
     polygenic.settings <- c(polygenic.settings, "house")
     polygenic.options <- paste(polygenic.options, "-keephouse")
   }
+  
+  # kinship
+  if(is.kinship) {
+    polygenic.settings <- c(polygenic.settings, "matrix load kin2.gz phi2")
+  }
+
 
   # check `traits`, `covlist`
   check_var_names(traits, covlist, names(data))
 
   out <- list(traits = traits, covlist = covlist, 
     polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
-    solar = list(model.filename = "null0.mod"),
+    solar = list(model.filename = "null0.mod", kinship = is.kinship),
     call = mc)
   
   ### step 2: set up SOLAR dir

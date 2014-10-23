@@ -6,7 +6,8 @@
 # Print method
 #--------------------
 
-#' @S3method print solarPolygenic
+#' @method print solarPolygenic
+#' @export
 print.solarPolygenic <- function(x, ...)
 {
   cat("\nCall: ")
@@ -16,7 +17,8 @@ print.solarPolygenic <- function(x, ...)
   l_ply(x$solar$files$model$polygenic.out, function(x) cat(x, "\n"))
 }
 
-#' @S3method summary solarPolygenic
+#' @method summary solarPolygenic
+#' @export
 summary.solarPolygenic <- function(x, ...)
 {
   cat("\nCall: ")

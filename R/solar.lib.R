@@ -58,9 +58,7 @@ df2solar <- function(df, dir, kinship)
     kmat <- 2*kinship
     kmat2phi2(kmat, dir)
     
-    cmd <- c("matcrc phi2.gz",
-      "matrix load phi2.gz phi2" # "loadkin"
-    )
+    cmd <- c("matcrc kin2.gz")
     ret <- solar(cmd, dir, result = TRUE)  
   }
   
@@ -203,8 +201,8 @@ kmat2kf <- function(kmat)
     for(j in i:N) {
       val <- kmat[i, j]
       if(val) {
-        ids1[k] <- ids[i]
-        ids2[k] <- ids[j]
+        ids1[k] <- ids[j]
+        ids2[k] <- ids[i]
         vals[k] <- val
         
         k <- k + 1

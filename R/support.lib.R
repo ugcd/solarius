@@ -50,6 +50,10 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
   names(pf) <- c("IBDID", "FIBDID", "MIBDID", "SEX", "MZTWIN", "PEDNO",
     "GEN", "ID")
   
+  for(i in 1:ncol(pf)) {
+    pf[, i] <- as.character(pf[, i])
+  }  
+  
   if(ids.unique) {
     stopifnot(!all(duplicated(pf$ID)))
   }
@@ -95,12 +99,14 @@ kf2phi2 <- function(kf, dir)
   stopifnot(knames %in% names(kf))
   kf <- subset(kf, select = knames)
   
-  kf$delta7 <- 0
-
-  phi2.gz <- file.path(dir, "phi2.gz")
+  # @ http://helix.nih.gov/Documentation/solar-6.6.2-doc/08.chapter.html#phi2
+  # - The coefficients should begin in the fourteenth character column, 
+  #   or higher, counting the first character column as number one. 
+  #   That is why `width = c(10, 10, 10)`.
+  phi2.gz <- file.path(dir, "kin2.gz")
   ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
     rownames = FALSE, colnames = FALSE,
-    sep = " ", width = c(5, 5, 11, 11))
+    sep = " ", width = c(10, 10, 10))
   
   return(invisible())
 }
