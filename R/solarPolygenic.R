@@ -1,8 +1,8 @@
 #' Function solarPolygenic.
 #'
 #' @export
-solarPolygenic <- function(formula, data, 
-  dir,
+solarPolygenic <- function(formula, data, dir,
+  kinship,
   traits, covlist = "1",
   covtest = FALSE, screen = FALSE, household = FALSE,
   alpha = 0.05,
@@ -66,7 +66,8 @@ solarPolygenic <- function(formula, data,
   if(verbose) cat(" * solarPolygenic: parameter `dir` is missing.\n")
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
  
-  df2solar(data, dir)
+  if(missing(kinship)) df2solar(data, dir)
+  else df2solar(data, dir, kinship)
   
   ### step 3: run polygenic
   out <- solar_polygenic(dir, out)

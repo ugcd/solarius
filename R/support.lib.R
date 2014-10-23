@@ -44,6 +44,68 @@ solarReadFiles <- function(dir)
   return(out)
 }
 
+read_pedindex <- function(pedindex.out, ids.unique = TRUE)
+{
+  pf <- read.fwf(pedindex.out, widths = c(6, 6, 6, 2, 4, 6, 6, 15))
+  names(pf) <- c("IBDID", "FIBDID", "MIBDID", "SEX", "MZTWIN", "PEDNO",
+    "GEN", "ID")
+  
+  if(ids.unique) {
+    stopifnot(!all(duplicated(pf$ID)))
+  }
+  
+  return(pf)
+}
+
+read_phi2_gz <- function(phi2.gz)
+{
+  kf <- read.table(gzfile(phi2.gz))
+  names(kf) <- c("IBDID1", "IBDID2", "phi2", "delta7")
+#> head(kf)
+#  IBDID1 IBDID2      phi2  delta7
+#1      1      1 0.1560492  0.2574
+#2      1      1 1.0000000  1.0000
+#3      2      2 1.0000000  1.0000
+#4      3      3 1.0000000  1.0000
+
+  # get rid of first two lines, which may be duplicated
+  if(with(kf, IBDID1[1] == IBDID2[1] & IBDID1[2] == IBDID2[2])) {
+    kf <- kf[-1, ]
+  }
+  
+  return(kf)
+}
+
+kmat2phi2 <- function(kmat, dir)
+{
+  kf <- kmat2kf(kmat)
+
+  kf2phi2(kf, dir)  
+}
+
+#' @importFrom gdata write.fwf
+kf2phi2 <- function(kf, dir)
+{
+  pedindex.out <- file.path(dir, "pedindex.out")
+  pf <- read_pedindex(pedindex.out)
+  
+  kf <- kf_match_pedindex(kf, pf)
+  
+  knames <- c("IBDID1", "IBDID2", "phi2")
+  stopifnot(knames %in% names(kf))
+  kf <- subset(kf, select = knames)
+  
+  kf$delta7 <- 0
+
+  phi2.gz <- file.path(dir, "phi2.gz")
+  ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
+    rownames = FALSE, colnames = FALSE,
+    sep = " ", width = c(5, 5, 11, 11))
+  
+  return(invisible())
+}
+
+
 #----------------------------------
 # Checkers
 #----------------------------------
@@ -129,6 +191,22 @@ match_id_names <- function(fields)
     out <- c(out, "FAMID")
     out.names <- c(out.names, names)
   }
+  # MO (optional)
+  pat <- "^mo$|^MO$|^mother$|^MOTHER$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one MO names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "MO")
+    out.names <- c(out.names, names)
+  }
+  # FA (optional)
+  pat <- "^fa$|^FA$|^father$|^FATHER$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one FA names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "FA")
+    out.names <- c(out.names, names)
+  }    
   # SEX field (obligatory)
   pat <- "^sex$|^SEX$"
   names <- grep(pat, fields, value = TRUE) 

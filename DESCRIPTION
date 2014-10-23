@@ -11,10 +11,13 @@ LazyData: true
 Depends:
     plyr
 Suggests:
-    ggplot2
+    ggplot2,
+    Matrix,
+    gdata
 Collate:
     'support.lib.R'
     'solar.lib.R'
     'solarPolygenic.R'
     'classSolarPolygenic.R'
     'polygenic.lib.R'
+    'plot.lib.R'
