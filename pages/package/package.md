@@ -4,7 +4,7 @@ title: Package
 title_id: package
 ---
 
-Being an R package, `solaris` has consists of several parts organized in folders.
+Being an R package, `solaris` consists of several parts organized in folders.
 
 * [data/](https://github.com/ugcd/solarius/tree/master/data) folder with data sets distributed with the package;
 * extra folders in [inst/](https://github.com/ugcd/solarius/tree/master/inst) folder:

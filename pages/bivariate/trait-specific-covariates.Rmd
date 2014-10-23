@@ -36,6 +36,8 @@ Covariates in `mod2` model  are trait-specific.
 mod2 <- solarPolygenic(trait1 + trait2 ~ sex(trait1) + age(trait2), dat30)
 ```
 
+### Mix of common and trait-specific covariates
+
 A mix of common and trait-specific covariates is also possible.
 
 | trait      |  common covariates | specific covariates |

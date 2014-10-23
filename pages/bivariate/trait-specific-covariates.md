@@ -6,10 +6,7 @@ title_id: trait_specific_cov
 
 
 
-
-
   
-
 
 
 Formula interface in `solarPolygenic` is used differently than in standard functions like `lm`.
@@ -28,7 +25,6 @@ that means `sex` covariate is given for both traits `trait1` and `trait2`.
 mod1 <- solarPolygenic(trait1 + trait2 ~ sex, dat30)
 ~~~
 
-
 ### Trait-specific covariates
 
 Imagine that `sex` is the only significant covariate for `trait1`,
@@ -38,7 +34,7 @@ and `age` is the only significant covariate for `trait2`.
 |------------|-------------|
 | trait1     |      sex    |
 | tarit2     |     age     |
-{: class="table"}
+{: class="table table-nonfluid"}
 
 Covariates in `mod2` model  are trait-specific.
 
@@ -47,6 +43,7 @@ Covariates in `mod2` model  are trait-specific.
 mod2 <- solarPolygenic(trait1 + trait2 ~ sex(trait1) + age(trait2), dat30)
 ~~~
 
+### Mix of common and trait-specific covariates
 
 A mix of common and trait-specific covariates is also possible.
 
@@ -61,7 +58,6 @@ A mix of common and trait-specific covariates is also possible.
 ~~~ r
 mod3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
 ~~~
-
 
 
 ### `traits` and `covlist` arguments
@@ -81,11 +77,9 @@ args(solarPolygenic)
 ~~~
 
 
-
 ~~~ r
 mod2.par <- solarPolygenic(traits = c("trait1", "trait2"), 
   covlist = c("sex(trait1)", "age(trait2)"), data = dat30)
 ~~~
-
 
 Covariates for `mod2.par` model  are trait-specific.
