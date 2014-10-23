@@ -10,7 +10,5 @@ Tutorial presents a *howto* for computing three main models available in `SOLAR`
 * association; 
 * linkage.
 
-Current table of content:
+See the menu on the right for table of content.
 
-1. [Polygenic model (univariate)]({{ site.baseurl }}/pages/polygenic/polygenic.html)
-2. [Polygenic model (bivariate)]({{ site.baseurl }}/pages/bivariate/bivariate.html)
