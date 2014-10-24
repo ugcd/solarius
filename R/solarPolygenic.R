@@ -57,7 +57,6 @@ solarPolygenic <- function(formula, data, dir,
     polygenic.settings <- c(polygenic.settings, "matrix load kin2.gz phi2")
   }
 
-
   # check `traits`, `covlist`
   check_var_names(traits, covlist, names(data))
 
