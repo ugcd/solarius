@@ -14,6 +14,17 @@ data(SLBDF, package="salamboR")
 geneSet2solar(SLBDF, "solar")
 ```
 
+First lines of `solar.gen` file:
+
+```
+ID,gen1,gen2,gen3
+51101,,,
+51102,,,
+51202,2/2,1/1,1/1
+51203,1/1,1/1,1/2
+51204,1/1,2/1,1/1
+```
+
 Step 2: go to that directory and run SOLAR.
 
 ```
