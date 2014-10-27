@@ -1,12 +1,12 @@
 #!/bin/bash
 
-dirs=("pages/polygenic" "pages/bivariate" "pages/package")
+dirs=("pages/polygenic" "pages/bivariate" "pages/package" "pages/assoc")
 wdir=$(pwd)
 
 chunks=$wdir/scripts/chunks.Rmd
 
 #pat="Rmd"
-pat="custom*.Rmd"
+pat="assoc"
 
 for dir in ${dirs[@]} ; do
   echo " * dir: $dir"

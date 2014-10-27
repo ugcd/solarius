@@ -1,0 +1,14 @@
+---
+layout: tutorial
+title: Parallelization
+title_id: assoc_parallel
+---
+
+
+```{r}
+data(dat50)
+
+system.time(mod <- solarAssoc(traits = "trait", data = phenodata, snpdata = genodata, cores = 1))
+system.time(mod <- solarAssoc(traits = "trait", data = phenodata, snpdata = genodata, cores = 2))
+```
+

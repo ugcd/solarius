@@ -1,0 +1,19 @@
+---
+layout: tutorial
+title: Association model
+title_id: assoc
+---
+
+```{r}
+args(solarAssoc)
+```
+
+```{r}
+data(dat50)
+
+mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
+head(mod$snpf)
+```
+
+
+
