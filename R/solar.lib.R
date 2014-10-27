@@ -3,6 +3,39 @@
 # Main functions
 #----------------------------------
 
+#' Function solar.
+#'
+#' @export
+solar <- function(cmd, dir = "solar", result = TRUE,
+  ignore.stdout = TRUE, ignore.stderr = FALSE, ...) 
+{
+  stopifnot(!missing(dir))
+  
+  cmd <- c(cmd, "quit")
+
+  wd <- getwd()
+  setwd(dir)
+  
+  if(result) {
+    ignore.stdout <- FALSE
+    ignore.stderr <- FALSE
+  }
+  
+  res <- try({
+    system("solar", input = cmd, intern = result, 
+      ignore.stdout = ignore.stdout, ignore.stderr = ignore.stderr)
+  })
+
+  setwd(wd)
+
+  if(result) { 
+    return(res) 
+  }
+  else { 
+    return(invisible()) 
+  }
+}
+
 #' Function df2solar
 #'
 #' The function (1) puts the data set \code{df}
@@ -68,37 +101,43 @@ df2solar <- function(df, dir, kinship)
   return(invisible())
 }
 
-#' Function solar.
+#' Function snpdata2solar.
+#'
+#' The function (1) exports the data set of genotypes stored 
+#' in \code{mat} itto SOLAR files, (2) runs solar command `snp load solar.gen` 
+#' to check the data is loaded ok; (3) if two output files were not created,
+#' throws error.
 #'
 #' @export
-solar <- function(cmd, dir = "solar", result = TRUE,
-  ignore.stdout = TRUE, ignore.stderr = FALSE, ...) 
+snpdata2solar <- function(mat, dir)
 {
-  stopifnot(!missing(dir))
-  
-  cmd <- c(cmd, "quit")
+  # parse arguments
+  stopifnot(class(mat) == "matrix")
 
-  wd <- getwd()
-  setwd(dir)
+  stopifnot(!is.null(rownames(mat)))
+  stopifnot(!is.null(colnames(mat)))
   
-  if(result) {
-    ignore.stdout <- FALSE
-    ignore.stderr <- FALSE
-  }
+  stopifnot(file.exists(dir))
+
+  ids <- rownames(mat)
+  snpnames <- colnames(mat)
   
-  res <- try({
-    system("solar", input = cmd, intern = result, 
-      ignore.stdout = ignore.stdout, ignore.stderr = ignore.stderr)
-  })
+  # prepare `mat`
+  mat <- cbind(ID = ids, mat)
+  
+  # write table
+  write.table(mat, file.path(dir, "dat.snp"),
+    row.names = FALSE, sep = ",", quote = FALSE, na = "")
+  
+  # run solar
+  cmd <- c("snp load dat.snp", "snp covar -nohaplos", "snp unload")
+  ret <- solar(cmd, dir, result = TRUE)  
 
-  setwd(wd)
+  # check solar has completed the job
+  stopifnot(file.exists(file.path(dir, "snp.genocov")))
+  stopifnot(file.exists(file.path(dir, "snp.geno-list")))
 
-  if(result) { 
-    return(res) 
-  }
-  else { 
-    return(invisible()) 
-  }
+  return(invisible())
 }
 
 #----------------------------------
@@ -295,5 +334,29 @@ set_dir <- function(dir)
   
   return(invisible())
 }
+
+#----------------------------------
+# File formats
+#----------------------------------
+
+format_snpdata <-function(mat, snpformat)
+{
+  switch(snpformat,
+    "012" = {
+      apply(mat, 2, function(x) ifelse(is.na(x), as.character(NA), 
+        ifelse(x == 0, "1/1", ifelse(x == 1, "1/2", ifelse(x == 2, "2/2", 
+        as.character(NA))))))
+    },
+    stop(paste("error in `format_snpdata`; `snpformat`", snpformat, "is unknown")))
+}
+
+
+
+
+
+
+
+
+
 
 
