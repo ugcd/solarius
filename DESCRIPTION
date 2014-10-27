@@ -13,13 +13,7 @@ Depends:
 Suggests:
     ggplot2,
     Matrix,
-    gdata
-Collate:
-    'classSolarPolygenic.R'
-    'plot.lib.R'
-    'polygenic.lib.R'
-    'solar.lib.R'
-    'solarAssoc.R'
-    'solarPolygenic.R'
-    'support.lib.R'
-    'assoc.lib.R'
+    gdata,
+    doMC,
+    iterators,
+    parallel

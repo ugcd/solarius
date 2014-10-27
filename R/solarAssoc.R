@@ -36,18 +36,18 @@ solarAssoc <- function(formula, data, dir,
   ### step 6: prepare data for parallel computation (if necessary)
   genolist.file <- "snp.geno-list"
 
+  snps <- readLines(file.path(dir, genolist.file))
+  num.snps <- length(snps)
+
   snplist.files0 <- "snp.geno-list"
   out.dirs0 <- "assoc"
   out.files0 <- "assoc.out"
-    
+
   if(cores == 1) {
     snplist.files <- snplist.files0
     out.dirs <- out.dirs0
     out.files <- out.files0
   } else {
-    snps <- readLines(file.path(dir, genolist.file))
-    num.snps <- length(snps)
-    
     num.gr <- cores 
     gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
 
@@ -78,9 +78,15 @@ solarAssoc <- function(formula, data, dir,
   if(cores == 1) {
     out.assoc <- solar_assoc(dir, out, snplist.files, out.dirs, out.files)
   } else {
+    ret <- require(doMC)
+    if(!ret) {
+      stop("`doMC` package is required for parallel calculations")
+    }
+    doMC::registerDoMC(cores)
+    
     out.gr <- llply(1:length(snplist.files), function(i) {
       solar_assoc(dir, out, snplist.files[i], out.dirs[i], out.files[i])
-    })
+    }, .parallel = TRUE)
     
     # process results
     snpf.list <- llply(out.gr, function(x) list(snpf = x$snpf))
@@ -101,6 +107,7 @@ solarAssoc <- function(formula, data, dir,
     # -- final output
     out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
   }
+  out$nsnps <- num.snps
   out$snpf <- out.assoc$snpf
   out$solar$assoc <- out.assoc$solar
   
