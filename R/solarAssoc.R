@@ -6,7 +6,7 @@ solarAssoc <- function(formula, data, dir,
   traits, covlist = "1",
   # association 
   snpdata, snpformat = "012",
-  cores = 1,
+  cores = getOption("cores"),
   ...,
   verbose = 0) 
 {
@@ -15,6 +15,10 @@ solarAssoc <- function(formula, data, dir,
 
   stopifnot(!missing(snpdata))
   stopifnot(class(snpdata) == "matrix")
+  
+  if(is.null(cores)) {  
+    cores <- 1
+  }
   
   is.tmpdir <- missing(dir)
 
@@ -118,7 +122,9 @@ solarAssoc <- function(formula, data, dir,
   }
   
   ### reutrn 
-  oldClass(out) <- c(oldClass(out), "solarAssoc")
+  out$call2 <- mc
+  
+  oldClass(out) <- c("solarAssoc", oldClass(out))
     
   return(out)
 }

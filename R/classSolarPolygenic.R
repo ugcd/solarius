@@ -1,4 +1,4 @@
-#' S3 class salamboPolygenic.
+#' S3 class solarPolygenic.
 #'
 #' @exportClass solarPolygenic
 
