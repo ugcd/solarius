@@ -8,12 +8,20 @@ title_id: assoc
 args(solarAssoc)
 ```
 
+| snpformat |  snpdata        | dat.gen        | genocov          |
+|-----------|-----------------|----------------|------------------|
+| "/"       | {A/A, A/T, T/T} | as is snpdata  | {0, 1, 2}        |
+| "012"     | {0, 1, 2}       | {1/1, 1/2, 2/2}| {0, 1, 2}        |
+| "0.1"     | [0; 2]          | skipped        | as is in snpdata |
+{: class="table"}
+
+
+### Example of association model
+
 ```{r}
 data(dat50)
 
 mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 head(mod$snpf)
 ```
-
-
 

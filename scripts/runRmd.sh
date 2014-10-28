@@ -6,7 +6,7 @@ wdir=$(pwd)
 chunks=$wdir/scripts/chunks.Rmd
 
 #pat="Rmd"
-pat="assoc"
+pat="assoc.Rmd"
 
 for dir in ${dirs[@]} ; do
   echo " * dir: $dir"
