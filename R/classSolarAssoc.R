@@ -19,9 +19,15 @@ print.solarAssoc <- function(x, ...)
 plot.solarAssoc <- function(x, 
   alpha = 0.05, corr = "BF", pval = "pval", ...)
 {
+  require(ggplot2)
+  
   df <- x$snpf
   N <- nrow(df)
   
+  ord <- order(df$pSNP)
+  df <- df[ord, ]
+  df$ord <- 1:nrow(df)
+    
   ### multiple-test correction  
   df <- within(df, {
     qSNP <- switch(corr,
@@ -34,12 +40,8 @@ plot.solarAssoc <- function(x,
   
   num.signif <- sum(df$signif)
   
-  ### order
-  df <- mutate(df, 
-    ord  = order(qSNP))
-    
   ### subset
-  num.nonsignif <- 3
+  num.nonsignif <- ifelse(num.signif, 3, 5)
   ord.nonsignif <- seq(1, num.nonsignif) + num.signif
   
   ### `pf` data frame for plotting
@@ -54,25 +56,33 @@ plot.solarAssoc <- function(x,
   {
     trans <- function(x) -log(x, base)
     inv <- function(x) base^(-x)
-    scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
+    trans_new(paste0("reverselog-", format(base)), trans, inv, 
       log_breaks(base = base), 
       domain = c(1e-100, Inf))
   }
   
   xbreaks <- pf$ord
   xlables <- pf$SNP
-  
+
   p <- switch(pval,
     "pval" = ggplot(pf, aes(ord, pSNP)) + geom_point() + 
       geom_segment(aes(x = ord, xend = ord, y = 1, yend = pSNP)) + 
       geom_hline(yintercept = alpha/N),
-    "qval" = ggplot(pf, aes(ord, pSNP)) + geom_point() + 
-      geom_segment(aes(x = ord, xend = ord, y = 1, yend = pSNP)) + 
+    "qval" = ggplot(pf, aes(ord, qSNP)) + geom_point() + 
+      geom_segment(aes(x = ord, xend = ord, y = 1, yend = qSNP)) + 
       geom_hline(yintercept = alpha/N),
       stop("switch error (2) in `plot.solarAssoc`"))
+
+  ylab <- switch(pval,
+    "pval" = paste("P-value (alpha = ", format(alpha), ", ", "alpha / N = ", format(alpha/N), ")", sep = ""),
+    "qval" = paste("Q-value (corrected p-value) (alpha = ", format(alpha), ")", sep = ""),
+     stop("switch error (3) in `plot.solarAssoc`"))
   
+  title <- paste("Association model: N = ", N, ", ", num.signif, " significant", sep = "")
+    
   p <- p + scale_y_continuous(trans = reverselog_trans(10)) + 
     scale_x_continuous(breaks = xbreaks, labels = xlables) + 
+    labs(y = ylab, x = "SNP", title = title) +
     coord_flip()
   
   return(p)
