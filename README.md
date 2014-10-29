@@ -37,8 +37,6 @@ Done:
 Polygenic model:
 
 * add house-hold effect (start with `df2solar` function)
-* add option of trait-specific covariates
-* add a slot with Log-likelihoods (see `polygenic.logs.out` file of a model)
 * track `PROBND`, `MZTWIN`, `HHID` info; see `polygenic.lib.R` in `salamboR` package
 * extract residuals and make plots for them
 
@@ -53,15 +51,12 @@ Linkage model:
 * make use of all linkage options availabe in `SOLAR`: second-path, adjustment of inflated scores
 * parallel computations
 
-
 ### Content of Software Manual
 
 TODO:
 
 * Polygenic model (univariate)
-  * `SOLAR` way to introduce covariates [link](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#covariate), e.g. `age#sex = age + sex + age*sex` and `age*sex = age*sex`
   * house-hold effect
-  * test covariates
   * screen covariates
   * SOLAR options (`polygenic.settings`, `polygenic.options`)
 * Polygenic model (bivariate)
