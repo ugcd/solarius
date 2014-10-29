@@ -1,0 +1,46 @@
+---
+layout: tutorial
+title: Test covariates
+title_id: test_covariates
+---
+
+### LRT
+
+`SOLAR` performs likelihood ratio test (LRT) 
+to evaluate the significance of covariates in a model.
+`covtest` argument says to conduct the LRT tests for all covariates.
+This option is disabled by default (to save calculation time).
+
+```{r}
+mod1 <- solarPolygenic(trait1 ~ age + sex, dat30)
+mod1$cf
+```
+
+For the next model the test results are collected into `cf` slot
+of the model object.
+
+```{r}
+mod2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+mod2$cf
+```
+
+The `SOLAR` command was the following.
+
+```{r}
+mod2$solar$cmd
+```
+
+In particular, `-screen -all` options for `polygenic` command do the job.
+These two options say to screen the covariates, although all covariates will be saved (not screened).
+That leads to the tests without covariate screening.
+
+### Model files
+
+`SOLAR` generates files to store the modeling results.
+
+```{r}
+names(mod2$solar$files$model)
+```
+
+Files `noage.mod` and `nosex.mod` are two polygenic models without one of the two covariates,
+which in turn were compared to the null model with all covariates to get the LRT statistics.

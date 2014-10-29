@@ -1,0 +1,70 @@
+---
+layout: tutorial
+title: Covariate formats
+title_id: covariate_formats
+---
+
+`SOLAR` encodes covariartes in a special format,
+which is described in [manual page](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#covariate)
+for `covariate` command.
+Special rules are concerned with interaction terms, quadratic/cubic/etc variables
+and [trait-specific covariates]({{ site.baseurl }}/pages/bivariate/trait-specific-covariates.html).
+
+Some examples of `covariate` commands are given in the following table
+(copied from `covariate` [manual page](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#covariate)).
+
+| `SOLAR` command |  Comment |
+|-----------------|----------|
+| `covariate age` | covariate age |
+| `covariate age*sex` | age and sex interaction (only) |
+| `covariate age*diabet*diameds` | 3-way interaction |
+| `covariate age^2` | age squared |
+| `covariate age^1,2` | shorthand for: age age^2 |
+| `covariate age#diabet` | shorthand for: age diabet age*diabet |
+| `covariate age^1,2,3#sex` | shorthand for: sex age age*sex age^2 age^2*sex age^3 age^3*sex |
+| `covariate sex age(q1) age*sex(q3)` | trait-specific covariates |
+{: class="table"}
+
+`solarius` package provides two alternative interfaces to introduce covariates:
+`formula` argument or two arguments `traits` and `covlist`.
+
+### Interaction terms
+
+The next three models are equvalent, and all introduce covariates
+`age`, `sex` and their interaction effect. By looking at the slot `cf` of the model object,
+one can ensure that the three covariate terms are presented
+and their p-values are identical.
+
+```{r}
+mod1 <- solarPolygenic(trait1 ~ age + sex + age*sex, data = dat30, covtest = TRUE)
+mod1$cf
+```
+
+```{r}
+mod2 <- solarPolygenic(traits = "trait1", covlist = c("age", "sex", "age*sex"), 
+  data = dat30, covtest = TRUE)
+mod2$cf
+```
+
+```{r}
+mod3 <- solarPolygenic(traits = "trait1", covlist = c("age#sex"), data = dat30, 
+  covtest = TRUE)
+mod3$cf
+```
+
+If one encodes covariates in a form `age*sex`, `SOLAR` will put only the interaction term
+(this behaviour is different from, for example, `lm` model in R).
+
+```{r}
+mod4 <- solarPolygenic(trait1 ~ age*sex, data = dat30, covtest = TRUE)
+mod4$cf
+```
+
+The resulted model `mod4` does not make sense, as the interaction term 
+is presented without `age` and `sex` covariates.
+
+Once can see the actual command passed to `SOLAR`.
+
+```{r}
+mod1$solar$cmd
+```
