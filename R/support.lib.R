@@ -132,6 +132,11 @@ check_var_names <- function(traits, covlist, dnames) {
   if(length(ind) > 0) { 
     covlist2 <- covlist2[-ind] 
   }
+  # filter out interaction terms with `#`
+  ind <-  grep("\\#", covlist2)
+  if(length(ind) > 0) { 
+    covlist2 <- covlist2[-ind] 
+  }
   # filter out power terms with "^"
   ind <-  grep("\\^", covlist2)
   if(length(ind) > 0) { 
