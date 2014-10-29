@@ -11,7 +11,7 @@
 print.solarAssoc <- function(x, ...)
 {
   cat("\nCall: ")
-  print(x$call2)
+  print(x$assoc$call)
 }
 
 #' @method plot solarAssoc
@@ -19,8 +19,15 @@ print.solarAssoc <- function(x, ...)
 plot.solarAssoc <- function(x, 
   alpha = 0.05, corr = "BF", pval = "pval", ...)
 {
-  require(ggplot2)
-  
+  ret <- require(ggplot2)
+  if(!ret) {
+    stop("`ggplot2` package is required for plotting")
+  }
+  ret <- require(scales)
+  if(!ret) {
+    stop("`scales` package is required for plotting")
+  }
+    
   df <- x$snpf
   N <- nrow(df)
   
@@ -52,6 +59,9 @@ plot.solarAssoc <- function(x,
   pf <- pf[ord, ]
   
   ### plotting settings
+  # custom axis transformations in ggplot2
+  #  - @ http://www.numbertheory.nl/2012/08/14/custom-axis-transformations-in-ggplot2/
+  #  - @ http://stackoverflow.com/questions/11053899/how-to-get-a-reversed-log10-scale-in-ggplot2
   reverselog_trans <- function(base = exp(1)) 
   {
     trans <- function(x) -log(x, base)
@@ -74,11 +84,11 @@ plot.solarAssoc <- function(x,
       stop("switch error (2) in `plot.solarAssoc`"))
 
   ylab <- switch(pval,
-    "pval" = paste("P-value (alpha = ", format(alpha), ", ", "alpha / N = ", format(alpha/N), ")", sep = ""),
+    "pval" = paste("P-value (alpha = ", format(alpha), ", ", "alpha/N = ", format(alpha/N), ")", sep = ""),
     "qval" = paste("Q-value (corrected p-value) (alpha = ", format(alpha), ")", sep = ""),
      stop("switch error (3) in `plot.solarAssoc`"))
   
-  title <- paste("Association model: N = ", N, ", ", num.signif, " significant", sep = "")
+  title <- paste("Association model: ", num.signif, " significant, N = ", N, sep = "")
     
   p <- p + scale_y_continuous(trans = reverselog_trans(10)) + 
     scale_x_continuous(breaks = xbreaks, labels = xlables) + 

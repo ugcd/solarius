@@ -12,6 +12,7 @@ Depends:
     plyr (>= 1.8.1)
 Suggests:
     ggplot2,
+    scales,
     Matrix,
     gdata,
     doMC,

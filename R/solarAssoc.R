@@ -111,7 +111,6 @@ solarAssoc <- function(formula, data, dir,
     # -- final output
     out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
   }
-  out$nsnps <- num.snps
   out$snpf <- out.assoc$snpf
   out$solar$assoc <- out.assoc$solar
   
@@ -122,7 +121,7 @@ solarAssoc <- function(formula, data, dir,
   }
   
   ### reutrn 
-  out$call2 <- mc
+  out$assoc <- list(call = mc, num.snps = num.snps)
   
   oldClass(out) <- c("solarAssoc", oldClass(out))
     
