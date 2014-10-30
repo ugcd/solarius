@@ -69,13 +69,13 @@ mod2$solar$cmd
 ~~~
 
 
-In particular, `-screen -all` options for `polygenic` command does the job.
-These two options say to screen the covariates, although they will be all saved (not screened).
+In particular, `-screen -all` options for `polygenic` command do the job.
+These two options say to screen the covariates, although all covariates will be saved (not screened).
 That leads to the tests without covariate screening.
 
 ### Model files
 
-`SOLAR` files generated to compute the model are stored.
+`SOLAR` generates files to store the modeling results.
 
 
 ~~~ r

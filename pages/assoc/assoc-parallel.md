@@ -24,7 +24,7 @@ system.time(mod <- solarAssoc(traits = "trait", data = phenodata, snpdata = geno
 
 ~~~
 ##    user  system elapsed 
-##   1.092   0.176   2.279
+##   1.020   0.268   2.592
 ~~~
 
 
@@ -37,7 +37,7 @@ system.time(mod <- solarAssoc(traits = "trait", data = phenodata, snpdata = geno
 
 ~~~
 ##    user  system elapsed 
-##   0.884   0.176   1.862
+##   0.932   0.184   2.079
 ~~~
 
 
