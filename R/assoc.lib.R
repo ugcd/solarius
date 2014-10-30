@@ -14,7 +14,7 @@ solar_assoc <- function(dir, out, snplist.file, out.dir, out.file)
     # `Phenotype named snp_s1 found in several files`
     #  - diagnostic: go to SOLAR dir and show phenos by `pheno` command,
     #    and you will see `snp.genocov` duplicated
-    "load pheno dat.phe", 
+    paste("load pheno", out$solar$phe.filename), 
     paste("load model", model.path),
     paste("outdir", out.dir),
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 
@@ -43,4 +43,39 @@ solar_assoc <- function(dir, out, snplist.file, out.dir, out.file)
   out <-  list(solar = list(cmd = cmd, solar.ok = solar.ok), snpf = snpf)
 
   return(out)
+}
+
+#----------------------------------
+# Support functions
+#----------------------------------
+
+guess_snpformat <- function(snpdata, snpfile.gen, snpfile.genocov)
+{
+  if(!missing(snpdata)) {
+    # first row
+    vals <- snpdata[1, ]
+    vals.class <- class(vals)
+  } else {
+    stop("error in `guess_snpformat`: snp values not extracted.")
+  }
+    
+  # - option 1: `/` format
+  if(vals.class == "character") {
+    format.ok <- all(grepl("\\/", vals))
+    if(!format.ok) {
+      stop("error in `guess_snpformat`: snp data (1st row) is character, but not in supported `/` format.")
+    } else {
+      return("/")
+    }
+  } else if(vals.class == "numeric") {
+    # - option 2: `012` format
+    format.ok <- all(vals %in% c(0, 1, 2))
+    if(format.ok) {
+      return("012")
+    } 
+    else {
+      # - option 3: `0.1` format
+      return("0.1")
+    }
+  }
 }

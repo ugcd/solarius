@@ -5,7 +5,7 @@ solarAssoc <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
   # association 
-  snpdata, snpformat = "012",
+  snpformat, snpdata, snpfile.gen, snpfile.genocov,
   cores = getOption("cores"),
   ...,
   verbose = 0) 
@@ -21,6 +21,11 @@ solarAssoc <- function(formula, data, dir,
   }
   
   is.tmpdir <- missing(dir)
+  
+  # gues format
+  if(missing(snpformat)) {
+    snpformat <- guess_snpformat(snpdata, snpfile.gen, snpfile.genocov)
+  }
 
   ### step 2: SOLAR dir
   if(is.tmpdir) {
@@ -121,7 +126,7 @@ solarAssoc <- function(formula, data, dir,
   }
   
   ### reutrn 
-  out$assoc <- list(call = mc, num.snps = num.snps)
+  out$assoc <- list(call = mc, snpformat = snpformat, num.snps = num.snps)
   
   oldClass(out) <- c("solarAssoc", oldClass(out))
     

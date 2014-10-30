@@ -62,7 +62,8 @@ solarPolygenic <- function(formula, data, dir,
 
   out <- list(traits = traits, covlist = covlist, 
     polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
-    solar = list(model.filename = "null0.mod", kinship = is.kinship),
+    solar = list(model.filename = "null0.mod", phe.filename = "dat.phe",
+      kinship = is.kinship),
     call = mc)
   
   ### step 2: set up SOLAR dir
