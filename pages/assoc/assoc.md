@@ -76,11 +76,11 @@ to control association analysis (list of snps to be analyzed, parallel computati
 
 | `SOLAR` file | Default value | `core == 2` | 
 |--|--|
-| genocov.files | `"snp.genocov"` | |
-| genolist.file | `"snp.geno-list"` | |
-| snplist.file | `"snp.geno-list"` | `"snp.geno-list1"`, `"snp.geno-list2"`|
-| out.dirs | `"assoc"` | `"assoc1"`, `"assoc2"`|
-| out.files | `"assoc.out"` | `"assoc.out1"`, `"assoc.out2"`|
+| genocov.files | "snp.genocov" | |
+| genolist.file | "snp.geno-list" | |
+| snplist.file | "snp.geno-list" | "snp.geno-list1", "snp.geno-list2"|
+| out.dirs | "assoc" | "assoc1", "assoc2"|
+| out.files | "assoc.out" | "assoc.out1", "assoc.out2"|
 {: class="table"}
 
 
