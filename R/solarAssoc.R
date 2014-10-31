@@ -33,24 +33,43 @@ solarAssoc <- function(formula, data, dir,
   }
   if(verbose) cat(" * solarAssoc: parameter `dir` is missing.\n")
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
-  
+
   ### step 3: compute a polygenic model by calling `solarPolygenic`
   out <- solarPolygenic(formula, data, dir,
     kinship, traits, covlist, ..., verbose = verbose)
+
+  ### step 3.1: add assoc.-specific slots to `out`
+  out$solar$assoc <- list(genocov.files = "snp.genocov", 
+    genolist.file = "snp.geno-list",
+    snplists.files = "snp.geno-list",
+    out.dirs = "assoc", out.files = "assoc.out")
 
   ### step 4: add genotype data to `dir`
   snpdata <- format_snpdata(snpdata, snpformat)
   ret <- snpdata2solar(snpdata, dir)
 
   ### step 6: prepare data for parallel computation (if necessary)
-  genolist.file <- "snp.geno-list"
+  out <- prepare_assoc_files(out, dir)
 
+prepare_assoc_files <- function(out, dir)
+{  
+  stopifnot(!is.null(out$assoc$cores))
+  stopifnot(!is.null(out$solar$assoc$genocov.files))
+  stopifnot(!is.null(out$solar$assoc$genolist.file)
+  stopifnot(!is.null(out$solar$assoc$out.dirs))
+  stopifnot(!is.null(out$solar$assoc$out.files))
+  
+  stopifnot(length(genolist.file) == 1)
+  
+  cores <- out$assoc$cores
+  genocov.files <- out$assoc$genocov.files
+  genolist.file <- out$solar$assoc$genolist.file
+  out.dirs <- out$assoc$out.dirs
+  out.files <- out$assoc$out.files
+  
+  ### number of snps
   snps <- readLines(file.path(dir, genolist.file))
   num.snps <- length(snps)
-
-  snplist.files0 <- "snp.geno-list"
-  out.dirs0 <- "assoc"
-  out.files0 <- "assoc.out"
 
   if(cores == 1) {
     snplist.files <- snplist.files0
@@ -111,13 +130,15 @@ solarAssoc <- function(formula, data, dir,
     }
     
     # -- extract assoc. solar outputs
-    out.assoc.solar <- llply(out.gr, function(x) x$solar)
+    assoc.solar <- llply(out.gr, function(x) x$solar)
+    out.assoc.solar <- list(cmd = llply(assoc.solar, function(x) x$cmd), 
+      solar.ok = llply(assoc.solar, function(x) x$solar.ok))
     
     # -- final output
     out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
   }
   out$snpf <- out.assoc$snpf
-  out$solar$assoc <- out.assoc$solar
+  out$solar$assoc <- c(out$solar$assoc, out.assoc.solar)
   
   ### clean 
   if(is.tmpdir) {
