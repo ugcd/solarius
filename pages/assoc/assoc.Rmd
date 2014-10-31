@@ -60,7 +60,7 @@ Other three files `snplist.file`, `out.dirs` and `out.files`
 are custom files by `solarius` package 
 to control association analysis (list of snps to be analyzed, parallel computation).
 
-| `SOLAR` file | Default value | `core == 2` | 
+| `SOLAR` file | Default value | Parallel computation on 2 cores | 
 |--|--|
 | genocov.files | "snp.genocov" | |
 | genolist.file | "snp.geno-list" | |
