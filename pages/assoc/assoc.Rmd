@@ -16,6 +16,34 @@ args(solarAssoc)
 {: class="table"}
 
 
+### `SOLAR` commands and files
+
+
+    > mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
+    > mod$solar$assoc$cmd
+    [[1]]
+    [1] "load pheno dat.phe"                                             
+    [2] "load model trait/null0.mod"                                     
+    [3] "outdir assoc1"                                                  
+    [4] "mga -files snp.genocov -snplists snp.geno-list1 -out assoc.out1"
+    
+    [[2]]
+    [1] "load pheno dat.phe"                                             
+    [2] "load model trait/null0.mod"                                     
+    [3] "outdir assoc2"                                                  
+    [4] "mga -files snp.genocov -snplists snp.geno-list2 -out assoc.out2"
+
+
+| `SOLAR` file | `solarAssoc` argument | Comments | 
+|--------------|-----------------------|----------|
+| genocov.files | Yes (alternative to `snpdata`) | Data files with genotype-covariates (e.g. file per chromosome) |
+| genolist.file | No | Meta file with SNP names (internal file derived from genocov.files) |
+| snplist.files | Yes (alternative to `snplist`) | Meta files with SNP names to analize |
+| out.dirs | No | Output directories for association models like `mga.mod` (directory per core) |
+| out.files | No | Output files to store association results (file per core) | 
+{: class="table"}
+
+
 ### Example of association model
 
 ```{r}
