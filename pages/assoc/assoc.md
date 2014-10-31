@@ -33,6 +33,11 @@ args(solarAssoc)
 ### `SOLAR` commands and files
 
 
+Association analysis provided by `solarius` package via `solarAssoc` function
+is based on `mga` command of `SOLAR`.
+The following code shows an exact rules (selected in `solarius`) 
+to conduct an association analysis on 2 cores in parallel.
+
     > mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
     > mod$solar$assoc$cmd
     [[1]]
@@ -48,6 +53,9 @@ args(solarAssoc)
     [4] "mga -files snp.genocov -snplists snp.geno-list2 -out assoc.out2"
 
 
+A list of specific `SOLAR` files are used in the calculations,
+as described in the following table.
+
 | `SOLAR` file | `solarAssoc` argument | Comments | 
 |--------------|-----------------------|----------|
 | genocov.files | Yes (alternative to `snpdata`) | Data files with genotype-covariates (e.g. file per chromosome) |
@@ -55,6 +63,24 @@ args(solarAssoc)
 | snplist.files | Yes (alternative to `snplist`) | Meta files with SNP names to analize |
 | out.dirs | No | Output directories for association models like `mga.mod` (directory per core) |
 | out.files | No | Output files to store association results (file per core) | 
+{: class="table"}
+
+Two files `genocov.files` and `genolist.file` are output files
+of a group of commands, that convert genotypes to covariates.
+These three commands are `snp load dat.snp`, `snp covar -nohaplos`, `snp unload`.
+See `snpdata2solar` function for more details.
+
+Other three files `snplist.file`, `out.dirs` and `out.files` 
+are custom files by `solarius` package 
+to control association analysis (list of snps to be analyzed, parallel computation).
+
+| `SOLAR` file | Default value | `core == 2` | 
+|--|--|
+| genocov.files | `"snp.genocov"` | |
+| genolist.file | `"snp.geno-list"` | |
+| snplist.file | `"snp.geno-list"` | `"snp.geno-list1"`, `"snp.geno-list2"`|
+| out.dirs | `"assoc"` | `"assoc1"`, `"assoc2"`|
+| out.files | `"assoc.out"` | `"assoc.out1"`, `"assoc.out2"`|
 {: class="table"}
 
 
