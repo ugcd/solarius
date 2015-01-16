@@ -2,9 +2,11 @@
 
 R package wrapper to SOLAR
 
-References:
+## References
 
 * [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
+* [SOLAR web page at txbiomedgenetics.org](http://solar.txbiomedgenetics.org/)
+* [SOLAR Eclipse is a new collaboration to develop genetic analysis tools for imaging applications](http://www.nitrc.org/projects/se_linux/)
 
 ### Ideas
 
