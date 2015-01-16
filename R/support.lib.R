@@ -94,7 +94,12 @@ kf2phi2 <- function(kf, dir)
   pf <- read_pedindex(pedindex.out)
   
   kf <- kf_match_pedindex(kf, pf)
-  
+
+  knames2 <- c("ID1", "ID2", "phi2")
+  stopifnot(knames2 %in% names(kf))
+  kf2 <- subset(kf, select = knames2)
+  kf2 <- rename(kf2, c(ID1 = "id1", ID2 = "id2", phi2 = "matrix1"))
+
   knames <- c("IBDID1", "IBDID2", "phi2")
   stopifnot(knames %in% names(kf))
   kf <- subset(kf, select = knames)
@@ -103,10 +108,35 @@ kf2phi2 <- function(kf, dir)
   # - The coefficients should begin in the fourteenth character column, 
   #   or higher, counting the first character column as number one. 
   #   That is why `width = c(10, 10, 10)`.
+  #phi2.gz <- file.path(dir, "kin2.gz")
+  #ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
+  #  rownames = FALSE, colnames = FALSE,
+  #  sep = " ", width = c(10, 10, 10))
+
+  kf$d7 <- 1.0
+  
+  kf <- mutate(kf,
+    phi2 = sprintf("%.7f", phi2),
+    d7 = sprintf("%.7f", d7)
+  )    
+  
+  imin <- min(min(kf$IBDID1, kf$IBDID2))
+  imax <- max(max(kf$IBDID1, kf$IBDID2))
+  for(i in imin:imax) {
+    for(j in 1:i) {
+      
+    }
+  }
+  
   phi2.gz <- file.path(dir, "kin2.gz")
   ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
-    rownames = FALSE, colnames = FALSE,
-    sep = " ", width = c(10, 10, 10))
+    rownames = FALSE, colnames = FALSE, justify = "right",
+    sep = " ", width = c(5, 5, 10, 10))
+  
+  ### CSV format
+  #phi2.gz <- file.path(dir, "kin2.gz")
+  #ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
+  #  row.names = FALSE, col.names = TRUE, sep = ",")
   
   return(invisible())
 }
