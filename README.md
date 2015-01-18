@@ -18,6 +18,8 @@ generated.
   * Autosomes: An object of class "SnpMatrix" containing genotype calls for 400 subjects at
 9445 autosomal SNPs
 * http://www.genabel.org/GenABEL/polygenic.html
+* http://www.bioconductor.org/packages/release/BiocViews.html#___SNP
+  * http://www.bioconductor.org/packages/release/bioc/vignettes/snpStats/inst/doc/tdt-vignette.pdf
 
 ### Ideas
 
