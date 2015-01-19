@@ -50,7 +50,7 @@ df2solar <- function(df, dir, kinship)
   # match ID/SEX names
   renames <- match_id_names(names(df))
   
-  # set ut `unrelated`
+  # set up `unrelated`
   unrelated <- ifelse(all(c("FA", "MO") %in% renames), FALSE, TRUE)
   
   # rename
@@ -174,7 +174,6 @@ solarKinship2 <- function(df, dir, ...)
 
   #### pedindex frame
   pf <- read_pedindex(pedindex.out)
-  
   N <- nrow(pf)
 
   ### data frame with `phi2`

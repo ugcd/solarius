@@ -44,11 +44,43 @@ solarReadFiles <- function(dir)
   return(out)
 }
 
+#pedindex.out                                          
+# 5 IBDID                 IBDID                       I
+# 1 BLANK                 BLANK                       C
+# 5 FATHER'S IBDID        FIBDID                      I
+# 1 BLANK                 BLANK                       C
+# 5 MOTHER'S IBDID        MIBDID                      I
+# 1 BLANK                 BLANK                       C
+# 1 SEX                   SEX                         I
+# 1 BLANK                 BLANK                       C
+# 3 MZTWIN                MZTWIN                      I
+# 1 BLANK                 BLANK                       C
+# 5 PEDIGREE NUMBER       PEDNO                       I
+# 1 BLANK                 BLANK                       C
+# 5 GENERATION NUMBER     GEN                         I
+# 1 BLANK                 BLANK                       C
+# 1 FAMILY ID             FAMID                       C
+# 2 ID                    ID                          C
 read_pedindex <- function(pedindex.out, ids.unique = TRUE)
 {
-  pf <- read.fwf(pedindex.out, widths = c(6, 6, 6, 2, 4, 6, 6, 15))
-  names(pf) <- c("IBDID", "FIBDID", "MIBDID", "SEX", "MZTWIN", "PEDNO",
-    "GEN", "ID")
+  ### CDE
+  pedindex.cde <- paste(tools::file_path_sans_ext(pedindex.out), "cde", sep = ".")
+
+  cf <- read.fwf(pedindex.cde, skip = 1, widths = c(2, 22, 28, 2),
+    stringsAsFactors = FALSE)
+  names(cf) <- c("LEN", "FIELDNAME", "FIELD", "LETTER")
+  cf <- mutate(cf,
+    FIELD = gsub(" ", "", FIELD))
+  
+  # names & widths for `pedindex.out` file
+  ind <- which(cf$FIELD != "BLANK")
+  pnames <- cf$FIELD
+  pwidths <- cf$LEN
+
+  pf <- read.fwf(pedindex.out, widths = pwidths)
+
+  pf <- pf[, ind]
+  names(pf) <- pnames[ind]
   
   for(i in 1:ncol(pf)) {
     pf[, i] <- as.character(pf[, i])
@@ -96,10 +128,12 @@ kf2phi2 <- function(kf, dir)
   kf <- kf_match_pedindex(kf, pf)
 
   knames2 <- c("ID1", "ID2", "phi2")
+  #knames2 <- c("IBDID1", "IBDID2", "phi2")  
   stopifnot(knames2 %in% names(kf))
   kf2 <- subset(kf, select = knames2)
   kf2 <- rename(kf2, c(ID1 = "id1", ID2 = "id2", phi2 = "matrix1"))
-
+  #kf2 <- rename(kf2, c(IBDID1 = "id1", IBDID2 = "id2", phi2 = "matrix1"))
+  
   knames <- c("IBDID1", "IBDID2", "phi2")
   stopifnot(knames %in% names(kf))
   kf <- subset(kf, select = knames)
@@ -113,30 +147,32 @@ kf2phi2 <- function(kf, dir)
   #  rownames = FALSE, colnames = FALSE,
   #  sep = " ", width = c(10, 10, 10))
 
-  kf$d7 <- 1.0
+  #kf$d7 <- 1.0
+  #kf <- mutate(kf,
+  #  phi2 = sprintf("%.7f", phi2),
+  #  d7 = sprintf("%.7f", d7)
+  #)    
   
-  kf <- mutate(kf,
-    phi2 = sprintf("%.7f", phi2),
-    d7 = sprintf("%.7f", d7)
-  )    
+  #imin <- min(min(kf$IBDID1, kf$IBDID2))
+  #imax <- max(max(kf$IBDID1, kf$IBDID2))
+  #for(i in imin:imax) {
+  #  for(j in 1:i) {
+  #    
+  #  }
+  #}
   
-  imin <- min(min(kf$IBDID1, kf$IBDID2))
-  imax <- max(max(kf$IBDID1, kf$IBDID2))
-  for(i in imin:imax) {
-    for(j in 1:i) {
-      
-    }
-  }
-  
-  phi2.gz <- file.path(dir, "kin2.gz")
-  ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
-    rownames = FALSE, colnames = FALSE, justify = "right",
-    sep = " ", width = c(5, 5, 10, 10))
+  #phi2.gz <- file.path(dir, "kin2.gz")
+  #ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
+  #  rownames = FALSE, colnames = FALSE, justify = "right",
+  #  sep = " ", width = c(5, 5, 10, 10))
   
   ### CSV format
-  #phi2.gz <- file.path(dir, "kin2.gz")
-  #ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
-  #  row.names = FALSE, col.names = TRUE, sep = ",")
+  ord <- with(kf2, order(as.integer(id1), as.integer(id2)))
+  kf2 <- kf2[ord, ]
+  
+  phi2.gz <- file.path(dir, "kin2.gz")
+  ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
+    row.names = FALSE, col.names = TRUE, sep = ",")
   
   return(invisible())
 }
