@@ -9,8 +9,7 @@ test_that("solarKinship2", {
 
   dat30.subset <- subset(dat30, select = c("id", "trait1", "sex"))
   dat30.subset <- mutate(dat30.subset,
-    fa = 0,
-    mo = 0)
+    famid = 0, fa = 0, mo = 0)
     
   mod1 <- solarPolygenic(trait1 ~ 1, dat30)
   mod2 <- solarPolygenic(trait1 ~ 1, dat30.subset, kinship = kin)
