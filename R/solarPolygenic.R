@@ -53,8 +53,9 @@ solarPolygenic <- function(formula, data, dir,
   }
   
   # kinship
+  kin2.gz <- "kin2.gz" # "phi2.gz" "kin2.gz"
   if(is.kinship) {
-    polygenic.settings <- c(polygenic.settings, "matrix load kin2.gz phi2")
+    polygenic.settings <- c(polygenic.settings, paste("matrix load", kin2.gz, "phi2"))
   }
 
   # check `traits`, `covlist`
@@ -62,8 +63,8 @@ solarPolygenic <- function(formula, data, dir,
 
   out <- list(traits = traits, covlist = covlist, 
     polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
-    solar = list(model.filename = "null0.mod", phe.filename = "dat.phe",
-      kinship = is.kinship),
+    solar = list(model.filename = "null0.mod", phe.filename = "dat.phe", 
+      kin2.gz = kin2.gz, kinship = is.kinship),
     call = mc)
   
   ### step 2: set up SOLAR dir
@@ -74,7 +75,7 @@ solarPolygenic <- function(formula, data, dir,
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
  
   if(missing(kinship)) df2solar(data, dir)
-  else df2solar(data, dir, kinship)
+  else df2solar(data, dir, kinship, kin2.gz = out$solar$kin2.gz)
   
   ### step 3: run polygenic
   out <- solar_polygenic(dir, out)

@@ -45,7 +45,7 @@ solar <- function(cmd, dir = "solar", result = TRUE,
 #' the directory \code{dir}.
 #' 
 #' @export
-df2solar <- function(df, dir, kinship)
+df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz")
 {
   # match ID/SEX names
   renames <- match_id_names(names(df))
@@ -89,9 +89,9 @@ df2solar <- function(df, dir, kinship)
   # kinship
   if(!missing(kinship)) {
     kmat <- 2*kinship
-    kmat2phi2(kmat, dir)
+    kmat2phi2(kmat, dir, kin2.gz = kin2.gz)
     
-    cmd <- c("matcrc kin2.gz")
+    cmd <- paste("matcrc ", kin2.gz)
     ret <- solar(cmd, dir, result = TRUE)  
   }
   
@@ -137,6 +137,70 @@ snpdata2solar <- function(mat, dir)
   stopifnot(file.exists(file.path(dir, "snp.genocov")))
   stopifnot(file.exists(file.path(dir, "snp.geno-list")))
 
+  return(invisible())
+}
+
+#' Function snpcovdata2solar.
+#'
+#' The function emulate the `snp load` SOLAR command.
+#' Two output files are produced: `snp.genocov` and `snp.geno-list`.
+#' The steps are the following: (1) add prefix `snp_` to SNP names;
+#' (2) (optiona) compute stats on # genotyped individuals (columns `nGTypes`);
+#' (3) write data and metadata into files.
+#'
+#' Example of `snp.genocov` file:
+#'   id,nGTypes,snp_s1,snp_s2,...
+#'   1,50,0,0,...
+#'   2,50,0,0,...
+#'
+#' Example of `snp.geno-list` file:
+#'  snp_s1
+#'  snp_s2
+#'  ...
+#'
+#' @export
+snpcovdata2solar <- function(mat, out, dir, nGTypes = FALSE)
+{
+  # parse arguments
+  stopifnot(class(mat) == "matrix")
+
+  stopifnot(!is.null(rownames(mat)))
+  stopifnot(!is.null(colnames(mat)))
+  
+  stopifnot(file.exists(dir))
+
+  # slots in `out` argumnet
+  genocov.files <- out$assoc$genocov.files
+  stopifnot(length(genocov.files) == 1)
+
+  genolist.file <- out$assoc$genolist.file
+  stopifnot(length(genolist.file) == 1)
+    
+  # extract variabels
+  ids <- rownames(mat)
+  snpnames <- colnames(mat)
+
+  # compute `ID` and `nGTypes` columns
+  snpnames <- paste("snp", snpnames, sep = "_")
+  if(nGTypes) {
+    ngtypes <- apply(genocovdata, 1, function(x) sum(!is.na(x)))
+  }
+  
+  # prepare `mat`
+  colnames(mat) <- snpnames
+  if(nGTypes) {
+    mat <- cbind(ID = ids, nGTypes = ngtypes, mat)
+  } else {
+    mat <- cbind(ID = ids, mat)
+  }
+  
+  # write table
+  write.table(mat, file.path(dir, genocov.files),
+    row.names = FALSE, sep = ",", quote = FALSE, na = "")
+
+  write.table(snpnames, file.path(dir, genolist.file),
+    col.names = FALSE, row.names = FALSE, sep = ",", quote = FALSE, na = "")
+  
   return(invisible())
 }
 
@@ -296,6 +360,8 @@ kf_match_pedindex <- function(kf, pf)
     
     ids.pf <- unique(pf$ID)
     ids.kf <- unique(c(kf$ID1, kf$ID2))
+    #print(ids.pf)
+    #print(ids.kf)
     stopifnot(all(ids.kf %in% ids.pf))
     stopifnot(all(ids.pf %in% ids.kf))    
     

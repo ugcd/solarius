@@ -86,6 +86,9 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
     pf[, i] <- as.character(pf[, i])
   }  
   
+  pf <- mutate(pf,
+    ID = gsub(" ", "", ID))
+  
   if(ids.unique) {
     stopifnot(!all(duplicated(pf$ID)))
   }
@@ -112,15 +115,15 @@ read_phi2_gz <- function(phi2.gz)
   return(kf)
 }
 
-kmat2phi2 <- function(kmat, dir)
+kmat2phi2 <- function(kmat, dir, kin2.gz = "kin2.gz")
 {
   kf <- kmat2kf(kmat)
 
-  kf2phi2(kf, dir)  
+  kf2phi2(kf, dir, kin2.gz = kin2.gz)  
 }
 
 #' @importFrom gdata write.fwf
-kf2phi2 <- function(kf, dir)
+kf2phi2 <- function(kf, dir, kin2.gz = "kin2.gz")
 {
   pedindex.out <- file.path(dir, "pedindex.out")
   pf <- read_pedindex(pedindex.out)
@@ -137,15 +140,16 @@ kf2phi2 <- function(kf, dir)
   knames <- c("IBDID1", "IBDID2", "phi2")
   stopifnot(knames %in% names(kf))
   kf <- subset(kf, select = knames)
+
+  phi2.gz <- file.path(dir, kin2.gz)
   
   # @ http://helix.nih.gov/Documentation/solar-6.6.2-doc/08.chapter.html#phi2
   # - The coefficients should begin in the fourteenth character column, 
   #   or higher, counting the first character column as number one. 
   #   That is why `width = c(10, 10, 10)`.
-  #phi2.gz <- file.path(dir, "kin2.gz")
-  #ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
-  #  rownames = FALSE, colnames = FALSE,
-  #  sep = " ", width = c(10, 10, 10))
+  ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
+    rownames = FALSE, colnames = FALSE,
+    sep = " ", width = c(10, 10, 10))
 
   #kf$d7 <- 1.0
   #kf <- mutate(kf,
@@ -153,26 +157,16 @@ kf2phi2 <- function(kf, dir)
   #  d7 = sprintf("%.7f", d7)
   #)    
   
-  #imin <- min(min(kf$IBDID1, kf$IBDID2))
-  #imax <- max(max(kf$IBDID1, kf$IBDID2))
-  #for(i in imin:imax) {
-  #  for(j in 1:i) {
-  #    
-  #  }
-  #}
-  
-  #phi2.gz <- file.path(dir, "kin2.gz")
   #ret <- gdata::write.fwf(kf, gzfile(phi2.gz),
   #  rownames = FALSE, colnames = FALSE, justify = "right",
   #  sep = " ", width = c(5, 5, 10, 10))
   
   ### CSV format
-  ord <- with(kf2, order(as.integer(id1), as.integer(id2)))
-  kf2 <- kf2[ord, ]
+  #ord <- with(kf2, order(as.integer(id1), as.integer(id2)))
+  #kf2 <- kf2[ord, ]
   
-  phi2.gz <- file.path(dir, "kin2.gz")
-  ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
-    row.names = FALSE, col.names = TRUE, sep = ",")
+  #ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
+  #  row.names = FALSE, col.names = TRUE, sep = ",")
   
   return(invisible())
 }

@@ -33,7 +33,7 @@ solar_assoc <- function(dir, out, snplist.file, out.dir, out.file)
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 
     # (SOLAR's strange things)
     paste("mga ", "-files snp.genocov ", "-snplists ", snplist.file, " -out ", out.file, sep = ""))
-    
+
   ### run solar    
   ret <- solar(cmd, dir, result = FALSE) 
   # `result = FALSE`, because all assoc. results are printed to output

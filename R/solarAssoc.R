@@ -5,7 +5,7 @@ solarAssoc <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
   # association 
-  snpformat, snpdata, snplist, genocov.files, snplist.files,
+  snpformat, snpdata, snpcovdata, snplist, genocov.files, snplists.files,
   cores = getOption("cores"),
   ...,
   verbose = 0) 
@@ -14,13 +14,21 @@ solarAssoc <- function(formula, data, dir,
   mc <- match.call()
   
   # missing parameters
-  if(missing(snpformat)) snpformat <- "012"
+  #if(missing(snpformat)) snpformat <- "012"
   
-  if(missing(snpdata) & missing(genocov.files)) {
-    stop("Error in `solarAssoc`: input SNP data must be given either by `snpdata` or `genocov.files` arguments.")
+  if(missing(snpdata) & missing(snpcovdata) & missing(genocov.files)) {
+    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata`/`snpcovdata` or `genocov.files` arguments.")
   }
+  if(!missing(snpdata) & !missing(snpcovdata)) {
+    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata` or `snpcovdata` or `genocov.files` arguments.")
+  }
+
+  # check for matrix format  
   if(!missing(snpdata)) {
     stopifnot(class(snpdata) == "matrix")
+  }
+  if(!missing(snpcovdata)) {
+    stopifnot(class(snpcovdata) == "matrix")
   }
     
   # cores
@@ -47,7 +55,8 @@ solarAssoc <- function(formula, data, dir,
     kinship, traits, covlist, ..., verbose = verbose)
 
   ### step 3.1: add assoc.-specific slots to `out`
-  out$solar$assoc <- list(call = mc, snpformat = snpformat,
+  out$assoc <- list(call = mc, #snpformat = snpformat,
+    cores = cores,
     genocov.files = ifelse(missing(genocov.files), "snp.genocov", genocov.files),
     genolist.file = "snp.geno-list",
     snplists.files = ifelse(missing(snplists.files), "snp.geno-list", snplists.files),
@@ -58,9 +67,13 @@ solarAssoc <- function(formula, data, dir,
   if(!missing(snpdata)) {
     ret <- snpdata2solar(snpdata, dir)
   }
+
+  if(!missing(snpcovdata)) {
+    ret <- snpcovdata2solar(snpcovdata, out, dir)
+  }
   
   ### number of snps
-  snps <- readLines(file.path(dir, genolist.file))
+  snps <- readLines(file.path(dir, out$assoc$genolist.file))
   num.snps <- length(snps)
 
   out$assoc$num.snps <- num.snps
@@ -85,19 +98,19 @@ solarAssoc <- function(formula, data, dir,
 prepare_assoc_files <- function(out, dir)
 {  
   stopifnot(!is.null(out$assoc$cores))
-  stopifnot(!is.null(out$solar$assoc$genocov.files))
-  stopifnot(!is.null(out$solar$assoc$genolist.file))
-  stopifnot(!is.null(out$solar$assoc$out.dirs))
-  stopifnot(!is.null(out$solar$assoc$out.files))
-  
-  stopifnot(length(genolist.file) == 1)
+  stopifnot(!is.null(out$assoc$genocov.files))
+  stopifnot(!is.null(out$assoc$genolist.file))
+  stopifnot(!is.null(out$assoc$out.dirs))
+  stopifnot(!is.null(out$assoc$out.files))
   
   cores <- out$assoc$cores
   genocov.files <- out$assoc$genocov.files
-  genolist.file <- out$solar$assoc$genolist.file
-  snplists.files0 <- out$solar$assoc$snplists.files0
-  out.dirs <- out$assoc$out.dirs
-  out.files <- out$assoc$out.files
+  genolist.file <- out$assoc$genolist.file
+  snplists.files0 <- out$assoc$snplists.files
+  out.dirs0 <- out$assoc$out.dirs
+  out.files0 <- out$assoc$out.files
+
+  stopifnot(length(genolist.file) == 1)
   
   if(cores == 1) {
     snplists.files <- snplists.files0
@@ -143,6 +156,8 @@ prepare_assoc_files <- function(out, dir)
 
 run_assoc <- function(out, dir)
 {    
+  cores <- out$assoc$cores
+  
   snplists.files <- out$assoc$snplists.files
   out.dirs <- out$assoc$out.dirs
   out.files <- out$assoc$out.files
@@ -183,7 +198,7 @@ run_assoc <- function(out, dir)
     out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
   }
   out$snpf <- out.assoc$snpf
-  out$solar$assoc <- out.assoc$solar
+  out$assoc$solar <- out.assoc$solar
     
   return(out)
 }
