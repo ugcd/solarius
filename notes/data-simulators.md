@@ -4,6 +4,7 @@ Lists:
 
 * [https://popmodels.cancercontrol.cancer.gov/gsr/packages/](https://popmodels.cancercontrol.cancer.gov/gsr/packages/)
   * `FASTSlink` from Department of Human Genetics, University of Pittsburgh, [link](https://watson.hgen.pitt.edu/register/soft_doc.html)
+  * http://research.nhgri.nih.gov/gasp/index.shtml from NIH
 
 Other programs
 
