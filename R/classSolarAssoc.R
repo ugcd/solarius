@@ -12,6 +12,23 @@ print.solarAssoc <- function(x, ...)
 {
   cat("\nCall: ")
   print(x$assoc$call)
+  
+  cat("\n Input SNP data:\n")
+  switch(x$assoc$assoc.informat,
+    "snpdata" = cat("  *  ", x$assoc$num.snps, " SNP genotypes passed by `snpdata` argument\n", sep = ""),
+    "snpcovdata" = cat("  *  ", x$assoc$num.snps, " SNP covariates passed by `snpcovdata` argument\n", sep = ""),
+    "genocov.file" = cat("  *  SNP covariates passed in ", length(x$assoc$genocov.files),
+      " file(s) by `genocov.files` argument\n", sep = ""),
+    stop("switch error")
+  )
+  
+  cat("\n Output results of association:\n")
+  if(x$assoc$assoc.outformat == "df") {
+    cat("\n  *  Table of association results (first 5 out of ", nrow(x$snpf), " rows):\n")
+    print(head(x$snpf, 5))
+  }
+  #cat("  *  assoc.outformat: ", x$assoc$assoc.outformat, "\n", sep = "")
+  
 }
 
 #' @method plot solarAssoc

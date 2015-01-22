@@ -12,7 +12,7 @@
 # - out$traits
 # - out$solar$model.filename
 # - out$solar$phe.filename)
-solar_assoc <- function(dir, out, snplist.file, out.dir, out.file)
+solar_assoc <- function(dir, out, genocov.files, snplist.file, out.dir, out.file)
 {
   stopifnot(file.exists(dir))
   
@@ -32,7 +32,8 @@ solar_assoc <- function(dir, out, snplist.file, out.dir, out.file)
     paste("outdir", out.dir),
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 
     # (SOLAR's strange things)
-    paste("mga ", "-files snp.genocov ", "-snplists ", snplist.file, " -out ", out.file, sep = ""))
+    paste("mga ", "-files ", paste(genocov.files, collapse = " "), 
+      " -snplists ", snplist.file, " -out ", out.file, sep = ""))
 
   ### run solar    
   ret <- solar(cmd, dir, result = FALSE) 

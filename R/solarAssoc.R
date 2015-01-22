@@ -4,8 +4,11 @@
 solarAssoc <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
-  # association 
-  snpformat, snpdata, snpcovdata, snplist, genocov.files, snplists.files,
+  # input data to association 
+  snpformat, snpdata, snpcovdata, snplist, genocov.files, genolist.file, snplists.files,
+  # output data from association
+  assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
+  # misc
   cores = getOption("cores"),
   ...,
   verbose = 0) 
@@ -16,12 +19,26 @@ solarAssoc <- function(formula, data, dir,
   # missing parameters
   #if(missing(snpformat)) snpformat <- "012"
   
+  
+  # check for input data argument
   if(missing(snpdata) & missing(snpcovdata) & missing(genocov.files)) {
     stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata`/`snpcovdata` or `genocov.files` arguments.")
   }
+
   if(!missing(snpdata) & !missing(snpcovdata)) {
     stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata` or `snpcovdata` or `genocov.files` arguments.")
   }
+
+  if(!missing(genocov.files)) {
+    if(missing(snplists.files)) {
+      stop("Error in `solarAssoc`: both genocov.files & snplists.files must be specified.")
+    }
+  }
+
+  assoc.informat <- ifelse(!missing(genocov.files), "genocov.file",
+    ifelse(!missing(snpdata), "snpdata",
+    ifelse(!missing(snpcovdata), "snpcovdata",
+    stop("ifelse error in processing `assoc.informat`"))))
 
   # check for matrix format  
   if(!missing(snpdata)) {
@@ -30,6 +47,9 @@ solarAssoc <- function(formula, data, dir,
   if(!missing(snpcovdata)) {
     stopifnot(class(snpcovdata) == "matrix")
   }
+  
+  # check for output data arguments
+  assoc.outformat <- match.arg(assoc.outformat)
     
   # cores
   if(is.null(cores)) {  
@@ -58,29 +78,35 @@ solarAssoc <- function(formula, data, dir,
   out$assoc <- list(call = mc, #snpformat = snpformat,
     cores = cores,
     genocov.files = ifelse(missing(genocov.files), "snp.genocov", genocov.files),
-    genolist.file = "snp.geno-list",
+    #genolist.file = ifelse(missing(genolist.file), "snp.geno-list", genolist.file),
+    genolist.file = "snp.geno-list", 
     snplists.files = ifelse(missing(snplists.files), "snp.geno-list", snplists.files),
-    out.dirs = "assoc", out.files = "assoc.out")
+    out.dirs = "assoc", out.files = "assoc.out",
+    # input/output data for association
+    assoc.informat = assoc.informat,
+    assoc.outformat = assoc.outformat)
 
   ### step 4: add genotype data to `dir`
   #snpdata <- format_snpdata(snpdata, snpformat)
-  if(!missing(snpdata)) {
+  
+  if(out$assoc$assoc.informat == "snpdata") {
     ret <- snpdata2solar(snpdata, dir)
-  }
-
-  if(!missing(snpcovdata)) {
+  } else if(out$assoc$assoc.informat == "snpcovdata") {
     ret <- snpcovdata2solar(snpcovdata, out, dir)
   }
   
   ### number of snps
-  snps <- readLines(file.path(dir, out$assoc$genolist.file))
-  num.snps <- length(snps)
+  num.snps <- as.integer(NA)
+  if(out$assoc$assoc.informat %in% c("snpdata", "snpcovdata")) {
+    snps <- readLines(file.path(dir, out$assoc$genolist.file))
+    num.snps <- length(snps)
+  }
 
   out$assoc$num.snps <- num.snps
     
   ### step 6: prepare data for parallel computation (if necessary)
   out <- prepare_assoc_files(out, dir)
-
+  
   ### step 7: run assoc  
   out <- run_assoc(out, dir)
 
@@ -158,13 +184,14 @@ run_assoc <- function(out, dir)
 {    
   cores <- out$assoc$cores
   
+  genocov.files <- out$assoc$genocov.files
   snplists.files <- out$assoc$snplists.files
   out.dirs <- out$assoc$out.dirs
   out.files <- out$assoc$out.files
 
   ### step 5: run assoc
   if(cores == 1) {
-    out.assoc <- solar_assoc(dir, out, snplists.files, out.dirs, out.files)
+    out.assoc <- solar_assoc(dir, out, genocov.files, snplists.files, out.dirs, out.files)
   } else {
     ret <- require(doMC)
     if(!ret) {
