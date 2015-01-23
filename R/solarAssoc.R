@@ -33,6 +33,16 @@ solarAssoc <- function(formula, data, dir,
     if(missing(snplists.files)) {
       stop("Error in `solarAssoc`: both genocov.files & snplists.files must be specified.")
     }
+    if(length(genocov.files) > 1) {
+      if(length(genocov.files) != length(snplists.files)) {
+        stop("Error in `solarAssoc`: if several `genocov.files` (", length(genocov.files), 
+          ") are given, then the same number of `snplists.files` (",length(snplists.files), ") is required.\n",
+          "  --  SOLAR processes these files differently: `genocov.files` are processed one by one in the analysis chain, ",
+          "while `snplists.files` are read all together before the analysis starts.\n",
+          "  --  When several groups of files are given, SOLAR is called for each group independelty. ",
+          "Groping, e.g. SNPS by chromosome, supposed to be under the user control (before SOLAR is called).")
+      }
+    }
   }
 
   assoc.informat <- ifelse(!missing(genocov.files), "genocov.file",
@@ -75,12 +85,27 @@ solarAssoc <- function(formula, data, dir,
     kinship, traits, covlist, ..., verbose = verbose)
 
   ### step 3.1: add assoc.-specific slots to `out`
+  if(missing(genocov.files)) {
+    genocov.files.local <- TRUE
+    genocov.files <- "snp.genocov"
+  } else {
+    genocov.files.local <- FALSE
+    genocov.files <- normalizePath(genocov.files)
+  }
+  
+  if(missing(snplists.files)) {
+    snplists.files.local <- TRUE
+    snplists.files <- "snp.geno-list"
+  } else {
+    snplists.files.local <- FALSE
+    snplists.files <- normalizePath(snplists.files)
+  }
+  
   out$assoc <- list(call = mc, #snpformat = snpformat,
     cores = cores,
-    genocov.files = ifelse(missing(genocov.files), "snp.genocov", genocov.files),
-    #genolist.file = ifelse(missing(genolist.file), "snp.geno-list", genolist.file),
+    genocov.files = genocov.files, genocov.files.local = genocov.files.local,
     genolist.file = "snp.geno-list", 
-    snplists.files = ifelse(missing(snplists.files), "snp.geno-list", snplists.files),
+    snplists.files = snplists.files, snplists.files.local = snplists.files.local,
     out.dirs = "assoc", out.files = "assoc.out",
     # input/output data for association
     assoc.informat = assoc.informat,
@@ -125,26 +150,47 @@ prepare_assoc_files <- function(out, dir)
 {  
   stopifnot(!is.null(out$assoc$cores))
   stopifnot(!is.null(out$assoc$genocov.files))
-  stopifnot(!is.null(out$assoc$genolist.file))
   stopifnot(!is.null(out$assoc$out.dirs))
   stopifnot(!is.null(out$assoc$out.files))
   
   cores <- out$assoc$cores
+
   genocov.files <- out$assoc$genocov.files
-  genolist.file <- out$assoc$genolist.file
   snplists.files0 <- out$assoc$snplists.files
+  genolist.file0 <- out$assoc$genolist.file
+  snplists.files.local <- out$assoc$snplists.files.local
+  
   out.dirs0 <- out$assoc$out.dirs
   out.files0 <- out$assoc$out.files
 
-  stopifnot(length(genolist.file) == 1)
-  
-  if(cores == 1) {
+  ### case 1
+  if(length(genocov.files) > 1) {
+    stopifnot(length(genocov.files) == length(snplists.files0))
+    
+    snplists.files <- snplists.files0
+    num.gr <- length(genocov.files)
+    
+    out.dirs <- rep(as.character(NA), num.gr)
+    out.files <- rep(as.character(NA), num.gr)
+
+    for(k in 1:num.gr) {
+      out.dirs[k] <- paste(out.dirs0, k, sep = "")
+      out.files[k] <- paste(out.files0, k, sep = "")
+    }
+  ### case 2
+  } else if(cores == 1) {
     snplists.files <- snplists.files0
     out.dirs <- out.dirs0
     out.files <- out.files0
+  ### case 3
+  # - use `genolist.file` to split lists of SNPs
   } else {
     ### number of snps
-    snps <- readLines(file.path(dir, genolist.file))
+    if(snplists.files.local) {
+      snps <- unlist(llply(file.path(dir, snplists.files0), function(x) readLines(x)))  
+    } else {
+      snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
+    }
     num.snps <- length(snps)
 
     num.gr <- cores 
@@ -155,7 +201,7 @@ prepare_assoc_files <- function(out, dir)
     out.files <- rep(as.character(NA), num.gr)
 
     for(k in 1:nlevels(gr)) {
-      snplists.files.k <- paste(snplists.files0, k, sep = "")
+      snplists.files.k <- paste(genolist.file0, k, sep = "")
       out.dirs.k <- paste(out.dirs0, k, sep = "")
       out.files.k <- paste(out.files0, k, sep = "")
       
@@ -183,47 +229,61 @@ prepare_assoc_files <- function(out, dir)
 run_assoc <- function(out, dir)
 {    
   cores <- out$assoc$cores
-  
+    
   genocov.files <- out$assoc$genocov.files
   snplists.files <- out$assoc$snplists.files
   out.dirs <- out$assoc$out.dirs
   out.files <- out$assoc$out.files
 
-  ### step 5: run assoc
-  if(cores == 1) {
-    out.assoc <- solar_assoc(dir, out, genocov.files, snplists.files, out.dirs, out.files)
-  } else {
+  parallel <- (cores > 1)
+  if(parallel) {
     ret <- require(doMC)
     if(!ret) {
       stop("`doMC` package is required for parallel calculations")
     }
     doMC::registerDoMC(cores)
-    
-    out.gr <- llply(1:length(snplists.files), function(i) {
-      solar_assoc(dir, out, snplists.files[i], out.dirs[i], out.files[i])
-    }, .parallel = TRUE)
-    
-    # process results
-    snpf.list <- llply(out.gr, function(x) list(snpf = x$snpf))
-    
-    # -- try to union `snpf` slots in `snpf.list`
-    snpf <- snpf.list 
-    ret <- try({
-      ldply(snpf.list, function(x) x$snpf)
-    })
+  }
 
-    if(class(ret) != "try-error") {
-      snpf <- ret
-    }
+  ### case 1
+  if(length(genocov.files) > 1) {
+    out.gr <- llply(1:length(genocov.files), function(i) {
+      solar_assoc(dir, out, genocov.files[i], snplists.files[i], out.dirs[i], out.files[i])
+    }, .parallel = parallel)
+  ### case 2 (length(genocov.files) == 1)
+  } else if(cores == 1) {
+    out.gr <- llply(1, function(i) {
+      solar_assoc(dir, out, genocov.files, snplists.files, out.dirs, out.files)
+    })
+  } else {
+    out.gr <- llply(1:length(snplists.files), function(i) {
+      solar_assoc(dir, out, genocov.files, snplists.files[i], out.dirs[i], out.files[i])
+    }, .parallel = TRUE)
+  }
+      
+  ### process results
+  snpf.list <- llply(out.gr, function(x) try({
+    fread(x$tab.file)}), .parallel = parallel)
+  
+  # -- try to union `snpf` slots in `snpf.list`
+  snpf <- snpf.list 
+  ret <- try({
+    rbindlist(snpf)
+  })
+
+  if(class(ret)[1] != "try-error") {
+    snpf <- ret
+    snpf <- rename(snpf, c("p(SNP)" = "pSNP"))
+  }
     
-    # -- extract assoc. solar outputs
-    assoc.solar <- llply(out.gr, function(x) x$solar)
+  # -- extract assoc. solar outputs
+  assoc.solar <- llply(out.gr, function(x) x$solar)
     out.assoc.solar <- list(cmd = llply(assoc.solar, function(x) x$cmd), 
       solar.ok = llply(assoc.solar, function(x) x$solar.ok))
     
-    # -- final output
-    out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
-  }
+  # -- final output
+  out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
+
+  ### assign
   out$snpf <- out.assoc$snpf
   out$assoc$solar <- out.assoc$solar
     

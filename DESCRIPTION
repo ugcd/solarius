@@ -9,7 +9,8 @@ Description: R package wrapper to SOLAR
 License: GPL (>= 3)
 LazyData: true
 Depends:
-    plyr (>= 1.8.1)
+    plyr (>= 1.8.1),
+    data.table
 Suggests:
     ggplot2,
     scales,
