@@ -8,19 +8,6 @@ R package wrapper to SOLAR
 * [SOLAR web page at txbiomedgenetics.org](http://solar.txbiomedgenetics.org/)
 * [SOLAR Eclipse is a new collaboration to develop genetic analysis tools for imaging applications](http://www.nitrc.org/projects/se_linux/)
 
-## Data sets
-
-* [SNPStats: testdata](http://www.bioconductor.org/packages/release/bioc/html/snpStats.html)
-  * This dataset comprises several data frames from a fictional (and unrealistically small) study. The
-dataset started off as real data from a screen of non-synonymous SNPs for association with type 1
-diabetes, but the original identifiers have been removed and a random case/control status has been
-generated.
-  * Autosomes: An object of class "SnpMatrix" containing genotype calls for 400 subjects at
-9445 autosomal SNPs
-* http://www.genabel.org/GenABEL/polygenic.html
-* http://www.bioconductor.org/packages/release/BiocViews.html#___SNP
-  * http://www.bioconductor.org/packages/release/bioc/vignettes/snpStats/inst/doc/tdt-vignette.pdf
-
 ### Ideas
 
 * do not automate things in R, which `SOLAR` has already automated
