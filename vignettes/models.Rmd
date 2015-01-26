@@ -11,6 +11,10 @@ output:
 bibliography: ref.bib
 ---
 
+```{r}
+opts_chunk$set(eval = FALSE)
+```
+
 ## About
 
 This vignette introduces examples on fitting statistical models available in `SOLAR`.
@@ -49,6 +53,12 @@ Additional references include:
 * Mitchell BD, Ghosh S, Schneider JL, Birznieks G, Blangero J (1997) Power of variance component linkage analysis to detect epistasis. Genet Epidemiol 14:1017-1022.
 * Williams JT, Blangero J (1999) Power of variance component linkage analysis to detect quantitative trait loci. Ann Hum Genet 63(6):545-563.
 * Williams JT, Blangero J (1999) Comparison of variance components and sibpair-based approaches to quantitative trait linkage analysis in unselected samples. Genet Epidemiol 16(2):113-134.
+
+## Statistical models
+
+\[
+y_{n \times 1} = X \beta + a_{n \times 1} + e_{n \times 1}
+\]
 
 ## Data sets
 

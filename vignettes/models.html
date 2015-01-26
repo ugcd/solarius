@@ -71,6 +71,7 @@ img {
 <ul>
 <li><a href="#about">About</a></li>
 <li><a href="#solar"><code>SOLAR</code></a></li>
+<li><a href="#statistical-models">Statistical models</a></li>
 <li><a href="#data-sets">Data sets</a></li>
 <li><a href="#structure-of-solarius-r-package">Structure of <code>solarius</code> R package</a></li>
 <li><a href="#polygenic-model-univariate">Polygenic model (univariate)</a><ul>
@@ -97,6 +98,7 @@ img {
 </ul>
 </div>
 
+<pre class="r"><code>opts_chunk$set(eval = FALSE)</code></pre>
 <div id="about" class="section level2">
 <h2>About</h2>
 <p>This vignette introduces examples on fitting statistical models available in <code>SOLAR</code>. Three types of models for quantitative genetic analysis in family-based studies are introduced: polygenic, association and linkage.</p>
@@ -132,6 +134,12 @@ img {
 <li>Williams JT, Blangero J (1999) Comparison of variance components and sibpair-based approaches to quantitative trait linkage analysis in unselected samples. Genet Epidemiol 16(2):113-134.</li>
 </ul>
 </div>
+<div id="statistical-models" class="section level2">
+<h2>Statistical models</h2>
+<p><span class="math">\[
+y_{n \times 1} = X \beta + a_{n \times 1} + e_{n \times 1}
+\]</span></p>
+</div>
 <div id="data-sets" class="section level2">
 <h2>Data sets</h2>
 <ul>
@@ -149,194 +157,36 @@ img {
 <h2>Polygenic model (univariate)</h2>
 <pre class="r"><code>M1 &lt;- solarPolygenic(trait1 ~ age + sex, dat30)
 M1</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait1                Individuals:  174 
-##  
-##           H2r is 0.8061621  p = 6.1167535e-10  (Significant) 
-##         H2r Std. Error:  0.1100465 
-##  
-##  
-##  Proportion of Variance Due to All Final Covariates Is 
-##                0.0330070 
-##  
-##  Loglikelihoods and chi's are in trait1/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor, nocovar 
-##  
-##  Residual Kurtosis is -0.3603, within normal range</code></pre>
 <div id="testing-covariates" class="section level3">
 <h3>Testing covariates</h3>
 <pre class="r"><code>M2 &lt;- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 M2</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait1 ~ age + sex, data = dat30, covtest = TRUE)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait1                Individuals:  174 
-##  
-##           H2r is 0.8061621  p = 6.1167535e-10  (Significant) 
-##         H2r Std. Error:  0.1100465 
-##  
-##                                       age  p = 0.9753082  (Not Sig., but fixed) 
-##                                       sex  p = 0.1455341  (Not Sig., but fixed) 
-##  
-##  Proportion of Variance Due to All Final Covariates Is 
-##                0.0330070 
-##  
-##  Loglikelihoods and chi's are in trait1/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor, nocovar 
-##  Initial sporadic and polygenic models are s0 and p0 
-##  Constrained covariate models are named no&lt;covariate name&gt; 
-##  
-##  Residual Kurtosis is -0.3603, within normal range</code></pre>
 <pre class="r"><code>M2$cf</code></pre>
-<pre><code>##   covariate      Estimate         SE    Chi      pval
-## 1       age  0.0004591117 0.01483782 0.0010 0.9753082
-## 2       sex -0.4559509166 0.31250456 2.1184 0.1455341</code></pre>
 </div>
 <div id="custom-kinship-matrix" class="section level3">
 <h3>Custom kinship matrix</h3>
 <p><code>dat50</code> data set is used.</p>
 <pre class="r"><code>M3 &lt;- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
 M3</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait ~ 1, data = phenodata, kinship = kin)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait                 Individuals:  66 
-##  
-##           H2r is 0.1000000  p = 0.5000000  (Not Significant) 
-##  
-##  
-##  Loglikelihoods and chi's are in trait/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor 
-##  
-##  Residual Kurtosis is -0.6742, within normal range</code></pre>
 <p>The polygenic and sporadic models have the same LRT statistics.</p>
 <pre class="r"><code>M3$lf</code></pre>
-<pre><code>##       model    loglik
-## 1  sporadic -27.77137
-## 2 polygenic -27.77137</code></pre>
 </div>
 </div>
 <div id="polygenic-model-bivariate" class="section level2">
 <h2>Polygenic model (bivariate)</h2>
 <pre class="r"><code>B1 &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30)
 B1</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait1 + trait2 ~ 1, data = dat30)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait1 trait2         Individuals:  174 
-##  
-##           H2r(trait1) is 0.8218823   
-##         H2r(trait1) Std. Error:  0.1053258 
-##  
-##           H2r(trait2) is 0.6270026   
-##         H2r(trait2) Std. Error:  0.1158107 
-##  
-##           RhoE is 0.4120487   
-##         RhoE Std. Error:  0.1969379 
-##  
-##           RhoG is 0.9728759 
-##         RhoG Std. Error:  0.0374442 
-##  
-##         Derived Estimate of RhoP is 0.8045957 
-##  
-##  
-##  Loglikelihoods and chi's are in trait1.trait2/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor</code></pre>
 <div id="testing-correlations" class="section level3">
 <h3>Testing correlations</h3>
 <pre class="r"><code>B2 &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = &quot;-testrhoe -testrhog&quot;)
 B2</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait1 + trait2 ~ 1, data = dat30, polygenic.options = &quot;-testrhoe -testrhog&quot;)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait1 trait2         Individuals:  174 
-##  
-##           H2r(trait1) is 0.8218823   
-##         H2r(trait1) Std. Error:  0.1053258 
-##  
-##           H2r(trait2) is 0.6270026   
-##         H2r(trait2) Std. Error:  0.1158107 
-##  
-##           RhoE is 0.4120487  p = 0.1424023 
-##         RhoE Std. Error:  0.1969379 
-##  
-##           RhoG is 0.9728759 
-##         RhoG Std. Error:  0.0374442 
-##  
-##  
-##         RhoG different from zero  p = 2.2463156e-09 
-##         RhoG different from 1.0   p = 0.2098041 
-##         Derived Estimate of RhoP is 0.8045957 
-##  
-##  
-##  Loglikelihoods and chi's are in trait1.trait2/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor</code></pre>
 <pre class="r"><code>B2$vcf</code></pre>
-<pre><code>##       varcomp  Estimate         SE    zscore
-## 1 h2r(trait1) 0.8218823 0.10532575  7.803242
-## 2  e2(trait1) 0.1781177 0.10532575  1.691112
-## 3 h2r(trait2) 0.6270026 0.11581068  5.414031
-## 4  e2(trait2) 0.3729974 0.11581068  3.220751
-## 5        rhog 0.9728759 0.03744417 25.982039
-## 6        rhoe 0.4120487 0.19693793  2.092277</code></pre>
 </div>
 <div id="trait-specific-covariates" class="section level3">
 <h3>Trait-specific covariates</h3>
 <pre class="r"><code>B3 &lt;- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
 B3</code></pre>
-<pre><code>## 
-## Call: solarPolygenic(formula = trait1 + trait2 ~ sex + age(trait2), 
-##     data = dat30)
-## 
-## File polygenic.out:
-##  Pedigree:    dat.ped 
-##  Phenotypes:  dat.phe 
-##  Trait:       trait1 trait2         Individuals:  174 
-##  
-##           H2r(trait1) is 0.7956974   
-##         H2r(trait1) Std. Error:  0.1129518 
-##  
-##           H2r(trait2) is 0.6029008   
-##         H2r(trait2) Std. Error:  0.1197632 
-##  
-##           RhoE is 0.4655421   
-##         RhoE Std. Error:  0.1736882 
-##  
-##           RhoG is 0.9676250 
-##         RhoG Std. Error:  0.0397582 
-##  
-##         Derived Estimate of RhoP is 0.8027999 
-##  
-##  
-##  Loglikelihoods and chi's are in trait1.trait2/polygenic.logs.out 
-##  Best model is named poly and null0 
-##  Final models are named poly, spor</code></pre>
 <pre class="r"><code>l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, &quot;\n&quot;))</code></pre>
-<pre><code>## # mu = \{t1*(&lt;Mean(trait1)&gt;+&lt;bsex(trait1)&gt;*Female) + t2*(&lt;Mean(trait2)&gt; 
-## # +&lt;bsex(trait2)&gt;*Female+&lt;bage(trait2)&gt;*(age-39.87931034))\} 
-## loglike set -361.499294</code></pre>
 </div>
 </div>
 <div id="association-model" class="section level2">
@@ -346,59 +196,11 @@ B3</code></pre>
 <h3>SNP data by <code>snpdata</code> argument</h3>
 <pre class="r"><code>A1 &lt;- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 A1</code></pre>
-<pre><code>## 
-## Call: solarAssoc(formula = trait ~ 1, data = phenodata, kinship = kin, 
-##     snpdata = genodata)
-## 
-##  Input SNP data:
-##   *  50 SNP genotypes passed by `snpdata` argument
-## 
-##  Output results of association:
-## 
-##   *  Table of association results (first 5 out of 50 rows):
-##    SNP NAv      chi     pSNP      bSNP   bSNPse   Varexp  est_maf
-## 1:  s1  66 0.189994 0.662922  0.160860 0.369045 0.002875 0.053031
-## 2:  s2  66 2.093946 0.147884 -0.952376 0.658151 0.031228 0.015152
-## 3:  s3  66 0.340986 0.559261 -0.244299 0.418362 0.005153 0.022728
-## 4:  s4  66 0.005618 0.940252  0.014026 0.187133 0.000085 0.272728
-## 5:  s5  66 0.273082 0.601272  0.485967 0.929951 0.004129 0.007576
-##      est_mac dosage_sd
-## 1:  7.000026  0.307915
-## 2:  1.999998  0.171420
-## 3:  3.000030  0.271462
-## 4: 36.000030  0.607574
-## 5:  1.000032  0.122155
-## 
-##  CPU time on 1 core(s): 00:00:02</code></pre>
 </div>
 <div id="snp-data-by-snpcovdata-argument" class="section level3">
 <h3>SNP data by <code>snpcovdata</code> argument</h3>
 <pre class="r"><code>A2 &lt;- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
 A2</code></pre>
-<pre><code>## 
-## Call: solarAssoc(formula = trait ~ 1, data = phenodata, kinship = kin, 
-##     snpcovdata = genocovdata)
-## 
-##  Input SNP data:
-##   *  50 SNP covariates passed by `snpcovdata` argument
-## 
-##  Output results of association:
-## 
-##   *  Table of association results (first 5 out of 50 rows):
-##    SNP NAv      chi     pSNP      bSNP   bSNPse   Varexp  est_maf
-## 1:  s1  66 0.189994 0.662922  0.160860 0.369045 0.002875 0.053031
-## 2:  s2  66 2.093946 0.147884 -0.952376 0.658151 0.031228 0.015152
-## 3:  s3  66 0.340986 0.559261 -0.244299 0.418362 0.005153 0.022728
-## 4:  s4  66 0.005618 0.940252  0.014026 0.187133 0.000085 0.272728
-## 5:  s5  66 0.273082 0.601272  0.485967 0.929951 0.004129 0.007576
-##      est_mac dosage_sd
-## 1:  7.000026  0.307915
-## 2:  1.999998  0.171420
-## 3:  3.000030  0.271462
-## 4: 36.000030  0.607574
-## 5:  1.000032  0.122155
-## 
-##  CPU time on 1 core(s): 00:00:02</code></pre>
 </div>
 <div id="snp-data-by-genocov.files-single-value" class="section level3">
 <h3>SNP data by <code>genocov.files</code> (single value)</h3>
@@ -409,30 +211,6 @@ snplists.files &lt;- file.path(dir, c(&quot;snp.geno-list1&quot;, &quot;snp.geno
 A3 &lt;- solarAssoc(trait ~ 1, phenodata, 
   genocov.files = genocov.files, snplists.files = snplists.files)
 A3</code></pre>
-<pre><code>## 
-## Call: solarAssoc(formula = trait ~ 1, data = phenodata, genocov.files = genocov.files, 
-##     snplists.files = snplists.files)
-## 
-##  Input SNP data:
-##   *  SNP covariates passed in 1 file(s) by `genocov.files` argument
-## 
-##  Output results of association:
-## 
-##   *  Table of association results (first 5 out of 25 rows):
-##    SNP NAv      chi     pSNP      bSNP   bSNPse   Varexp  est_maf
-## 1:  s1  66 0.189994 0.662922  0.160860 0.369045 0.002875 0.053031
-## 2:  s2  66 2.093946 0.147884 -0.952376 0.658151 0.031228 0.015152
-## 3:  s3  66 0.340986 0.559261 -0.244299 0.418362 0.005153 0.022728
-## 4:  s4  66 0.005618 0.940252  0.014026 0.187133 0.000085 0.272728
-## 5:  s5  66 0.273082 0.601272  0.485967 0.929951 0.004129 0.007576
-##      est_mac dosage_sd
-## 1:  7.000026  0.307915
-## 2:  1.999998  0.171420
-## 3:  3.000030  0.271462
-## 4: 36.000030  0.607574
-## 5:  1.000032  0.122155
-## 
-##  CPU time on 1 core(s): 00:00:01</code></pre>
 </div>
 <div id="snp-data-by-genocov.files-many-values" class="section level3">
 <h3>SNP data by <code>genocov.files</code> (many values)</h3>
@@ -443,45 +221,12 @@ snplists.files &lt;- file.path(dir, c(&quot;snp.geno-list1&quot;, &quot;snp.geno
 A4 &lt;- solarAssoc(trait ~ 1, phenodata, 
   genocov.files = genocov.files, snplists.files = snplists.files)
 A4</code></pre>
-<pre><code>## 
-## Call: solarAssoc(formula = trait ~ 1, data = phenodata, genocov.files = genocov.files, 
-##     snplists.files = snplists.files)
-## 
-##  Input SNP data:
-##   *  SNP covariates passed in 2 file(s) by `genocov.files` argument
-## 
-##  Output results of association:
-## 
-##   *  Table of association results (first 5 out of 25 rows):
-##    SNP NAv      chi     pSNP      bSNP   bSNPse   Varexp  est_maf
-## 1:  s1  66 0.189994 0.662922  0.160860 0.369045 0.002875 0.053031
-## 2:  s2  66 2.093946 0.147884 -0.952376 0.658151 0.031228 0.015152
-## 3:  s3  66 0.340986 0.559261 -0.244299 0.418362 0.005153 0.022728
-## 4:  s4  66 0.005618 0.940252  0.014026 0.187133 0.000085 0.272728
-## 5:  s5  66 0.273082 0.601272  0.485967 0.929951 0.004129 0.007576
-##      est_mac dosage_sd
-## 1:  7.000026  0.307915
-## 2:  1.999998  0.171420
-## 3:  3.000030  0.271462
-## 4: 36.000030  0.607574
-## 5:  1.000032  0.122155
-## 
-##  CPU time on 1 core(s): 00:00:01</code></pre>
 </div>
 <div id="parallelization" class="section level3">
 <h3>Parallelization</h3>
 <pre class="r"><code>A5 &lt;- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)</code></pre>
-<pre><code>## Loading required package: doMC
-## Loading required package: foreach
-## foreach: simple, scalable parallel programming from Revolution Analytics
-## Use Revolution R for scalability, fault tolerance and more.
-## http://www.revolutionanalytics.com
-## Loading required package: iterators
-## Loading required package: parallel</code></pre>
-<pre class="r"><code>A1$assoc$tprofile$cputime.sec</code></pre>
-<pre><code>## [1] 2.737</code></pre>
-<pre class="r"><code>A5$assoc$tprofile$cputime.sec</code></pre>
-<pre><code>## [1] 2.65</code></pre>
+<pre class="r"><code>A1$assoc$tprofile$cputime.sec
+A5$assoc$tprofile$cputime.sec</code></pre>
 </div>
 </div>
 <div id="linkage-model" class="section level2">
