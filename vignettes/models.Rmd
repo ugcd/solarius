@@ -1,6 +1,6 @@
 ---
 title: "SOLAR models for quantitative genetic analysis"
-author: "Andrey Ziyatdinov"
+author: "Andrey Ziyatdinov, Helena Brunel"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -17,57 +17,177 @@ This vignette introduces examples on fitting statistical models available in `SO
 Three types of models for quantitative genetic analysis in family-based studies are introduced:
 polygenic, association and linkage.
 
+
+## `SOLAR`
+
+via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
+
+The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is: 
+
+* Almasy L, Blangero J (1998) Multipoint quantitative trait linkage analysis in general pedigrees. Am J Hum Genet 62:1198-1211.
+Bivariate Quantitative trait linkage is described in the following papers:
+* Almasy L, Dyer TD, Blangero J (1997) Bivariate quantitative trait linkage analysis: Pleiotropy versus co-incident linkages. Genet Epidemiol 14:953-958.
+* Williams JT, Van Eerdewegh P, Almasy L, Blangero J (1999) Joint Multipoint Linkage Analysis of Multivariate Qualitative and Quantitative Traits. I. Likelihood Formulation and Simulation Results. Am J Hum Genet 65:1134-1147
+
+The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one:
+
+* Duggirala R, Williams JT, Williams-Blangero S, and Blangero J (1997) A variance component approach to dichotomous trait linkage analysis using a threshold model. Genet Epidemiol 14:987-992.
+
+Gene By Environment Interaction is discussed in:
+
+* Towne B, Siervogel RM, Blangero J (1997) Effects of genotype-by-sex interaction on quantitative trait linkage analysis. Genet Epidemiol 14:1053-1058.
+* Blangero J (1993) Statistical Genetic Approaches to Human Adaptability. Hum Biol 65:941-966.
+
+An examination of LOD adjustment is given in:
+
+* Blangero J, Williams JT, Almasy L (2000) Robust LOD scores for variance component-based linkage analysis. Genet Epidemiol 19 Suppl 1:S8-14.
+* Blangero J, Williams JT, Almasy L (2001) Variance component methods for detecting complex trait loci. Adv Genet 42:151-81.
+
+Additional references include:
+
+* Blangero J, Almasy L (1997) Multipoint oligogenic linkage analysis of quantitative traits. Genet Epidemiol 14:959-964.
+* Mitchell BD, Ghosh S, Schneider JL, Birznieks G, Blangero J (1997) Power of variance component linkage analysis to detect epistasis. Genet Epidemiol 14:1017-1022.
+* Williams JT, Blangero J (1999) Power of variance component linkage analysis to detect quantitative trait loci. Ann Hum Genet 63(6):545-563.
+* Williams JT, Blangero J (1999) Comparison of variance components and sibpair-based approaches to quantitative trait linkage analysis in unselected samples. Genet Epidemiol 16(2):113-134.
+
 ## Data sets
 
-`dat30` [@Andrade2006]
+* GAW10 data distributed within `SOLAR`
+* Simulated data `dat30` from `multic` R package [@Andrade2006]
+* Simulated data `dat50` from `?` R package
+* GAIT1 data 
 
+## Structure of `solarius` R package 
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+library(solarius)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+## Polygenic model (univariate)
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r, cache = TRUE}
+M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
+M1
 ```
 
-Also a quote using `>`:
+### Testing covariates
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r, cache = TRUE}
+M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+M2
+```
+
+```{r, cache = TRUE}
+M2$cf
+```
+
+### Custom kinship matrix
+
+`dat50` data set is used.
+
+```{r, cache = TRUE}
+M3 <- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
+M3
+```
+
+The polygenic and sporadic models have the same LRT statistics.
+
+```{r, cache = TRUE}
+M3$lf
+```
+
+## Polygenic model (bivariate)
+
+```{r, cache = TRUE}
+B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
+B1
+```
+
+### Testing correlations
+
+```{r, cache = TRUE}
+B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
+B2
+```
+
+```{r, cache = TRUE}
+B2$vcf
+```
+
+### Trait-specific covariates
+
+```{r, cache = TRUE}
+B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
+B3
+```
+
+```{r}
+l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
+
+```
+
+## Association model
+
+`dat50` data set is used.
+
+### SNP data by `snpdata` argument
+
+```{r, cache = TRUE}
+A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
+A1
+```
+
+### SNP data by `snpcovdata` argument
+
+```{r, cache = TRUE}
+A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
+A2
+```
+
+
+### SNP data by `genocov.files` (single value)
+ 
+```{r, cache = TRUE}
+dir <- system.file("extdata/solarAssoc/", package = "solarius")
+genocov.files <- file.path(dir, "snp.genocov")
+snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
+
+A3 <- solarAssoc(trait ~ 1, phenodata, 
+  genocov.files = genocov.files, snplists.files = snplists.files)
+A3
+```
+
+### SNP data by `genocov.files` (many values)
+ 
+```{r, cache = TRUE}
+dir <- system.file("extdata/solarAssoc/", package = "solarius")
+genocov.files <- file.path(dir, c("snp.genocov1", "snp.genocov2"))
+snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
+
+A4 <- solarAssoc(trait ~ 1, phenodata, 
+  genocov.files = genocov.files, snplists.files = snplists.files)
+A4
+```
+
+### Parallelization
+
+```{r, cache = TRUE}
+A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
+```
+
+```{r}
+A1$assoc$tprofile$cputime.sec
+A5$assoc$tprofile$cputime.sec
+```
+
+## Linkage model
+
+## Advanced models
+
+## Large-scale study: GAIT1 phenotypes
+
+### BMI
+
+### Throm
 
 ## Refences

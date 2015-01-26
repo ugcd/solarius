@@ -13,6 +13,9 @@ solarAssoc <- function(formula, data, dir,
   ...,
   verbose = 0) 
 {
+  tsolarAssoc <- list()
+  tsolarAssoc$args <- proc.time()
+  
   ### step 1: process par & create `out`
   mc <- match.call()
   
@@ -81,10 +84,12 @@ solarAssoc <- function(formula, data, dir,
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
 
   ### step 3: compute a polygenic model by calling `solarPolygenic`
+  tsolarAssoc$polygenic <- proc.time()
   out <- solarPolygenic(formula, data, dir,
     kinship, traits, covlist, ..., verbose = verbose)
 
   ### step 3.1: add assoc.-specific slots to `out`
+  tsolarAssoc$preassoc <- proc.time()
   if(missing(genocov.files)) {
     genocov.files.local <- TRUE
     genocov.files <- "snp.genocov"
@@ -109,7 +114,8 @@ solarAssoc <- function(formula, data, dir,
     out.dirs = "assoc", out.files = "assoc.out",
     # input/output data for association
     assoc.informat = assoc.informat,
-    assoc.outformat = assoc.outformat)
+    assoc.outformat = assoc.outformat,
+    tprofile = list(tproc = list()))
 
   ### step 4: add genotype data to `dir`
   #snpdata <- format_snpdata(snpdata, snpformat)
@@ -133,6 +139,7 @@ solarAssoc <- function(formula, data, dir,
   out <- prepare_assoc_files(out, dir)
   
   ### step 7: run assoc  
+  tsolarAssoc$runassoc <- proc.time()
   out <- run_assoc(out, dir)
 
   ### clean 
@@ -142,8 +149,42 @@ solarAssoc <- function(formula, data, dir,
   }
 
   ### return
+  tsolarAssoc$return <- proc.time()
+  out$assoc$tprofile$tproc$tsolarAssoc <- tsolarAssoc
+
+  out$assoc$tprofile <- try({
+    procc_tprofile(out$assoc$tprofile)
+  }, silent = TRUE)
+  
   oldClass(out) <- c("solarAssoc", oldClass(out))
   return(out)
+}
+
+procc_tprofile <- function(tprofile)
+{
+  tprocf <- list()
+  for(i in 1:length(tprofile$tproc)) {
+    df <- ldply(tprofile$tproc[[i]])
+    
+    df <- rename(df, c(.id = "unit"))
+    
+    df <- within(df, {
+      elapsed.diff <- c(elapsed[-1] - elapsed[-nrow(df)], elapsed[nrow(df)] - elapsed[1])
+    })
+    df <- within(df, {
+      elapsed.prop <- elapsed.diff / elapsed.diff[nrow(df)]
+    })
+          
+    tprocf[[i]] <- df
+  }
+  names(tprocf) <- names(tprofile$tproc)
+  
+  ### return
+  tprofile$tprocf <- tprocf
+  
+  tprofile$cputime.sec <- tail(tprofile$tprocf$tsolarAssoc$elapsed.diff, 1)
+  
+  return(tprofile)
 }
 
 prepare_assoc_files <- function(out, dir)
@@ -227,14 +268,19 @@ prepare_assoc_files <- function(out, dir)
 }
 
 run_assoc <- function(out, dir)
-{    
+{ 
+  trun_assoc <- list()
+  trun_assoc$args <- proc.time()
+  
   cores <- out$assoc$cores
     
   genocov.files <- out$assoc$genocov.files
   snplists.files <- out$assoc$snplists.files
   out.dirs <- out$assoc$out.dirs
   out.files <- out$assoc$out.files
-
+  
+  ### run
+  trun_assoc$solar <- proc.time()
   parallel <- (cores > 1)
   if(parallel) {
     ret <- require(doMC)
@@ -261,6 +307,7 @@ run_assoc <- function(out, dir)
   }
       
   ### process results
+  trun_assoc$results <- proc.time()
   snpf.list <- llply(out.gr, function(x) try({
     fread(x$tab.file)}), .parallel = parallel)
   
@@ -286,6 +333,10 @@ run_assoc <- function(out, dir)
   ### assign
   out$snpf <- out.assoc$snpf
   out$assoc$solar <- out.assoc$solar
-    
+  
+  ### return
+  trun_assoc$return <- proc.time()
+  out$assoc$tprofile$tproc$trun_assoc <- trun_assoc
+      
   return(out)
 }

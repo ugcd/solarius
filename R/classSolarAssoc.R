@@ -24,11 +24,14 @@ print.solarAssoc <- function(x, ...)
   
   cat("\n Output results of association:\n")
   if(x$assoc$assoc.outformat == "df") {
-    cat("\n  *  Table of association results (first 5 out of ", nrow(x$snpf), " rows):\n")
+    cat("\n  *  Table of association results (first 5 out of ", nrow(x$snpf), " rows):\n", sep = "")
     print(head(x$snpf, 5))
   }
   #cat("  *  assoc.outformat: ", x$assoc$assoc.outformat, "\n", sep = "")
   
+  t <- x$assoc$tprofile$cputime.sec
+  cat("\n CPU time on ", x$assoc$cores, " core(s): ", 
+    format(.POSIXct(t, tz = "GMT"), "%H:%M:%S"), "\n", sep = "")
 }
 
 #' @method plot solarAssoc
