@@ -2,6 +2,10 @@
 
 R package wrapper to SOLAR
 
+* Vignetter `SOALR models`
+  * R code [vignettes/models.Rmd](vignettes/models.Rmd), html file [vignettes/models.html](vignettes/models.html)
+  * [html preview](http://htmlpreview.github.io/?https://github.com/ugcd/solarius/blob/master/vignettes/models.html)
+
 ## References
 
 * [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
