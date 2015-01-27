@@ -12,7 +12,7 @@ bibliography: ref.bib
 ---
 
 ```{r}
-opts_chunk$set(eval = FALSE)
+opts_chunk$set(eval = TRUE)
 ```
 
 ## About
@@ -26,33 +26,13 @@ polygenic, association and linkage.
 
 via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
 
-The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is: 
+* The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is [@Almasy1998] 
+* Bivariate Quantitative trait linkage is described in the following papers: [@Almasy1997], [@Williams1999]
+* The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one: [@Duggirala1997]
+* Gene By Environment Interaction is discussed in: [@Towne1997], [@Blangero2009]
+* An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001]
+* Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b]
 
-* Almasy L, Blangero J (1998) Multipoint quantitative trait linkage analysis in general pedigrees. Am J Hum Genet 62:1198-1211.
-Bivariate Quantitative trait linkage is described in the following papers:
-* Almasy L, Dyer TD, Blangero J (1997) Bivariate quantitative trait linkage analysis: Pleiotropy versus co-incident linkages. Genet Epidemiol 14:953-958.
-* Williams JT, Van Eerdewegh P, Almasy L, Blangero J (1999) Joint Multipoint Linkage Analysis of Multivariate Qualitative and Quantitative Traits. I. Likelihood Formulation and Simulation Results. Am J Hum Genet 65:1134-1147
-
-The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one:
-
-* Duggirala R, Williams JT, Williams-Blangero S, and Blangero J (1997) A variance component approach to dichotomous trait linkage analysis using a threshold model. Genet Epidemiol 14:987-992.
-
-Gene By Environment Interaction is discussed in:
-
-* Towne B, Siervogel RM, Blangero J (1997) Effects of genotype-by-sex interaction on quantitative trait linkage analysis. Genet Epidemiol 14:1053-1058.
-* Blangero J (1993) Statistical Genetic Approaches to Human Adaptability. Hum Biol 65:941-966.
-
-An examination of LOD adjustment is given in:
-
-* Blangero J, Williams JT, Almasy L (2000) Robust LOD scores for variance component-based linkage analysis. Genet Epidemiol 19 Suppl 1:S8-14.
-* Blangero J, Williams JT, Almasy L (2001) Variance component methods for detecting complex trait loci. Adv Genet 42:151-81.
-
-Additional references include:
-
-* Blangero J, Almasy L (1997) Multipoint oligogenic linkage analysis of quantitative traits. Genet Epidemiol 14:959-964.
-* Mitchell BD, Ghosh S, Schneider JL, Birznieks G, Blangero J (1997) Power of variance component linkage analysis to detect epistasis. Genet Epidemiol 14:1017-1022.
-* Williams JT, Blangero J (1999) Power of variance component linkage analysis to detect quantitative trait loci. Ann Hum Genet 63(6):545-563.
-* Williams JT, Blangero J (1999) Comparison of variance components and sibpair-based approaches to quantitative trait linkage analysis in unselected samples. Genet Epidemiol 16(2):113-134.
 
 ## Statistical models
 
@@ -142,22 +122,31 @@ l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
 
 ### SNP data by `snpdata` argument
 
-```{r, cache = TRUE}
+```{r genodata, cache = TRUE}
 A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 A1
 ```
 
 ### SNP data by `snpcovdata` argument
 
-```{r, cache = TRUE}
+```{r genocovdata, cache = TRUE}
 A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
+A2
+```
+
+
+```{r genocovdata2, cache = TRUE}
+genocovdata2 <- genocovdata
+genocovdata2[genocovdata2 == 2] <- 1.9
+
+A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata2, kinship = kin)
 A2
 ```
 
 
 ### SNP data by `genocov.files` (single value)
  
-```{r, cache = TRUE}
+```{r genocov, cache = TRUE}
 dir <- system.file("extdata/solarAssoc/", package = "solarius")
 genocov.files <- file.path(dir, "snp.genocov")
 snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
@@ -169,7 +158,7 @@ A3
 
 ### SNP data by `genocov.files` (many values)
  
-```{r, cache = TRUE}
+```{r genocov2, cache = TRUE}
 dir <- system.file("extdata/solarAssoc/", package = "solarius")
 genocov.files <- file.path(dir, c("snp.genocov1", "snp.genocov2"))
 snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
@@ -181,7 +170,7 @@ A4
 
 ### Parallelization
 
-```{r, cache = TRUE}
+```{r assoc_par, cache = TRUE}
 A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
 ```
 
