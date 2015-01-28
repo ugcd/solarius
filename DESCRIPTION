@@ -21,13 +21,13 @@ Suggests:
     parallel,
     knitr
 Collate: 
+    'support.lib.R'
+    'solar.lib.R'
     'assoc.lib.R'
     'classSolarAssoc.R'
     'classSolarPolygenic.R'
     'plot.lib.R'
     'polygenic.lib.R'
-    'solar.lib.R'
     'solarAssoc.R'
     'solarPolygenic.R'
-    'support.lib.R'
 VignetteBuilder: knitr

@@ -5,7 +5,9 @@ solarAssoc <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
   # input data to association 
-  snpformat, snpdata, snpcovdata, snplist, genocov.files, genolist.file, snplists.files,
+  snpformat, snpdata, snpcovdata, snpmap,
+  snplist, snpind,
+  genocov.files, genolist.file, snplists.files,
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
   # misc
@@ -52,6 +54,11 @@ solarAssoc <- function(formula, data, dir,
     ifelse(!missing(snpdata), "snpdata",
     ifelse(!missing(snpcovdata), "snpcovdata",
     stop("ifelse error in processing `assoc.informat`"))))
+  if(assoc.informat == "genocov.file") {
+    if(length(genocov.files) > 1) {
+      assoc.informat <- "genocov.files"
+    }
+  }
 
   # check for matrix format  
   if(!missing(snpdata)) {
@@ -59,6 +66,26 @@ solarAssoc <- function(formula, data, dir,
   }
   if(!missing(snpcovdata)) {
     stopifnot(class(snpcovdata) == "matrix")
+  }
+  
+  # check `snplist` / `snpind` format
+  stopifnot(any(missing(snplist), missing(snpind)))
+  
+  assoc.snplistformat <- ifelse(all(missing(snplist), missing(snpind)), "default",
+    ifelse(!missing(snplist), "snplist",
+    ifelse(!missing(snpind), "snpind",
+    stop("ifelse error in processing `snplistformat`"))))
+  if(assoc.informat == "genocov.files") {
+    if(assoc.snplistformat != "default") {
+      stop("Error in `solarAssoc`: `snplist`/`snpind` is not allowd for `genocov.files` input format.")
+    }
+  }
+
+  if(missing(snplist)) {
+    snplist <-  character()
+  }
+  if(missing(snpind)) {
+    snpind <- integer()
   }
   
   # check for output data arguments
@@ -108,6 +135,9 @@ solarAssoc <- function(formula, data, dir,
   
   out$assoc <- list(call = mc, #snpformat = snpformat,
     cores = cores,
+    # input par
+    snplist = snplist, snpind = snpind,
+    # input/output files
     genocov.files = genocov.files, genocov.files.local = genocov.files.local,
     genolist.file = "snp.geno-list", 
     snplists.files = snplists.files, snplists.files.local = snplists.files.local,
@@ -115,10 +145,18 @@ solarAssoc <- function(formula, data, dir,
     # input/output data for association
     assoc.informat = assoc.informat,
     assoc.outformat = assoc.outformat,
+    assoc.snplistformat = assoc.snplistformat,
     tprofile = list(tproc = list()))
 
   ### step 4: add genotype data to `dir`
   #snpdata <- format_snpdata(snpdata, snpformat)
+
+  # maps (load previously to loading snp data)
+  # -- SOLAR does not use this info. in assoc. analysis 
+  #    neither output to the results file
+  #if(!missing(snpmap)) {
+  #  ret <- snpmap2solar(snpmap, dir)
+  #}
   
   if(out$assoc$assoc.informat == "snpdata") {
     ret <- snpdata2solar(snpdata, dir)
@@ -141,7 +179,30 @@ solarAssoc <- function(formula, data, dir,
   ### step 7: run assoc  
   tsolarAssoc$runassoc <- proc.time()
   out <- run_assoc(out, dir)
-
+  
+  ### step 8: set keys
+  tsolarAssoc$keyresults <- proc.time()
+  if(class(out$snpf)[1] == "data.table") {
+    setkey(out$snpf, SNP)
+  }
+  
+  ### step 9: add mapping information
+  if(!missing(snpmap)) {
+    # read map
+    tsolarAssoc$map <- proc.time()
+    snpmap <- as.data.table(snpmap)
+    
+    renames <- match_map_names(names(snpmap))
+    snpmap <- rename(snpmap, renames)
+    
+    snpmap <- subset(snpmap, select = renames)
+    setkey(snpmap, SNP)
+    
+    # annotate 
+    tsolarAssoc$annotate <- proc.time()
+    out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+  }
+  
   ### clean 
   if(is.tmpdir) {
     unlink(dir, recursive = TRUE)
@@ -193,6 +254,9 @@ prepare_assoc_files <- function(out, dir)
   stopifnot(!is.null(out$assoc$genocov.files))
   stopifnot(!is.null(out$assoc$out.dirs))
   stopifnot(!is.null(out$assoc$out.files))
+
+  assoc.snplistformat <- out$assoc$assoc.snplistformat
+  assoc.informat <- out$assoc$assoc.informat
   
   cores <- out$assoc$cores
 
@@ -205,7 +269,7 @@ prepare_assoc_files <- function(out, dir)
   out.files0 <- out$assoc$out.files
 
   ### case 1
-  if(length(genocov.files) > 1) {
+  if(assoc.informat == "genocov.files") {
     stopifnot(length(genocov.files) == length(snplists.files0))
     
     snplists.files <- snplists.files0
@@ -219,41 +283,66 @@ prepare_assoc_files <- function(out, dir)
       out.files[k] <- paste(out.files0, k, sep = "")
     }
   ### case 2
-  } else if(cores == 1) {
-    snplists.files <- snplists.files0
-    out.dirs <- out.dirs0
-    out.files <- out.files0
-  ### case 3
-  # - use `genolist.file` to split lists of SNPs
   } else {
-    ### number of snps
-    if(snplists.files.local) {
-      snps <- unlist(llply(file.path(dir, snplists.files0), function(x) readLines(x)))  
-    } else {
-      snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
-    }
-    num.snps <- length(snps)
-
-    num.gr <- cores 
-    gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
-
-    snplists.files <- rep(as.character(NA), num.gr)
-    out.dirs <- rep(as.character(NA), num.gr)
-    out.files <- rep(as.character(NA), num.gr)
-
-    for(k in 1:nlevels(gr)) {
-      snplists.files.k <- paste(genolist.file0, k, sep = "")
-      out.dirs.k <- paste(out.dirs0, k, sep = "")
-      out.files.k <- paste(out.files0, k, sep = "")
+    #### sub-case: `snplistformat` is `snplist`/`snpind`
+    if(assoc.snplistformat == "snplist") {
+      snplists.files <- genolist.file0
       
-      gr.k <- levels(gr)[k]
-      snps.k <- snps[gr %in% gr.k]
+      writeLines(out$assoc$snplist, file.path(dir, snplists.files))
+      snplists.files0 <- snplists.files
+    } else if(assoc.snplistformat == "snpind") {
+      snplists.files <- genolist.file0
     
-      writeLines(snps.k, file.path(dir, snplists.files.k))
+      if(snplists.files.local) {
+        snps <- unlist(llply(file.path(dir, snplists.files0), function(x) readLines(x)))  
+      } else {
+        snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
+      }
+      num.snps <- length(snps)
       
-      snplists.files[k] <- snplists.files.k
-      out.dirs[k] <- out.dirs.k
-      out.files[k] <- out.files.k
+      stopifnot(all(out$assoc$snpind <= num.snps))
+      
+      snplist <- snps[out$assoc$snpind]
+      writeLines(snplist, file.path(dir, snplists.files))
+      snplists.files0 <- snplists.files
+    }
+    
+    if(cores == 1) {
+      snplists.files <- snplists.files0
+      out.dirs <- out.dirs0
+      out.files <- out.files0
+    } else {
+    ### case 3
+    # - use `genolist.file` to split lists of SNPs
+      ### number of snps
+      if(snplists.files.local) {
+        snps <- unlist(llply(file.path(dir, snplists.files0), function(x) readLines(x)))  
+      } else {
+        snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
+      }
+      num.snps <- length(snps)
+
+      num.gr <- cores 
+      gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
+
+      snplists.files <- rep(as.character(NA), num.gr)
+      out.dirs <- rep(as.character(NA), num.gr)
+      out.files <- rep(as.character(NA), num.gr)
+
+      for(k in 1:nlevels(gr)) {
+        snplists.files.k <- paste(genolist.file0, k, sep = "")
+        out.dirs.k <- paste(out.dirs0, k, sep = "")
+        out.files.k <- paste(out.files0, k, sep = "")
+        
+        gr.k <- levels(gr)[k]
+        snps.k <- snps[gr %in% gr.k]
+    
+        writeLines(snps.k, file.path(dir, snplists.files.k))
+      
+        snplists.files[k] <- snplists.files.k
+        out.dirs[k] <- out.dirs.k
+        out.files[k] <- out.files.k
+      }
     }
   }
   stopifnot(all(!is.na(snplists.files)))

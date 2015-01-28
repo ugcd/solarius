@@ -292,3 +292,39 @@ match_id_names <- function(fields)
   
   return(out)
 }
+
+#' Function match_map_names
+match_map_names <- function(fields)
+{
+  # `fields`: fields in data set
+  # `names`: matched names
+  
+  ### matching
+  out <- c("SNP")
+  # ID field (obligatory)
+  pat <- "^name$|^snp$|^SNP$|^Snp$|^marker$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) == 0) stop("SNP name not found; grep pattern '", pat, "'")
+  if(length(names) > 1)  stop("more than one SNP names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
+  out.names <- names
+  # pos 
+  pat <- "^pos$|^position$|^Position$|^bp$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one `pos` names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "pos")
+    out.names <- c(out.names, names)
+  }
+  # chr 
+  pat <- "^chr$|^chrom$|^chromosome$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one `chr` names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "chr")
+    out.names <- c(out.names, names)
+  }
+
+  names(out) <- out.names    
+  
+  return(out)
+}

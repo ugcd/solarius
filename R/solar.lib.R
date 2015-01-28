@@ -140,6 +140,40 @@ snpdata2solar <- function(mat, dir)
   return(invisible())
 }
 
+#' @export
+snpmap2solar <- function(map, dir)
+{
+  # parse arguments
+  stopifnot(class(map) == "data.frame")
+
+  stopifnot(file.exists(dir))
+  
+  # prepare `map`
+  map <- rename(map, c(name = "snp", chrom = "chr", position = "pos"))
+  lines <- dlply(map, "chr", function(submap) {
+    chr <- submap$chr[1]
+    list(filename = paste("map.snp", chr, sep = "."),
+      chr = chr,
+      lines = apply(submap, 1, function(x) paste(x["snp"], x["pos"], sep = " ")))
+  })
+  
+  # write table
+  l_ply(lines, function(x) {
+    writeLines(c(x$chr, x$lines), file.path(dir, x$filename))
+  })
+        
+  # run solar
+  l_ply(lines, function(x) {
+    cmd <- paste("load map -basepair", x$filename)
+    ret <- solar(cmd, dir, result = TRUE)  
+  })
+    
+  # check solar has completed the job
+  #stopifnot(file.exists(file.path(dir, "snp.genocov")))
+
+  return(invisible())
+}
+
 #' Function snpcovdata2solar.
 #'
 #' The function emulate the `snp load` SOLAR command.

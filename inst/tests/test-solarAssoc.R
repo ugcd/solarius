@@ -21,3 +21,4 @@ test_that("different results for different kinship matrices", {
   
   expect_true(all((mod1$snpf$pSNP != mod2$snpf$pSNP)))
 })
+

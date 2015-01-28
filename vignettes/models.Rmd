@@ -44,8 +44,21 @@ y_{n \times 1} = X \beta + a_{n \times 1} + e_{n \times 1}
 
 * GAW10 data distributed within `SOLAR`
 * Simulated data `dat30` from `multic` R package [@Andrade2006]
-* Simulated data `dat50` from `?` R package
+* Simulated data `dat50` from `FFBSKAT` R package
 * GAIT1 data 
+
+`dat50` data set is adapted from `example.data` data set in 
+[FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) R package. 
+The following variables are in the data set.
+
+* `phenodata`: A data.frame with the phenotypes `trait`, `sex` and `age`.
+* `genodata`: A matrix of 50 genetic variants (columns) given for 66 individuals (rows).
+  The genotypes are coded in the format as `1/1`, `1/2` and `2/2`.
+* `genocovdata`: A matrix of covariates derived from the genotype data (additive model).
+  The covariates are coded as integers 0, 1 and 2.
+* `snpdata`: A data.frame of anotation for genetic variantes. 
+   The variables iclude `name` of the variant, the chromose `chrom`, `position` in bp and `gene`.
+* `kin`: A kinship matrix for 66 individuals.     
 
 ## Structure of `solarius` R package 
 
