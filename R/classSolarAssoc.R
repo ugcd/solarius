@@ -19,6 +19,9 @@ print.solarAssoc <- function(x, ...)
     "snpcovdata" = cat("  *  ", x$assoc$num.snps, " SNP covariates passed by `snpcovdata` argument\n", sep = ""),
     "genocov.file" = cat("  *  SNP covariates passed in ", length(x$assoc$genocov.files),
       " file(s) by `genocov.files` argument\n", sep = ""),
+    "genocov.files" = cat("  *  SNP covariates passed in ", length(x$assoc$genocov.files),
+      " file(s) by `genocov.files` argument and ", length(x$assoc$snplists.files), 
+      " files(s) by `snplists.files` argument\n", sep = ""),
     stop("switch error")
   )
   

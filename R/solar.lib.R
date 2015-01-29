@@ -154,7 +154,9 @@ snpmap2solar <- function(map, dir)
     chr <- submap$chr[1]
     list(filename = paste("map.snp", chr, sep = "."),
       chr = chr,
-      lines = apply(submap, 1, function(x) paste(x["snp"], x["pos"], sep = " ")))
+      lines = apply(submap, 1, function(x)
+      # @ http://stackoverflow.com/questions/25707647/merge-multiple-spaces-to-single-space-remove-trailing-leading-spaces?lq=1#comment40185881_25707647 
+      gsub("^ *|(?<= ) | *$", "", paste(x["snp"], x["pos"]), perl = TRUE)))
   })
   
   # write table

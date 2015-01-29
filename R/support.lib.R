@@ -25,6 +25,33 @@ loadMulticData <- function()
 # Read/Write Files
 #----------------------------------
 
+readPhen <- function(phen.file, sep.phen = ","
+  ped.file, sep.ped = ",", 
+  header = TRUE, stringsAsFactors = FALSE)
+{
+  stopifnot(missing(phenfile)) 
+  stopifnot(file.exists(phenfile))
+  
+  stopifnot(!header)
+  stopifnot(stringsAsFactors)
+  
+  ### read `phen` file
+  sep <- sep.phen
+  dat1 <- read.table(phenfile, nrow = 1,
+    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+  renames <- match_id_names(names(dat1))
+    
+  ### read `ped` if necessary
+  if(!missing(pedfile)) {
+    stopifnot(file.exists(pedfile))
+  
+    sep <- sep.ped    
+    
+    
+    
+  }
+}
+
 #' @export
 solarReadFiles <- function(dir)
 {
@@ -114,6 +141,63 @@ read_phi2_gz <- function(phi2.gz)
   
   return(kf)
 }
+
+read_map <- function(file)
+{
+  ### read `chr` in the first line
+  # - filter out patters like `c1.1.500`
+  chr <- readLines(file, n = 1)
+  
+  chr <- strsplit("1", "\\.")[[1]][1] # now it is like `c1`
+  
+  chr <- gsub("chrom", "", chr)
+  chr <- gsub("chr", "", chr)
+  chr <- gsub("c", "", chr)
+  
+  chr <- as.integer(chr)
+  stopifnot(!is.na(chr))
+    
+  ### read 2 columns: snp name & position in bp
+  tab <- fread(file, skip = 1, header = FALSE, sep = " ")
+  
+  stopifnot(ncol(tab) == 2)
+  colnames(tab) <- c("SNP", "pos")
+  
+  ### add `chr` column
+  tab <- data.table(tab, chr = as.character(chr))
+  
+  return(tab)
+}
+
+read_map_files <- function(files, cores = 1)
+{
+  parallel <- (cores > 1)
+  if(parallel) {
+    ret <- require(doMC)
+    if(!ret) {
+      stop("Error in `read_map_files`: `doMC` package is required for parallel calculations")
+    }
+    doMC::registerDoMC(cores)
+  }
+  
+  map.list <- llply(files, function(f) try({
+    fread(f)}), .parallel = parallel)
+  
+  # -- try to union `snpf` slots in `snpf.list`
+  ret <- try({
+    rbindlist(map.list)
+  })
+  
+  map <- data.table(SNP = character(0), pos = integer(0), chr = character(0))
+  if(class(ret)[1] != "try-error") {
+    map <- ret
+  }
+  
+  return(map)
+}
+#----------------------------------
+# Kinship functions
+#----------------------------------
 
 kmat2phi2 <- function(kmat, dir, kin2.gz = "kin2.gz")
 {

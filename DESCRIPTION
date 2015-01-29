@@ -8,10 +8,10 @@ Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
 Description: R package wrapper to SOLAR
 License: GPL (>= 3)
 LazyData: true
-Depends: 
+Depends:
     plyr (>= 1.8.1),
     data.table
-Suggests: 
+Suggests:
     ggplot2,
     scales,
     Matrix,
@@ -20,7 +20,7 @@ Suggests:
     iterators,
     parallel,
     knitr
-Collate: 
+Collate:
     'support.lib.R'
     'solar.lib.R'
     'assoc.lib.R'
@@ -30,4 +30,5 @@ Collate:
     'polygenic.lib.R'
     'solarAssoc.R'
     'solarPolygenic.R'
+    'files.lib.R'
 VignetteBuilder: knitr

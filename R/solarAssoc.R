@@ -7,7 +7,7 @@ solarAssoc <- function(formula, data, dir,
   # input data to association 
   snpformat, snpdata, snpcovdata, snpmap,
   snplist, snpind,
-  genocov.files, genolist.file, snplists.files,
+  genocov.files, genolist.file, snplists.files, snpmap.files,
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
   # misc
@@ -21,9 +21,11 @@ solarAssoc <- function(formula, data, dir,
   ### step 1: process par & create `out`
   mc <- match.call()
   
+  ### check if input files exist
+  ret <- check_assoc_files_exist(genocov.files, snplists.files, snpmap.files)
+  
   # missing parameters
   #if(missing(snpformat)) snpformat <- "012"
-  
   
   # check for input data argument
   if(missing(snpdata) & missing(snpcovdata) & missing(genocov.files)) {
@@ -60,6 +62,30 @@ solarAssoc <- function(formula, data, dir,
     }
   }
 
+  # check map files
+  if(!missing(snpmap) & !missing(snpmap.files)) {
+    stop("Error in `solarAssoc`: input SNP maps must be given by either `snpmap` or `snpmap.files` arguments.")
+  }
+  if(!missing(genocov.files) & !missing(snpmap.files)) {
+    if(length(genocov.files) > 1) {
+      if(length(genocov.files) != length(snpmap.files)) {
+        stop("Error in `solarAssoc`: if several `genocov.files` (", length(genocov.files), 
+          ") are given, then the same number of `snpmap.files` (",length(snplists.files), ") is required.")
+      }
+    }
+  }  
+  
+  assoc.mapformat <- ifelse(!missing(snpmap.files), "snpmap.file",
+    ifelse(!missing(snpmap), "snpmap", "default"))
+  if(!missing(genocov.files) & !missing(snpmap.files)) {
+    if(length(genocov.files) > 1) {
+      if(assoc.mapformat == "snpmap.file") {
+        stopifnot(length(genocov.files) == length(snpmap.files))
+        assoc.mapformat <- "snpmap.files"
+      }
+    }
+  }
+    
   # check for matrix format  
   if(!missing(snpdata)) {
     stopifnot(class(snpdata) == "matrix")
@@ -132,6 +158,11 @@ solarAssoc <- function(formula, data, dir,
     snplists.files.local <- FALSE
     snplists.files <- normalizePath(snplists.files)
   }
+  if(missing(snpmap.files)) {
+    snpmap.files <- character(0)
+  } else {
+    snpmap.files <- normalizePath(snpmap.files)
+  }
   
   out$assoc <- list(call = mc, #snpformat = snpformat,
     cores = cores,
@@ -141,11 +172,13 @@ solarAssoc <- function(formula, data, dir,
     genocov.files = genocov.files, genocov.files.local = genocov.files.local,
     genolist.file = "snp.geno-list", 
     snplists.files = snplists.files, snplists.files.local = snplists.files.local,
+    snpmap.files = snpmap.files,
     out.dirs = "assoc", out.files = "assoc.out",
     # input/output data for association
     assoc.informat = assoc.informat,
     assoc.outformat = assoc.outformat,
     assoc.snplistformat = assoc.snplistformat,
+    assoc.mapformat = assoc.mapformat,
     tprofile = list(tproc = list()))
 
   ### step 4: add genotype data to `dir`
@@ -187,10 +220,24 @@ solarAssoc <- function(formula, data, dir,
   }
   
   ### step 9: add mapping information
-  if(!missing(snpmap)) {
+  if(out$assoc$assoc.mapformat == "snpmap") {
     # read map
     tsolarAssoc$map <- proc.time()
     snpmap <- as.data.table(snpmap)
+    
+    renames <- match_map_names(names(snpmap))
+    snpmap <- rename(snpmap, renames)
+    
+    snpmap <- subset(snpmap, select = renames)
+    setkey(snpmap, SNP)
+    
+    # annotate 
+    tsolarAssoc$annotate <- proc.time()
+    out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+  } else if(out$assoc$assoc.mapformat %in% c("snpmap.file", "snpmap.files")) {
+    # read map
+    tsolarAssoc$map <- proc.time()
+    snpmap <- read_map_files(out$assoc$snpmap.files, cores = out$assoc$cores)
     
     renames <- match_map_names(names(snpmap))
     snpmap <- rename(snpmap, renames)
@@ -299,7 +346,6 @@ prepare_assoc_files <- function(out, dir)
         snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
       }
       num.snps <- length(snps)
-      
       stopifnot(all(out$assoc$snpind <= num.snps))
       
       snplist <- snps[out$assoc$snpind]
@@ -389,6 +435,7 @@ run_assoc <- function(out, dir)
     out.gr <- llply(1, function(i) {
       solar_assoc(dir, out, genocov.files, snplists.files, out.dirs, out.files)
     })
+  ### case 2 (length(genocov.files) == 2)
   } else {
     out.gr <- llply(1:length(snplists.files), function(i) {
       solar_assoc(dir, out, genocov.files, snplists.files[i], out.dirs[i], out.files[i])
