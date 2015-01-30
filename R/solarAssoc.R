@@ -220,7 +220,7 @@ solarAssoc <- function(formula, data, dir,
   }
   
   ### step 9: try to add mapping information
-  ret <- try({
+  ret <- suppressWarnings(try({
   if(out$assoc$assoc.mapformat == "snpmap") {
     # read map
     tsolarAssoc$map <- proc.time()
@@ -250,7 +250,7 @@ solarAssoc <- function(formula, data, dir,
     tsolarAssoc$annotate <- proc.time()
     out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
   }
-  }, silent = TRUE)
+  }, silent = TRUE))
   
   ### clean 
   if(is.tmpdir) {

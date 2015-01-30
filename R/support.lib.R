@@ -148,7 +148,7 @@ read_map <- function(file)
   # - filter out patters like `c1.1.500`
   chr <- readLines(file, n = 1)
   
-  chr <- strsplit("1", "\\.")[[1]][1] # now it is like `c1`
+  chr <- strsplit(chr, "\\.")[[1]][1] # now it is like `c1`
   
   chr <- gsub("chrom", "", chr)
   chr <- gsub("chr", "", chr)
@@ -158,13 +158,17 @@ read_map <- function(file)
   stopifnot(!is.na(chr))
     
   ### read 2 columns: snp name & position in bp
-  tab <- fread(file, skip = 1, header = FALSE, sep = " ")
+  tab <- data.table(SNP = character(0), pos = integer(0), chr = character(0))
   
-  stopifnot(ncol(tab) == 2)
-  colnames(tab) <- c("SNP", "pos")
+  ret <- suppressWarnings(try({
+    tab <- fread(file, skip = 1, header = FALSE, sep = " ")
   
-  ### add `chr` column
-  tab <- data.table(tab, chr = as.character(chr))
+    stopifnot(ncol(tab) == 2)
+    colnames(tab) <- c("SNP", "pos")
+  
+    ### add `chr` column
+    tab <- data.table(tab, chr = as.character(chr))
+  }, silent = TRUE))
   
   return(tab)
 }
