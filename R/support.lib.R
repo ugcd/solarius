@@ -181,7 +181,7 @@ read_map_files <- function(files, cores = 1)
   }
   
   map.list <- llply(files, function(f) try({
-    fread(f)}), .parallel = parallel)
+    read_map(f)}), .parallel = parallel)
   
   # -- try to union `snpf` slots in `snpf.list`
   ret <- try({
@@ -191,6 +191,9 @@ read_map_files <- function(files, cores = 1)
   map <- data.table(SNP = character(0), pos = integer(0), chr = character(0))
   if(class(ret)[1] != "try-error") {
     map <- ret
+    
+    stopifnot(ncol(map) == 3)
+    stopifnot(all(c("SNP", "pos", "chr") %in% colnames(map)))
   }
   
   return(map)
