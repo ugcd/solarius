@@ -25,7 +25,7 @@ loadMulticData <- function()
 # Read/Write Files
 #----------------------------------
 
-readPhen <- function(phen.file, sep.phen = ","
+readPhen <- function(phen.file, sep.phen = ",",
   ped.file, sep.ped = ",", 
   header = TRUE, stringsAsFactors = FALSE)
 {
@@ -45,7 +45,7 @@ readPhen <- function(phen.file, sep.phen = ","
   if(!missing(pedfile)) {
     stopifnot(file.exists(pedfile))
   
-    sep <- sep.ped    
+    #sep <- sep.ped    
     
     
     
