@@ -141,6 +141,12 @@ solarAssoc <- function(formula, data, dir,
   out <- solarPolygenic(formula, data, dir,
     kinship, traits, covlist, ..., verbose = verbose)
 
+  # make a copy of `dir`
+  files.dir <- list.files(dir, include.dirs = TRUE, full.names = TRUE)
+  dir.poly <- file.path(dir, "solarPolygenic")
+  stopifnot(dir.create(dir.poly, showWarnings = FALSE, recursive = TRUE))
+  stopifnot(file.copy(from = files.dir, to = dir.poly, recursive = TRUE))
+  
   ### step 3.1: add assoc.-specific slots to `out`
   tsolarAssoc$preassoc <- proc.time()
   if(missing(genocov.files)) {
@@ -169,6 +175,7 @@ solarAssoc <- function(formula, data, dir,
     # input par
     snplist = snplist, snpind = snpind,
     # input/output files
+    dir.poly = dir.poly,
     genocov.files = genocov.files, genocov.files.local = genocov.files.local,
     genolist.file = "snp.geno-list", 
     snplists.files = snplists.files, snplists.files.local = snplists.files.local,
@@ -253,6 +260,7 @@ solarAssoc <- function(formula, data, dir,
   }, silent = TRUE))
   
   ### clean 
+  unlink(dir.poly, recursive = TRUE)
   if(is.tmpdir) {
     unlink(dir, recursive = TRUE)
     if(verbose > 1) cat("  -- solarAssoc: temporary directory `", dir, "` unlinked\n")
@@ -317,6 +325,8 @@ prepare_assoc_files <- function(out, dir)
   out.dirs0 <- out$assoc$out.dirs
   out.files0 <- out$assoc$out.files
 
+  snplists.files.local <- out$assoc$snplists.files.local
+
   ### case 1
   if(assoc.informat == "genocov.files") {
     stopifnot(length(genocov.files) == length(snplists.files0))
@@ -338,7 +348,9 @@ prepare_assoc_files <- function(out, dir)
       snplists.files <- genolist.file0
       
       writeLines(out$assoc$snplist, file.path(dir, snplists.files))
+
       snplists.files0 <- snplists.files
+      snplists.files.local <- TRUE
     } else if(assoc.snplistformat == "snpind") {
       snplists.files <- genolist.file0
     
@@ -352,7 +364,9 @@ prepare_assoc_files <- function(out, dir)
       
       snplist <- snps[out$assoc$snpind]
       writeLines(snplist, file.path(dir, snplists.files))
+
       snplists.files0 <- snplists.files
+      snplists.files.local <- TRUE
     }
     
     if(cores == 1) {
@@ -386,11 +400,12 @@ prepare_assoc_files <- function(out, dir)
         snps.k <- snps[gr %in% gr.k]
     
         writeLines(snps.k, file.path(dir, snplists.files.k))
-      
+        
         snplists.files[k] <- snplists.files.k
         out.dirs[k] <- out.dirs.k
         out.files[k] <- out.files.k
       }
+      snplists.files.local <- TRUE
     }
   }
   stopifnot(all(!is.na(snplists.files)))
@@ -400,7 +415,8 @@ prepare_assoc_files <- function(out, dir)
   out$assoc$snplists.files <- snplists.files
   out$assoc$out.dirs <- out.dirs
   out$assoc$out.files <- out.files
-  
+  out$assoc$snplists.files.local <- snplists.files.local
+
   return(out)
 }
 

@@ -1,6 +1,73 @@
 #----------------------------------
+# Phenotype files
+#----------------------------------
+
+#' @export
+readPhen <- function(phen.file, sep.phen = ",",
+  ped.file, sep.ped = ",", 
+  header = TRUE, stringsAsFactors = FALSE,
+  id.unique = TRUE)
+{
+  stopifnot(!missing(phen.file)) 
+  stopifnot(file.exists(phen.file))
+  
+  stopifnot(header)
+  stopifnot(!stringsAsFactors)
+  
+  stopifnot(id.unique)
+  
+  ### read `phen` file
+  sep <- sep.phen
+  dat1 <- read.table(phen.file, nrow = 1,
+    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+  new.names <- match_id_names(names(dat1))
+  old.names <- names(new.names)
+  
+  ind <- which(names(dat1) %in% old.names)
+  colClasses <- rep(as.character(NA), ncol(dat1))
+  colClasses[ind] <- "character"
+  
+  dat <- read.table(phen.file, colClasses = colClasses,
+    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+  
+  dat <- rename(dat, new.names)
+  
+  if(id.unique) {
+    stopifnot(!any(duplicated(dat$ID)))
+  }  
+  
+  ### read `ped` if necessary
+  if(!missing(ped.file)) {
+    stopifnot(file.exists(ped.file))
+  
+    sep <- sep.ped  
+    ped <- read.table(ped.file, colClasses = "character",
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+   
+    new.names <- match_id_names(names(ped))
+    ped <- rename(ped, new.names)
+
+    if(id.unique) {
+      stopifnot(!any(duplicated(dat$ID)))
+    }  
+    
+    # merge `dat` & `ped`
+    stopifnot("ID" %in% new.names)
+    new.names2 <- new.names[!new.names %in% c("ID")]
+    
+    ind <- which(names(dat) %in% new.names2)
+    dat <- dat[, -ind]
+    
+    dat <- base::merge(dat, ped, by = "ID", all = TRUE)      
+  }
+  
+  return(dat)
+}
+
+#----------------------------------
 # Association
 #----------------------------------
+
 check_assoc_files_exist <- function(genocov.files, snplists.files, snpmap.files)
 {
   # genocov.files

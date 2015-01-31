@@ -25,33 +25,6 @@ loadMulticData <- function()
 # Read/Write Files
 #----------------------------------
 
-readPhen <- function(phen.file, sep.phen = ",",
-  ped.file, sep.ped = ",", 
-  header = TRUE, stringsAsFactors = FALSE)
-{
-  stopifnot(missing(phenfile)) 
-  stopifnot(file.exists(phenfile))
-  
-  stopifnot(!header)
-  stopifnot(stringsAsFactors)
-  
-  ### read `phen` file
-  sep <- sep.phen
-  dat1 <- read.table(phenfile, nrow = 1,
-    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
-  renames <- match_id_names(names(dat1))
-    
-  ### read `ped` if necessary
-  if(!missing(pedfile)) {
-    stopifnot(file.exists(pedfile))
-  
-    #sep <- sep.ped    
-    
-    
-    
-  }
-}
-
 #' @export
 solarReadFiles <- function(dir)
 {
@@ -376,6 +349,38 @@ match_id_names <- function(fields)
   if(length(names) > 1)  stop("more than one SEX names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
   if(length(names) == 1) {
     out <- c(out, "SEX")
+    out.names <- c(out.names, names)
+  }
+  # FAM (optional)
+  pat <- "^fam$|^FAM$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one FAM names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "FAM")
+    out.names <- c(out.names, names)
+  }  
+  # PROBND (optional)
+  pat <- "^PROBND$|^probnd$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one PROBND names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "PROBND")
+    out.names <- c(out.names, names)
+  }
+  # HHID  (optional)
+  pat <- "^HHID$|^hhid$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one HHID names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "HHID")
+    out.names <- c(out.names, names)
+  }
+  # MZTWIN (optional)
+  pat <- "^MZTWIN$|^mztwin$"
+  names <- grep(pat, fields, value = TRUE) 
+  if(length(names) > 1)  stop("more than one MZTWIN names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")   
+  if(length(names) == 1) {
+    out <- c(out, "MZTWIN")
     out.names <- c(out.names, names)
   }
   

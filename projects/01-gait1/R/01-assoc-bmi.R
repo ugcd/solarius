@@ -5,10 +5,10 @@ load_all("~/git/ugcd/solarius")
 library(gait1)
 
 ### par
-cores <- 64
+cores <- 2
 
-pdir <- "/home/datasets/GAIT1/GWAS/SFBR"
-#pdir <- "/home/andrey/Datasets/GAIT1/SFBR/subset"
+#pdir <- "/home/datasets/GAIT1/GWAS/SFBR"
+pdir <- "/home/andrey/Datasets/GAIT1/SFBR/subset"
 
 phefile <- file.path(pdir, "gait1.phe")
 pedfile <- file.path(pdir, "gait1.ped")
@@ -24,21 +24,7 @@ gait1.snpfiles <- gait1.snpfiles()
 #gait1.snpfiles <- gait1.snpfiles(chr = 21:22)
 
 ### read phen. data
-pdat <- read.table(phefile, header = TRUE,
-  stringsAsFactors = FALSE)
-
-# re-read `id` field as character
-tab <- read.table(phefile, header = TRUE, colClasses = "character")
-pdat <- within(pdat, {
-  id <- tab[, "id"]
-  FA <- tab[, "FA"]
-  MO <- tab[, "MO"]
-  
-  FA[is.na(FA)] <- "0"
-  MO[is.na(MO)] <- "0"
-})  
-  
-pdat <- subset(pdat, select = head(colnames(pdat), 13))
+pdat <- readPhen(phen.file, sep.phen = "\t", ped.file = ped.file)
 
 ### polygenic model
 M <- solarPolygenic(bmi ~ 1, pdat)

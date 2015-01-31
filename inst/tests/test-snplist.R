@@ -6,7 +6,7 @@ test_that("input data parameters `genocovdata`", {
   data(dat50)
   snplist <- c("s1", "s2")
   
-  mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata[, snps], snplist = snplist)
+  mod <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snplist = snplist)
   
   expect_equal(nrow(mod$snpf), length(snplist))
 })

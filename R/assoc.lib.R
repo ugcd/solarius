@@ -4,7 +4,7 @@
 #----------------------------------
 
 # function parameters
-# - snplist.file
+# - snplists.files
 # - out.dir
 # - out.file
 #
@@ -12,10 +12,41 @@
 # - out$traits
 # - out$solar$model.filename
 # - out$solar$phe.filename)
-solar_assoc <- function(dir, out, genocov.files, snplist.file, out.dir, out.file)
+solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.file)
 {
+  ### check arguments
   stopifnot(file.exists(dir))
   
+  ### var
+  dir.poly <- out$assoc$dir.poly
+  out.path <- file.path(dir, out.dir)
+
+  snplists.files.local <- out$assoc$snplists.files.local
+  genocov.files.local <- out$assoc$genocov.files.local
+  
+  if(snplists.files.local) {
+    snplists.files <- file.path(dir, snplists.files)
+  }
+  if(genocov.files.local) {
+    genocov.files <- file.path(dir, genocov.files)
+  }
+
+  ### check files exist  
+  stopifnot(all(file.exists(genocov.files)))
+  stopifnot(all(file.exists(snplists.files)))
+  stopifnot(dir.create(out.path))
+
+  ### normalize path
+  genocov.files <- normalizePath(genocov.files)
+  snplists.files <- normalizePath(snplists.files)
+  out.path <- normalizePath(out.path)
+  
+  ### create a temp. dir.
+  dir.assoc <- file.path(dir, paste0("solar_assoc_", basename(out.file)))
+  stopifnot(dir.create(dir.assoc))
+  files.dir <- list.files(dir.poly, include.dirs = TRUE, full.names = TRUE)
+  stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
+      
   ### make `cmd`
   # local variables
   trait.dir <- paste(out$traits, collapse = ".")
@@ -29,19 +60,22 @@ solar_assoc <- function(dir, out, genocov.files, snplist.file, out.dir, out.file
     #    and you will see `snp.genocov` duplicated
     paste("load pheno", out$solar$phe.filename), 
     paste("load model", model.path),
-    paste("outdir", out.dir),
+    paste("outdir", out.path),
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 
     # (SOLAR's strange things)
     paste("mga ", "-files ", paste(genocov.files, collapse = " "), 
-      " -snplists ", paste(snplist.file, collapse = " "), " -out ", out.file, sep = ""))
+      " -snplists ", paste(snplists.files, collapse = " "), " -out ", out.file, sep = ""))
   
   ### run solar    
-  ret <- solar(cmd, dir, result = FALSE) 
+  ret <- solar(cmd, dir.assoc, result = FALSE) 
   # `result = FALSE`, because all assoc. results are printed to output
 
-  tab.file <- file.path(dir, out.dir, out.file)
+  tab.file <- file.path(out.path, out.file)
   solar.ok <- file.exists(tab.file)
 
+  ### clean
+  unlink(dir.assoc, recursive = TRUE)
+    
   ### return  
   out <-  list(solar = list(cmd = cmd, solar.ok = solar.ok), tab.file = tab.file)
 
