@@ -21,6 +21,7 @@ Suggests:
     parallel,
     knitr
 Collate:
+    'data.lib.R'
     'support.lib.R'
     'solar.lib.R'
     'assoc.lib.R'

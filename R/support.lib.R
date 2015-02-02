@@ -1,27 +1,4 @@
 #----------------------------------
-# Data loaders
-#----------------------------------
-
-#' Function loadMulticData.
-#'
-#' @export
-loadMulticData <- function()
-{
-  dat.dir <- system.file("inst", "extdata", "solarOutput", package = "solarius")
-  if(!file.exists(dat.dir)) {
-    dat.dir <- system.file("extdata", "solarOutput", package = "solarius")
-  }
-  stopifnot(file.exists(dat.dir))
-
-  ped <- read.table(file.path(dat.dir, "simulated.ped"), header = TRUE, sep = ",")
-  phen <- read.table(file.path(dat.dir, "simulated.phen"), header = TRUE, sep = ",")
-  dat <- merge(ped, phen)
-  
-  return(dat)
-}
-
-
-#----------------------------------
 # Read/Write Files
 #----------------------------------
 
@@ -284,7 +261,7 @@ check_var_names <- function(traits, covlist, dnames) {
 #' Function match_id_names
 #
 #' @examples inst/examples/example-fields.R
-match_id_names <- function(fields)
+match_id_names <- function(fields, sex.optional = FALSE)
 {
   # `fields`: fields in data set
   # `names`: matched names
@@ -342,10 +319,12 @@ match_id_names <- function(fields)
     out <- c(out, "FA")
     out.names <- c(out.names, names)
   }    
-  # SEX field (obligatory)
+  # SEX field (obligatory / optional if `sex.optional` argumnet is TRUE)
   pat <- "^sex$|^SEX$"
   names <- grep(pat, fields, value = TRUE) 
-  if(length(names) == 0) stop("SEX name not found; grep pattern '", pat, "'")
+  if(!sex.optional) {
+    if(length(names) == 0) stop("SEX name not found; grep pattern '", pat, "'")
+  }
   if(length(names) > 1)  stop("more than one SEX names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
   if(length(names) == 1) {
     out <- c(out, "SEX")
