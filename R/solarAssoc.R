@@ -261,6 +261,7 @@ solarAssoc <- function(formula, data, dir,
   
   ### clean 
   unlink(dir.poly, recursive = TRUE)
+  
   if(is.tmpdir) {
     unlink(dir, recursive = TRUE)
     if(verbose > 1) cat("  -- solarAssoc: temporary directory `", dir, "` unlinked\n")

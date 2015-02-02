@@ -18,34 +18,45 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
   stopifnot(file.exists(dir))
   
   ### var
-  dir.poly <- out$assoc$dir.poly
-  out.path <- file.path(dir, out.dir)
-
-  snplists.files.local <- out$assoc$snplists.files.local
-  genocov.files.local <- out$assoc$genocov.files.local
+  cores <- out$assoc$cores
+  is.tmp <- (cores > 1)  
   
-  if(snplists.files.local) {
-    snplists.files <- file.path(dir, snplists.files)
-  }
-  if(genocov.files.local) {
-    genocov.files <- file.path(dir, genocov.files)
-  }
+  if(!is.tmp) {
+    dir.assoc <- dir
+    out.path <- out.dir
+    tab.file <- file.path(dir, out.path, out.file)
+  } else {
+    dir.poly <- out$assoc$dir.poly
+    out.path <- file.path(dir, out.dir)
 
-  ### check files exist  
-  stopifnot(all(file.exists(genocov.files)))
-  stopifnot(all(file.exists(snplists.files)))
-  stopifnot(dir.create(out.path))
-
-  ### normalize path
-  genocov.files <- normalizePath(genocov.files)
-  snplists.files <- normalizePath(snplists.files)
-  out.path <- normalizePath(out.path)
+    snplists.files.local <- out$assoc$snplists.files.local
+    genocov.files.local <- out$assoc$genocov.files.local
   
-  ### create a temp. dir.
-  dir.assoc <- file.path(dir, paste0("solar_assoc_", basename(out.file)))
-  stopifnot(dir.create(dir.assoc))
-  files.dir <- list.files(dir.poly, include.dirs = TRUE, full.names = TRUE)
-  stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
+    if(snplists.files.local) {
+      snplists.files <- file.path(dir, snplists.files)
+    }
+    if(genocov.files.local) {
+      genocov.files <- file.path(dir, genocov.files)
+    }
+
+    ### check files exist  
+    stopifnot(all(file.exists(genocov.files)))
+    stopifnot(all(file.exists(snplists.files)))
+    stopifnot(dir.create(out.path))
+
+    ### normalize path
+    genocov.files <- normalizePath(genocov.files)
+    snplists.files <- normalizePath(snplists.files)
+    out.path <- normalizePath(out.path)
+  
+    ### create a temp. dir.
+    dir.assoc <- file.path(dir, paste0("solar_assoc_", basename(out.file)))
+    stopifnot(dir.create(dir.assoc))
+    files.dir <- list.files(dir.poly, include.dirs = TRUE, full.names = TRUE)
+    stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
+    
+    tab.file <- file.path(out.path, out.file)
+  }
       
   ### make `cmd`
   # local variables
@@ -65,16 +76,17 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
     # (SOLAR's strange things)
     paste("mga ", "-files ", paste(genocov.files, collapse = " "), 
       " -snplists ", paste(snplists.files, collapse = " "), " -out ", out.file, sep = ""))
-  
+
   ### run solar    
   ret <- solar(cmd, dir.assoc, result = FALSE) 
   # `result = FALSE`, because all assoc. results are printed to output
-
-  tab.file <- file.path(out.path, out.file)
+  
   solar.ok <- file.exists(tab.file)
 
   ### clean
-  unlink(dir.assoc, recursive = TRUE)
+  if(is.tmp) {
+    unlink(dir.assoc, recursive = TRUE)
+  }
     
   ### return  
   out <-  list(solar = list(cmd = cmd, solar.ok = solar.ok), tab.file = tab.file)
