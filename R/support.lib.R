@@ -1,4 +1,35 @@
 #----------------------------------
+# Utils
+#----------------------------------
+
+procc_tprofile <- function(tprofile)
+{
+  tprocf <- list()
+  for(i in 1:length(tprofile$tproc)) {
+    df <- ldply(tprofile$tproc[[i]])
+    
+    df <- rename(df, c(.id = "unit"))
+    
+    df <- within(df, {
+      elapsed.diff <- c(elapsed[-1] - elapsed[-nrow(df)], elapsed[nrow(df)] - elapsed[1])
+    })
+    df <- within(df, {
+      elapsed.prop <- elapsed.diff / elapsed.diff[nrow(df)]
+    })
+          
+    tprocf[[i]] <- df
+  }
+  names(tprocf) <- names(tprofile$tproc)
+  
+  ### return
+  tprofile$tprocf <- tprocf
+  
+  tprofile$cputime.sec <- tail(tprofile$tprocf$tsolarAssoc$elapsed.diff, 1)
+  
+  return(tprofile)
+}
+
+#----------------------------------
 # Read/Write Files
 #----------------------------------
 
