@@ -29,8 +29,8 @@ pdat <- mutate(pdat,
   
 ### polygenic model
 #M <- solarPolygenic(bmi ~ 1, pdat)
-M <- solarPolygenic(tr_bmi ~ AGE, pdat, covtest = TRUE)
-
+M1 <- solarPolygenic(tr_bmi ~ AGE, pdat, covtest = TRUE)
+M3 <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
 
 ## assoc. model
 #A <- solarAssoc(bmi ~ 1, pdat, genocov.files = genocov.files[1], snplists.files = snplists.files[1], snpind = 1:4)
@@ -42,4 +42,6 @@ A1 <- solarAssoc(tr_bmi ~ 1, pdat, genocov.files = gait1.snpfiles$genocov.files,
 
 A2 <- solarAssoc(tr_bmi ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
 
-save(A1, A2, file = "gait1.bmi.A.RData")
+A3 <- solarAssoc(aff ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+
+save(A1, A2, A3, file = "gait1.bmi.A.RData")
