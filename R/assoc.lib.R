@@ -69,7 +69,7 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
     # `Phenotype named snp_s1 found in several files`
     #  - diagnostic: go to SOLAR dir and show phenos by `pheno` command,
     #    and you will see `snp.genocov` duplicated
-    paste("load pheno", out$solar$phe.filename), 
+    #paste("load pheno", out$solar$phe.filename), 
     paste("load model", model.path),
     paste("outdir", out.path),
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 

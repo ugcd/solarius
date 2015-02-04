@@ -45,7 +45,7 @@ solar <- function(cmd, dir = "solar", result = TRUE,
 #' the directory \code{dir}.
 #' 
 #' @export
-df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz")
+df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz", sort.ped = TRUE)
 {
   # match ID/SEX names
   renames <- match_id_names(names(df))
@@ -71,7 +71,16 @@ df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz")
   # create dir
   set_dir(dir)
   
-  # write tables  
+  # write tables
+  if(sort.ped) {
+    if("FAM" %in% ped) {
+      ord <- with(ped, order(as.integer(FAM), as.integer(ID)))
+    } else {
+      ord <- with(ped, order(as.integer(ID)))
+    }
+    
+    ped <- ped[ord, ]
+  }
   write.table(ped, file.path(dir, "dat.ped"),
     row.names = FALSE, sep = ",", quote = FALSE, na = "")
 
