@@ -6,12 +6,14 @@
 readPhen <- function(phen.file, sep.phen = ",",
   ped.file, sep.ped = ",", 
   header = TRUE, stringsAsFactors = FALSE,
-  id.unique = TRUE)
+  id.unique = TRUE, sex.optional)
 {
   stopifnot(!missing(phen.file)) 
   stopifnot(file.exists(phen.file))
   
-  sex.optional <- ifelse(missing(ped.file), FALSE, TRUE)
+  if(missing(sex.optional)) {
+    sex.optional <- ifelse(missing(ped.file), FALSE, TRUE)
+  }
   
   stopifnot(header)
   stopifnot(!stringsAsFactors)
@@ -58,8 +60,10 @@ readPhen <- function(phen.file, sep.phen = ",",
     new.names2 <- new.names[!new.names %in% c("ID")]
     
     ind <- which(names(dat) %in% new.names2)
-    dat <- dat[, -ind]
-    
+    if(length(ind)) {
+      dat <- dat[, -ind]
+    }
+      
     dat <- base::merge(dat, ped, by = "ID", all = TRUE)      
   }
   
