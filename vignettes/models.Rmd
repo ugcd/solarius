@@ -12,7 +12,7 @@ bibliography: ref.bib
 ---
 
 ```{r}
-opts_chunk$set(eval = TRUE)
+opts_chunk$set(eval = TRUE, dev = "png")
 ```
 
 ## About
