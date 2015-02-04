@@ -1,13 +1,12 @@
 
-annotateSignifSNPs- function(A, file="resultsAnnotation.txt")
+annotateSignifSNPs <- function(A)
 {
 require(NCBI2R)
 
-load("resultsF11.Rdata")
-
-posSig <- which(A$snpf$pSNP*307984<0.05)
+d <- dim(A$snpf)
+posSig <- which(A$snpf$pSNP*d[1]<0.05)
 snplist <- A$snpf$SNP[posSig]
 b <- AnnotateSNPList(snplist)
 
-write.table(b[1:12], file=file)
+b[1:12]
 }

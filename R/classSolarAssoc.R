@@ -39,7 +39,15 @@ print.solarAssoc <- function(x, ...)
 
 #' @method plot solarAssoc
 #' @export
-plot.solarAssoc <- function(x, 
+plot.solarAssoc <- function(x, y = "manh", ...)
+{
+  switch(y,
+    manh = ManhattanPlot(x, ...),
+    qq = qqPlot(x, ...),
+    stop("switch error"))
+}
+
+plot.solarAssoc.old <- function(x, 
   alpha = 0.05, corr = "BF", pval = "pval", ...)
 {
   ret <- require(ggplot2)
@@ -121,4 +129,13 @@ plot.solarAssoc <- function(x,
   return(p)
 }
 
+#--------------------
+# Other methods
+#--------------------
 
+#' @method annotate solarAssoc
+#' @export
+annotate.solarAssoc <- function(x, ..)
+{
+  annotateSignifSNPs(x, ...)
+}

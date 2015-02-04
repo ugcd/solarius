@@ -19,7 +19,8 @@ Suggests:
     doMC,
     iterators,
     parallel,
-    knitr
+    knitr,
+    qqman
 Collate:
     'data.lib.R'
     'support.lib.R'
