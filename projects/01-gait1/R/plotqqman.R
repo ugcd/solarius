@@ -14,11 +14,11 @@ pos <- which(is.na(dataP$CHR))
 
 dataPP<- dataP[-pos,]
 
-png("plotF11.pdf")
+png("plotF11.png")
 manhattan(dataPP)
 dev.off()
 
-png("qqF11.pdf")
+png("qqF11.png")
 qq(dataPP$P)
 dev.off()
 
