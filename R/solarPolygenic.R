@@ -4,7 +4,7 @@
 solarPolygenic <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
-  covtest = FALSE, screen = FALSE, household = FALSE,
+  covtest = FALSE, screen = FALSE, household = as.logical(NA),
   alpha = 0.05,
   polygenic.settings = "",  polygenic.options = "",
   verbose = 0,
@@ -47,11 +47,22 @@ solarPolygenic <- function(formula, data, dir,
   if(screen) {
     polygenic.options <- paste(polygenic.options, "-screen")
   }
-  if(household) {
+  
+  # force `household <- FALSE` if the data set does not have the house-hold field
+  if(is.na(household) & !hasHousehold(names(data))) {
+    household <- FALSE
+  }
+  # set up `polygenic.settings`
+  if(is.na(household)) {
+    polygenic.settings <- c(polygenic.settings, "house")
+  } else if(household) {
     polygenic.settings <- c(polygenic.settings, "house")
     polygenic.options <- paste(polygenic.options, "-keephouse")
-  }
-  
+  } 
+  ###
+  # in the case `household == FALSE`, the house-hold effect will be ignored, 
+  # as `house` SOLAR command in `polygenic.settings` is NOT set.
+    
   # kinship
   kin2.gz <- "kin2.gz" # "phi2.gz" "kin2.gz"
   if(is.kinship) {

@@ -91,6 +91,10 @@ solar_polygenic <- function(dir, out)
   return(out)
 }
 
+#----------------------------------
+# Check functions
+#----------------------------------
+hasHousehold <- function(cnames) "HHID" %in% match_id_names(cnames)
 
 #----------------------------------
 # Extract functions
