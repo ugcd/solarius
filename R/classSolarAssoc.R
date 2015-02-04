@@ -133,7 +133,6 @@ plot.solarAssoc.old <- function(x,
 # Other methods
 #--------------------
 
-#' @method annotate solarAssoc
 #' @export
 annotate.solarAssoc <- function(x, ..)
 {
