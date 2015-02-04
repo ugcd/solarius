@@ -181,15 +181,25 @@ A4 <- solarAssoc(trait ~ 1, phenodata,
 A4
 ```
 
+### Map information and Manhetten plot
+
+```{r assoc_map, cache = TRUE}
+A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kinship = kin)
+```
+
+```{r manh_plot}
+plot(A5)
+```
+
 ### Parallelization
 
 ```{r assoc_par, cache = TRUE}
-A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
+A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
 ```
 
 ```{r}
 A1$assoc$tprofile$cputime.sec
-A5$assoc$tprofile$cputime.sec
+A6$assoc$tprofile$cputime.sec
 ```
 
 ## Linkage model
