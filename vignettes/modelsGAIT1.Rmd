@@ -1,0 +1,70 @@
+---
+title: "SOLAR models for quantitative genetic analysis. Part 2: GAIT1"
+author: "Andrey Ziyatdinov, Helena Brunel"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+  pdf_document:
+    toc: true
+bibliography: ref.bib
+---
+
+```{r}
+opts_chunk$set(eval = TRUE, dev = "png")
+```
+
+```{r inc}
+library(devtools)
+load_all("~/git/ugcd/solarius")
+```
+
+
+## Large-scale study: GAIT1 phenotypes
+
+```{r load}
+load("dat/gait1.bmi.A.RData")
+load("dat/resultsF11.Rdata")
+```
+
+### BMI
+
+```{r compare_A1_A2}
+A1
+A2
+```
+
+```{r A2.manh, cache = TRUE}
+plot(A2)
+```
+
+```{r A2.qq, cache = TRUE}
+plot(A2, "qq")
+```
+
+### Throm
+
+```{r A3.manh, cache = TRUE}
+plot(A3)
+```
+
+```{r A3.qq, cache = TRUE}
+plot(A3, "qq")
+```
+
+### FXI
+
+```{A}
+A
+```
+
+```{r A.manh, cache = TRUE}
+plot(A)
+```
+
+```{r A.qq, cache = TRUE}
+plot(A, "qq")
+```
+
+## Refences
