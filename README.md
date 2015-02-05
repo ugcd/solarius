@@ -2,9 +2,9 @@
 
 R package wrapper to SOLAR
 
-* Vignetter `SOALR models`
-  * R code [vignettes/models.Rmd](vignettes/models.Rmd), html file [vignettes/models.html](vignettes/models.html)
-  * [html preview](http://htmlpreview.github.io/?https://github.com/ugcd/solarius/blob/master/vignettes/models.html)
+* Vignettes `SOALR models`
+  * R code [vignettes/](vignettes/)
+  * html preview: [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
 
 ## References
 
