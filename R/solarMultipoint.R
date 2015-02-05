@@ -67,28 +67,6 @@ solarMultipoint <- function(formula, data, dir,
   ###
   ###
   ###
-  dir.multipoint <- dir
-  
-  trait.dir <- paste(out$traits, collapse = ".")
-  model.path <- file.path(trait.dir, out$solar$model.filename)
-  
-  cmd <- c(paste("load pheno", out$solar$phe.filename),
-    paste("load model", model.path),
-    paste("mibddir", "solarMibds"), #out$multipoint$mibddir),
-    "chromosome all",
-    "interval 1",
-    "multipoint -overwrite")
-  ###
-  cmd <- c(
-  #"pedigree load dat.ped", 
-  "phen load dat.phe",
-  "model new", "trait trait1", "polygenic",
-  "load model trait1/null0.mod",
-  paste("mibddir", out$multipoint$mibddir), 
-  "chromosome all", "interval 5", 
-  "multipoint -overwrite")
-  
-  ret <- solar(cmd, dir.multipoint)#, result = FALSE) 
 
   out$multipoint$solar$cmd <- cmd 
   out$multipoint$solar$output <- ret
@@ -112,5 +90,106 @@ solarMultipoint <- function(formula, data, dir,
   }, silent = TRUE)
   
   oldClass(out) <- c("solarMultipoint", oldClass(out))
+  return(out)
+}
+
+solar_multipoint <- function(dir, out)
+{
+  ### check arguments
+  stopifnot(file.exists(dir))
+  
+  ### prepare `cmd`  
+  dir.multipoint <- dir
+  
+  trait.dir <- paste(out$traits, collapse = ".")
+  model.path <- file.path(trait.dir, out$solar$model.filename)
+  
+  cmd <- c(paste("load model", model.path),
+    paste("mibddir", out$multipoint$mibddir), 
+    "chromosome all", "interval 1", 
+    "multipoint -overwrite")
+  
+  ret <- solar(cmd, dir.multipoint, result = FALSE) 
+
+
+  ### run solar    
+  ret <- solar(cmd, dir.assoc, result = FALSE) 
+  # `result = FALSE`, because all assoc. results are printed to output
+  
+  solar.ok <- file.exists(tab.file)
+    
+  ### return  
+  out <-  list(solar = list(cmd = cmd, solar.ok = solar.ok), tab.file = tab.file)
+
+  return(out)
+}
+
+run_multipoint <- function(out, dir)
+{ 
+  trun_multipoint <- list()
+  trun_multipoint$args <- proc.time()
+  
+  cores <- out$assoc$cores
+    
+  ### run
+  trun_multipoint$solar <- proc.time()
+  parallel <- (cores > 1)
+  if(parallel) {
+    ret <- require(doMC)
+    if(!ret) {
+      stop("`doMC` package is required for parallel calculations")
+    }
+    doMC::registerDoMC(cores)
+  }
+
+  ### case 1
+  if(length(genocov.files) > 1) {
+    out.gr <- llply(1:length(genocov.files), function(i) {
+      solar_assoc(dir, out, genocov.files[i], snplists.files[i], out.dirs[i], out.files[i])
+    }, .parallel = parallel)
+  ### case 2 (length(genocov.files) == 1)
+  } else if(cores == 1) {
+    out.gr <- llply(1, function(i) {
+      solar_assoc(dir, out, genocov.files, snplists.files, out.dirs, out.files)
+    })
+  ### case 2 (length(genocov.files) == 2)
+  } else {
+    out.gr <- llply(1:length(snplists.files), function(i) {
+      solar_assoc(dir, out, genocov.files, snplists.files[i], out.dirs[i], out.files[i])
+    }, .parallel = TRUE)
+  }
+      
+  ### process results
+  trun_multipoint$results <- proc.time()
+  snpf.list <- llply(out.gr, function(x) try({
+    fread(x$tab.file)}), .parallel = parallel)
+  
+  # -- try to union `snpf` slots in `snpf.list`
+  snpf <- snpf.list 
+  ret <- try({
+    rbindlist(snpf)
+  })
+
+  if(class(ret)[1] != "try-error") {
+    snpf <- ret
+    snpf <- rename(snpf, c("p(SNP)" = "pSNP"))
+  }
+    
+  # -- extract assoc. solar outputs
+  assoc.solar <- llply(out.gr, function(x) x$solar)
+    out.assoc.solar <- list(cmd = llply(assoc.solar, function(x) x$cmd), 
+      solar.ok = llply(assoc.solar, function(x) x$solar.ok))
+    
+  # -- final output
+  out.assoc <- list(snpf = snpf, solar = out.assoc.solar)
+
+  ### assign
+  out$snpf <- out.assoc$snpf
+  out$assoc$solar <- out.assoc$solar
+  
+  ### return
+  trun_multipoint$return <- proc.time()
+  out$assoc$tprofile$tproc$trun_multipoint <- trun_multipoint
+      
   return(out)
 }
