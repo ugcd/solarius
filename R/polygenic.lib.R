@@ -175,6 +175,15 @@ extactCovariateFrame <- function(dir, out)
       cf$pval <- as.numeric(NA)
     }
     
+    # Add mean
+    if(all(c("mean", "meanSE") %in% tab[, 1])) {
+      ind1 <- which(tab[, 1] %in% "mean")
+      ind2 <- which(tab[, 1] %in% "meanSE")
+      cf.mean <- data.frame(covariate = "mean", Estimate = tab[ind1, 2], 
+        SE = tab[ind2, 2], Chi = NA, pval = NA)
+      
+      cf <- rbind(cf.mean, cf)
+    }
   }  
   
   return(cf)
@@ -503,6 +512,14 @@ get_proc_write_param_univar <- function()
       puts $f \"b$covi $bi\"\
       puts $f \"b${covi}SE $biSE\"\
      }\
+  }\
+\
+  # mean\
+	if {[if_parameter_exists mean]} {\
+    set mean [read_model $model mean]\
+    set meanSE [read_model $model mean -se]\
+    puts $f \"mean $mean\"\
+    puts $f \"meanSE $meanSE\"\
   }\
 \
 	close $f\
