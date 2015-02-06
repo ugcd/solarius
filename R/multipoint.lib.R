@@ -1,0 +1,254 @@
+
+#----------------------------------
+# mibd functions
+#----------------------------------
+
+covert_mibd <- function(indir, outdir, pedindex.out)
+{
+  dir <- "inst/extdata/solarOutput"
+  pedindex.out <- file.path(dir, "pedindex.out")
+  indir <- file.path(dir, "solarMibds")
+  outdir <- "mibds"
+  
+  stopifnot(dir.create(outdir))
+  
+  ### infiles
+  infiles <- list.files(indir, full.names = TRUE)
+  
+  ### read pedindex
+  pf <- read_pedindex(pedindex.out)
+  N <- nrow(pf)
+  
+  for(i in 1:length(infiles)) {
+    f <- infiles[i]
+    
+    mf <- read_mibd_gz(f)
+    N.diag <- with(mf, sum(IBDID1 == IBDID2))
+    stopifnot(N == N.diag)
+    
+    mf <- kf_match_pedindex(mf, pf)
+
+    mf2 <- subset(mf, select = c("ID1", "ID2", "matrix1", "matrix2"))
+    mf2 <- rename(mf2, c(ID1 = "id1", ID2 = "id2"))
+    
+    # order
+    ord <- with(mf2, order(as.integer(id1), as.integer(id2)))
+    mf2 <- mf2[ord, ]
+    
+    ### write file
+    of <- file.path(outdir, basename(f))
+    ret <- write.table(mf2, gzfile(of), quote = FALSE,
+      row.names = FALSE, col.names = TRUE, sep = ",")
+  }
+  
+  return(invisible())
+}
+
+#
+read_mibd_gz <- function(mibd.gz)
+{
+  mf <- read.table(gzfile(mibd.gz), colClasses = c("character", "character", "numeric", "numeric"))
+  names(mf) <- c("IBDID1", "IBDID2", "matrix1", "matrix2")
+###
+#         1          1   1.000000   1.000000
+#         2          2   1.000000   1.000000
+#         3          1   0.500000   0.000000
+#         3          2   0.500000   0.000000
+
+  stopifnot(ncol(mf) == 4)
+   
+  return(mf)
+}
+
+#----------------------------------
+# Read LOD functions
+#----------------------------------
+
+read_multipoint_lod <- function(dir, num.traits, mode = "none")  
+{
+  stopifnot(!missing(num.traits)) 
+ 
+  switch(mode,
+    "none" = {
+      switch(as.character(num.traits),
+        "1" = read_multipoint_lod_univar(dir),
+        "2" = read_multipoint_lod_bivar(dir),
+        stop("error in switch by `num.traits`"))
+    },
+    "gxed" = read_multipoint_lod_gxed(dir),
+    stop("error in switch by `mode`"))
+}
+
+read_multipoint_lod_gxed <- function (dir)
+{
+  out <- list()
+  
+  multipoint.files <- list.files(dir, "multipoint[1-9].out", full.names = TRUE)
+  num.passes <- length(multipoint.files)
+  stopifnot(num.passes <= 1)
+  
+  names.tab <- list("1" = c("Model", "LOD", "Loglike", "xgsd", "ygsd", "rhog", "xqsd1", "yqsd1", "rhoq1"))
+  ncol.tab <- list("1" = 12)
+  col.tab <- list("1" = c(2, 4, 5:12))
+  colnames.tab <- list("1" = c("chr", "pos", "LOD", "Loglike", "xgsd", "ygsd", "rhog", "xqsd1", "yqsd1", "rhoq1"))
+
+### pass 1
+#       Model            LOD        Loglike      xgsd      ygsd      rhog     xqsd1     yqsd1     rhoq1  
+#------------------- -----------  -----------  --------  --------  -------- --------- --------- ---------
+#chrom 02  loc     7      3.3134      673.687  0.031174  0.074905  1.000000  0.083059  0.040770  1.000000 
+#chrom 02  loc     9      3.2409      673.520  0.032504  0.074223  1.000000  0.080781  0.042219  1.000000 
+#...
+
+### pass 2
+# ...
+
+  for(i in 1:num.passes) {
+    f <- multipoint.files[i]
+    
+    tnames <- names.tab[[i]]
+    tncol <- ncol.tab[[i]]
+    tcol <- col.tab[[i]]
+    tcolnames <- colnames.tab[[i]]
+    
+    # names
+    names <- unlist(strsplit(readLines(f, n = 1), "\\s+"))
+    names <- names[names != ""]
+    stopifnot(all(names == tnames))
+    
+    # table 
+    tab <- read.table(f, skip = 2)
+    stopifnot(ncol(tab) == tncol)
+    tab <- tab[, tcol]
+    colnames(tab) <- tcolnames
+    
+    out <- c(out, list(tab))
+  }
+
+  if(num.passes > 0) {
+    names(out) <- paste("df", 1:num.passes, sep = "")
+    names(out)[1] <- "df"
+  }
+  
+  out$num.passes <- num.passes
+  
+  return(out)  
+}
+
+read_multipoint_lod_bivar <- function(dir)  
+{
+  out <- list()
+  
+  multipoint.files <- list.files(dir, "multipoint[1-9].out", full.names = TRUE)
+  num.passes <- length(multipoint.files)
+  stopifnot(num.passes <= 1)
+  
+  names.tab <- list("1" = c("Model", "LOD", "Loglike", "H2r_trait1", "H2r_trait2", 
+    "RhoG", "H2q1_trait1", "H2q1_trait2", "RhoQ1"))
+  ncol.tab <- list("1" = 12)
+  col.tab <- list("1" = c(2, 4, 5:12))
+  colnames.tab <- list("1" = c("chr", "pos", "LOD", "Loglike", "H2r_trait1", 
+    "H2r_trait2", "RhoG", "H2q1_trait1", "H2q1_trait2", "RhoQ1"))
+
+### pass 1
+#       Model            LOD        Loglike   H2r(trait1) H2r(trait2)    RhoG   H2q1(trait1) H2q1(trait2)   RhoQ1   
+#------------------- -----------  ----------- ----------- -----------  -------- ------------ ------------ --------- 
+#chrom 05  loc     0      9.7291    -2612.669    0.485964    0.513254  0.930689     0.386615     0.236398  1.000000  
+#chrom 05  loc     1     12.0168    -2607.213    0.364941    0.421572  0.915142     0.503510     0.324686  1.000000  
+#chrom 05  loc     2     13.7087    -2603.198    0.285072    0.356037  0.898079     0.579351     0.385922  1.000000 
+#  ...
+
+  for(i in 1:num.passes) {
+    f <- multipoint.files[i]
+    
+    tnames <- names.tab[[i]]
+    tncol <- ncol.tab[[i]]
+    tcol <- col.tab[[i]]
+    tcolnames <- colnames.tab[[i]]
+    
+    # names
+    names <- unlist(strsplit(readLines(f, n = 1), "\\s+"))
+    names <- names[names != ""]
+    stopifnot(all(names[1:3] == tnames[1:3])) # just first three names, as further naming depend on particular names of traits 
+    
+    # table 
+    tab <- read.table(f, skip = 2)
+    stopifnot(ncol(tab) == tncol)
+    tab <- tab[, tcol]
+    colnames(tab) <- tcolnames
+    
+    out <- c(out, list(tab))
+  }
+
+  if(num.passes > 0) {
+    names(out) <- paste("df", 1:num.passes)
+    names(out)[1] <- "df"
+  }
+  
+  out$num.passes <- num.passes
+  
+  return(out)
+}
+
+read_multipoint_lod_univar <- function(dir)  
+{
+  out <- list()
+  
+  multipoint.files <- list.files(dir, "multipoint[1-9].out", full.names = TRUE)
+  num.passes <- length(multipoint.files)
+  stopifnot(num.passes <= 2)
+  
+  names.tab <- list("1" = c("Model", "LOD", "Loglike", "H2r", "H2q1"),
+    "2" = c("Model", "LOD", "Loglike", "H2r", "H2q1", "H2q2"))
+  ncol.tab <- list("1" = 8, "2" = 9)
+  col.tab <- list("1" = c(2, 4, 5:8), "2" = c(2, 4, 5:9))
+  colnames.tab <- list("1" = c("chr", "pos", "LOD", "Loglike", "H2r", "H2q1"),
+    "2" = c("chr", "pos", "LOD", "Loglike", "H2r", "H2q1", "H2q2"))
+
+### pass 1
+#             Model         LOD       Loglike       H2r      H2q1  
+#  -------------------   ---------  -----------  --------  --------
+#  chrom 05  loc     0     11.0544    -1466.123  0.492049  0.386445
+#  chrom 05  loc     1     13.2765    -1461.007  0.375424  0.499153
+#  chrom 05  loc     2     14.9359    -1457.186  0.298530  0.572836
+#  ...
+
+### pass 2
+#            Model         LOD       Loglike       H2r      H2q1      H2q2  
+# -------------------   ---------  -----------  --------  --------  --------
+# chrom 05  loc     0      0.7355    -1455.422  0.285594  0.439268  0.145092
+# chrom 05  loc     1      0.5086    -1455.945  0.284433  0.404778  0.180871
+# chrom 05  loc     2      0.3176    -1456.384  0.284086  0.301798  0.284157
+# ...
+
+  for(i in 1:num.passes) {
+    f <- multipoint.files[i]
+    
+    tnames <- names.tab[[i]]
+    tncol <- ncol.tab[[i]]
+    tcol <- col.tab[[i]]
+    tcolnames <- colnames.tab[[i]]
+    
+    # names
+    names <- unlist(strsplit(readLines(f, n = 1), "\\s+"))
+    names <- names[names != ""]
+    stopifnot(all(names == tnames))
+    
+    # table 
+    tab <- read.table(f, skip = 2)
+    stopifnot(ncol(tab) == tncol)
+    tab <- tab[, tcol]
+    colnames(tab) <- tcolnames
+    
+    out <- c(out, list(tab))
+  }
+
+  if(num.passes > 0) {
+    names(out) <- paste("df", 1:num.passes, sep = "")
+    names(out)[1] <- "df"
+  }
+  
+  out$num.passes <- num.passes
+  
+  return(out)
+}
+

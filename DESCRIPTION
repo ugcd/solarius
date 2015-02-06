@@ -35,4 +35,5 @@ Collate:
     'files.lib.R'
     'classSolarMultipoint.R'
     'solarMultipoint.R'
+    'multipoint.lib.R'
 VignetteBuilder: knitr

@@ -66,11 +66,28 @@ solarMultipoint <- function(formula, data, dir,
   
   ###
   ###
-  ###
-
-  out$multipoint$solar$cmd <- cmd 
-  out$multipoint$solar$output <- ret
+  ### prepare `cmd`  
+  dir.multipoint <- dir
   
+  trait.dir <- paste(out$traits, collapse = ".")
+  trait.path <- file.path(dir, trait.dir)
+  model.path <- file.path(trait.dir, out$solar$model.filename)
+  
+  cmd <- c(paste("load model", model.path),
+    paste("mibddir", out$multipoint$mibddir), 
+    "chromosome all", "interval 1", 
+    "multipoint -overwrite")
+  
+  ret <- solar(cmd, dir.multipoint, result = FALSE) 
+
+  results <- try(read_multipoint_lod(trait.path, num.traits = length(out$traits)))
+  #pedlod <- try(read_multipoint_pedlod(dir.multipoint))
+
+  out$multipoint <- c(out$multipoint, results)#, pedlod)  
+  ###
+  ###
+  out$multipoint$solar$cmd <- cmd 
+
   ### clean 
   if(is.dir.poly) {
     unlink(dir.poly, recursive = TRUE)

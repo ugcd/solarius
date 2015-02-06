@@ -10,4 +10,11 @@ test_that("basic example on dat30", {
   
 })
 
+# basic example
+test_that("CSV IBD matices", {
+  dat <- loadMulticPhen()
+  mibddir <- package.file("extdata", "solarOutput", "solarIDMibds", package = "solarius")  
 
+  mod <- solarMultipoint(trait1 ~ 1, dat, mibddir = mibddir)
+  
+})
