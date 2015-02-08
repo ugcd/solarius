@@ -15,7 +15,35 @@ bibliography: ref.bib
 opts_chunk$set(eval = TRUE, dev = "png")
 ```
 
-## About
+## Introduction
+
+In human genetics research, the study of complex disorders or related quantitative phenotypes 
+is targeted to discover the underlying genetic architecture of such disorders.
+Whereas simple Mendelian diseases are results of a mutation in a single gene,
+for example [Huntington's disease](http://en.wikipedia.org/wiki/Huntington%27s_disease),
+complex phenotypes are the product of the action of multiple genes and environmental factors
+as well as their interactions.
+For instance, obesity is a complex disease,
+which genetic basis might be better dissected 
+via measurable quantitative variation in phenotypes,
+such as body-mass index, closely related to the disease risk.
+
+One of the study designs to identify the quantitative trait loci (QTLs)
+that affect complex phenotypes is based on examination 
+of related individuals grouped by families (pedigrees).
+Pedigree-based designs allow for both QTL linkage and association mappings.
+In addition, QTL analysis with pedigrees 
+possess more power to detect rare variants,
+permits explicit control for population stratification in association studies,
+and suit for examination of parent-of-origin and sex-specificity effects.
+
+The analysis of the pedigree data is traditionally based on variance component (VC) model, 
+also known as linear mixed model (LMM).
+`SOLAR` is one of the well-known and widely used tools
+that implements the variance component models and other routines needed for the QTL analysis.
+Similar tools of the interest include `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`.
+
+
 
 This vignette introduces examples on fitting statistical models available in `SOLAR`.
 Three types of models for quantitative genetic analysis in family-based studies are introduced:
