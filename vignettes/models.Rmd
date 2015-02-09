@@ -48,6 +48,13 @@ Three types of models for quantitative genetic analysis in family-based studies 
 polygenic, association and linkage.
 
 
+### Polygenic and sporadic models
+
+
+
+$$ y = X \beta + a + e $$
+
+
 ## `SOLAR`
 
 via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
@@ -59,12 +66,6 @@ via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
 * An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001]
 * Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b]
 
-
-## Statistical models
-
-\[
-y_{n \times 1} = X \beta + a_{n \times 1} + e_{n \times 1}
-\]
 
 ## Data sets
 
