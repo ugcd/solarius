@@ -82,11 +82,14 @@ solarMultipoint <- function(formula, data, dir,
 
   results <- try(read_multipoint_lod(trait.path, num.traits = length(out$traits)))
   #pedlod <- try(read_multipoint_pedlod(dir.multipoint))
-
+  
   out$multipoint <- c(out$multipoint, results)#, pedlod)  
   ###
   ###
   out$multipoint$solar$cmd <- cmd 
+
+  out$lodf <- out$multipoint$df
+  out$multipoint$df <- NULL
 
   ### clean 
   if(is.dir.poly) {

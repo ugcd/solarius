@@ -234,8 +234,8 @@ kf2phi2 <- function(kf, dir, kin2.gz = "kin2.gz")
   #  sep = " ", width = c(5, 5, 10, 10))
   
   ### CSV format
-  #ord <- with(kf2, order(as.integer(id1), as.integer(id2)))
-  #kf2 <- kf2[ord, ]
+  ord <- with(kf2, order(as.integer(id1), as.integer(id2)))
+  kf2 <- kf2[ord, ]
   
   ret <- write.table(kf2, gzfile(phi2.gz), quote = FALSE,
     row.names = FALSE, col.names = TRUE, sep = ",")
