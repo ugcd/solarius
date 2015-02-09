@@ -43,8 +43,6 @@ also known as linear mixed model (LMM).
 that implements the variance component models and other routines needed for the QTL analysis.
 Similar tools of the interest include `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`.
 
-
-
 This vignette introduces examples on fitting statistical models available in `SOLAR`.
 Three types of models for quantitative genetic analysis in family-based studies are introduced:
 polygenic, association and linkage.

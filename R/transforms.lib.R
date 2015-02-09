@@ -54,11 +54,7 @@ transformTrait <- function(x, transform, ...)
   
   res <- switch(transform,
     "none" = list(x = x),
-    "log" = {
-      x.min <- min(x, na.rm = TRUE)
-      if(x.min <= 0) x <- x - x.min + 0.1
-      list(x = log(x))
-    },
+    "log" = list(x = transform_trait_log(x, ...)),
     "inormal" = list(x = transform_trait_inormal(x, ...)),
     "out" = list(x = transform_trait_out(x, ...)),
     stop("error in switch (unknown transform)"))
@@ -68,6 +64,33 @@ transformTrait <- function(x, transform, ...)
   return(xt)
 }
 
+transform_trait_log <- function(x, log.base, log.intercept)
+{
+  stopifnot(!missing(x))
+
+  # process `log.intercept`
+  if(missing(log.intercept)) {
+    x.min <- min(x, na.rm = TRUE)
+    if(x.min <= 0) {
+      x.min <- min(x, na.rm = TRUE)
+      x <- x - x.min + 0.1
+    }
+  } else {
+    x <- x - log.intercept
+
+    x.min <- min(x, na.rm = TRUE)
+    stopifnot(x.min > 0)
+  }
+  
+  if(missing(log.base)) {
+    xt <- log(x)
+  } else {
+    xt <- log(x, log.base)
+  }
+
+  return(xt)
+}  
+  
 # test data: x <- c(NA, 10:1, NA)
 transform_trait_inormal <- function(x, mean = 0, sd = 1)
 {
