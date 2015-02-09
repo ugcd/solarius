@@ -1,10 +1,13 @@
 #' Function solarPolygenic.
 #'
+#' @importFrom methods hasArg
+#' 
 #' @export
 solarPolygenic <- function(formula, data, dir,
   kinship,
   traits, covlist = "1",
   covtest = FALSE, screen = FALSE, household = as.logical(NA),
+  transforms = character(0),
   alpha = 0.05,
   polygenic.settings = "",  polygenic.options = "",
   verbose = 0,
@@ -12,7 +15,7 @@ solarPolygenic <- function(formula, data, dir,
 {
   ### step 1: process par & create `out`
   mc <- match.call()
-  is.kinship <- hasArg(kinship)
+  is.kinship <- methods::hasArg(kinship)
   
   stopifnot(!missing(data))
   stopifnot(class(data) == "data.frame")
@@ -72,13 +75,33 @@ solarPolygenic <- function(formula, data, dir,
   # check `traits`, `covlist`
   check_var_names(traits, covlist, names(data))
 
-  out <- list(traits = traits, covlist = covlist, 
+  out <- list(traits = traits, covlist = covlist, transforms = transforms,
     polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
     solar = list(model.filename = "null0.mod", phe.filename = "dat.phe", 
       kin2.gz = kin2.gz, kinship = is.kinship),
     call = mc)
   
-  ### step 2: set up SOLAR dir
+  ### step 2.1: transform
+  if(length(out$transforms)) {
+    if(length(out$transforms) == 1) {
+      if(is.null(names(out$transforms))) {
+        names(out$transforms) <- traits
+      }      
+    }
+    stopifnot(all(names(out$transforms) %in% traits))
+    
+    # transform
+    data <- transformData(out$transforms, data, ...)
+    # change `traits` names
+    for(t in names(out$transforms)) {
+      ind <- which(out$traits == t)
+      stopifnot(length(ind) == 1)
+      
+      out$traits[] <- paste0("tr_", t)
+    }
+  }
+  
+  ### step 2.2: set up SOLAR dir
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarPolygenic-")
   }

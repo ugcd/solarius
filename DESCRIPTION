@@ -10,7 +10,8 @@ License: GPL (>= 3)
 LazyData: true
 Depends:
     plyr (>= 1.8.1),
-    data.table
+    data.table,
+    methods
 Suggests:
     ggplot2,
     scales,
@@ -36,4 +37,5 @@ Collate:
     'classSolarMultipoint.R'
     'solarMultipoint.R'
     'multipoint.lib.R'
+    'transforms.lib.R'
 VignetteBuilder: knitr

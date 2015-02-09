@@ -2,16 +2,10 @@
 #library(solarius)
 load_all("~/git/ugcd/solarius")
 
-library(gait1)
+library(gait)
 
 ### par
-cores <- 64
-
-pdir <- "/home/datasets/GAIT1/GWAS/SFBR"
-#pdir <- "/home/andrey/Datasets/GAIT1/SFBR/subset"
-
-phefile <- file.path(pdir, "gait1.phe")
-pedfile <- file.path(pdir, "gait1.ped")
+cores <- 8
 
 ### var
 #gait1.snpfiles <- gait1.snpfiles(chr = 1, num.snpdirs = 2)
@@ -20,8 +14,8 @@ pedfile <- file.path(pdir, "gait1.ped")
 gait1.snpfiles <- gait1.snpfiles()
 #gait1.snpfiles <- gait1.snpfiles(chr = 21:22)
 
-### read phen. data
-pdat <- readPhen(phefile, sep.phen = "\t", ped.file = pedfile)
+# read phen. data
+pdat <- gait1.phen()
 
 pdat <- mutate(pdat,
   ln_bmi = log(bmi),
