@@ -1,5 +1,5 @@
 ---
-title: "SOLAR models for quantitative genetic analysis"
+title: "Tutorial on `solarius` R package"
 author: "Andrey Ziyatdinov, Helena Brunel"
 date: "`r Sys.Date()`"
 output:
@@ -15,7 +15,7 @@ bibliography: ref.bib
 opts_chunk$set(eval = TRUE, dev = "png")
 ```
 
-## Introduction
+## Abstract
 
 In human genetics research, the study of complex disorders or related quantitative phenotypes 
 is targeted to discover the underlying genetic architecture of such disorders.
@@ -47,27 +47,94 @@ This vignette introduces examples on fitting statistical models available in `SO
 Three types of models for quantitative genetic analysis in family-based studies are introduced:
 polygenic, association and linkage.
 
+## Introduction
 
-### Polygenic and sporadic models
+### General mixed model
 
+Consider a particular trait, such as body-mass index, 
+is observed in $n$ individuals grouped by families or clusters of related individuals.
+A $n \times 1$ vector $y$ contains the phenotypic values measured for the trait.
+One assumes that these observations are described adequately by a linear model
+with a $p \times 1$ vector of fixed effects ($\beta$)
+and a $q \times 1$ vector of random effects ($u$) [@Lynch1998, Chapter 26, pp. 746].
+In matrix form,
 
+$$ y = X \beta + Z u + e $$
 
-$$ y = X \beta + a + e $$
+where $X$ and $Z$ are respectively $n \times p$ and $n \times q$ incidence matrices,
+and $e$ is a $n \times 1$ vector of residual deviations
+assumed to be distributed independently of the random effects.
+Denote the $n \times $n covariance matrix for the vector $e$ by $R$
+and the the $q \times q$ covariance matrix for the vector $u$ by $G$.
 
+The first element of the vector $\beta$ is typically the population mean,
+and other elements may be age, gender, diet and so on.
+The elements of the incidence matrices are usually equal to 0 or 1,
+that indicate the effect contribution to the individuals's phenotype.
+The model is referred to as a __mixed model__,
+because this model jointly accounts for fixed and random effects.
 
-## `SOLAR`
+Giving the two terms of the random effects $u$ and $e$,
+the first term typically accounts for the contribution from random genetic effects
+such as additive genetic values.
+The second term accounts for the residual variance,
+and one usually assumes that residual errors have constant variance and are uncorrelated,
+so that $R$ is a diagonal matrix, with $R = \sigma_e^2 I$.
 
-via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
+Two more equations for the means and variances of the component vectors
+of the mixed model can be derived on the basis of its definition.
+Since $E(u) = E(e) = 0$ by definition,
 
-* The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is [@Almasy1998] 
-* Bivariate Quantitative trait linkage is described in the following papers: [@Almasy1997], [@Williams1999]
-* The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one: [@Duggirala1997]
-* Gene By Environment Interaction is discussed in: [@Towne1997], [@Blangero2009]
-* An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001]
-* Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b]
+$$ E(y) = X \beta $$
 
+Excluding the difference among individuals due to fixed effects 
+and calling the assumption that $u$ and $e$ are uncorrelated,
+the covariance matrix for the vector of observations $y$ is
 
-## Data sets
+$$ Var(y) = V = Z G Z^{T} + R $$
+
+Now the mixed model can be rewritten in a compact form
+
+$$
+y = X \beta + Z u + e, \mbox{ where } u \sim (0, G) \mbox{ and } e \sim (0, R) \\
+\mbox{ implying } y \sim (X \beta, V) = (X \beta, Z G Z^T + R)
+$$
+
+For the mixed model,
+$y$, $X$ and $Z$ are observed variables,
+while $\beta$, $u$, $R$ and $G$ are generally unknown variables.
+Thus, the analysis consists of two complementary estimation procedures:
+(1) estimation of the covariance matrices $G$ and $R$,
+and (2) estimation of the vectors of fixed and random effects, $\beta$ and $u$.
+The covariance matrices are usually functions of a few unknown parameters 
+or variance components.
+For instance, the covariance matrix of the residuals errors
+typically has the form $R = \sigma_e^2 I$,
+where $\sigma_e^2$ is the parameter to be estimated.
+
+The description of the two estimation procedures is out of scope of this document,
+and the reader is referred to [@Lynch1998, Chapter 26-27], 
+where the necessary theoretical material and accompanying examples are given.
+On the other hand, the implementation of the estimation procedures in `SOLAR`
+is discussed elsewhere [@Almasy1998].  
+
+### Polygenic model in `SOLAR`
+
+### Linkage model in `SOLAR`
+
+### Association model in `SOLAR`
+
+## Software
+
+### Installation
+
+### `solarius` R package 
+
+```{r}
+library(solarius)
+```
+
+### Data sets
 
 * GAW10 data distributed within `SOLAR`
 * Simulated data `dat30` from `multic` R package [@Andrade2006]
@@ -87,20 +154,21 @@ The following variables are in the data set.
    The variables iclude `name` of the variant, the chromose `chrom`, `position` in bp and `gene`.
 * `kin`: A kinship matrix for 66 individuals.     
 
-## Structure of `solarius` R package 
 
-```{r}
-library(solarius)
-```
+## Examples
 
-## Polygenic model (univariate)
+### Loading data
+
+### Data exploration
+
+### Polygenic model (univariate)
 
 ```{r, cache = TRUE}
 M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
 M1
 ```
 
-### Testing covariates
+#### Testing covariates
 
 ```{r, cache = TRUE}
 M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
@@ -111,7 +179,7 @@ M2
 M2$cf
 ```
 
-### Custom kinship matrix
+#### Custom kinship matrix
 
 `dat50` data set is used.
 
@@ -126,14 +194,14 @@ The polygenic and sporadic models have the same LRT statistics.
 M3$lf
 ```
 
-## Polygenic model (bivariate)
+### Polygenic model (bivariate)
 
 ```{r, cache = TRUE}
 B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
 B1
 ```
 
-### Testing correlations
+#### Testing correlations
 
 ```{r, cache = TRUE}
 B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
@@ -144,7 +212,7 @@ B2
 B2$vcf
 ```
 
-### Trait-specific covariates
+#### Trait-specific covariates
 
 ```{r, cache = TRUE}
 B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
@@ -156,18 +224,18 @@ l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
 
 ```
 
-## Association model
+### Association model
 
 `dat50` data set is used.
 
-### SNP data by `snpdata` argument
+#### SNP data by `snpdata` argument
 
 ```{r genodata, cache = TRUE}
 A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 A1
 ```
 
-### SNP data by `snpcovdata` argument
+#### SNP data by `snpcovdata` argument
 
 ```{r genocovdata, cache = TRUE}
 A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
@@ -184,7 +252,7 @@ A2
 ```
 
 
-### SNP data by `genocov.files` (single value)
+#### SNP data by `genocov.files` (single value)
  
 ```{r genocov, cache = TRUE}
 dir <- system.file("extdata/solarAssoc/", package = "solarius")
@@ -196,7 +264,7 @@ A3 <- solarAssoc(trait ~ 1, phenodata,
 A3
 ```
 
-### SNP data by `genocov.files` (many values)
+#### SNP data by `genocov.files` (many values)
  
 ```{r genocov2, cache = TRUE}
 dir <- system.file("extdata/solarAssoc/", package = "solarius")
@@ -208,7 +276,7 @@ A4 <- solarAssoc(trait ~ 1, phenodata,
 A4
 ```
 
-### Map information and Manhetten plot
+#### Map information and Manhetten plot
 
 ```{r assoc_map, cache = TRUE}
 A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kinship = kin)
@@ -218,7 +286,7 @@ A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kin
 plot(A5)
 ```
 
-### Parallelization
+#### Parallelization
 
 ```{r assoc_par, cache = TRUE}
 A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
@@ -229,14 +297,24 @@ A1$assoc$tprofile$cputime.sec
 A6$assoc$tprofile$cputime.sec
 ```
 
-## Linkage model
+### Linkage model
 
-## Advanced models
+### Advanced models
 
-## Large-scale study: GAIT1 phenotypes
+## Miscellaneous material
 
-### BMI
+### `SOLAR` references
 
-### Throm
+
+A list of references given on the official web page of `SOLAR` 
+[http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/):
+
+* The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is [@Almasy1998];
+* Bivariate Quantitative trait linkage is described in the following papers: [@Almasy1997], [@Williams1999];
+* The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one: [@Duggirala1997];
+* Gene By Environment Interaction is discussed in: [@Towne1997], [@Blangero2009];
+* An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001];
+* Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b].
+
 
 ## Refences
