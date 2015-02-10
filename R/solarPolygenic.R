@@ -79,7 +79,7 @@ solarPolygenic <- function(formula, data, dir,
     polygenic.settings = polygenic.settings, polygenic.options = polygenic.options, 
     solar = list(model.filename = "null0.mod", phe.filename = "dat.phe", 
       kin2.gz = kin2.gz, kinship = is.kinship),
-    call = mc)
+    call = mc, verbose = verbose)
   
   ### step 2.1: transform
   if(length(out$transforms)) {
@@ -105,7 +105,7 @@ solarPolygenic <- function(formula, data, dir,
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarPolygenic-")
   }
-  if(verbose) cat(" * solarPolygenic: parameter `dir` is missing.\n")
+  if(verbose > 1) cat(" * solarPolygenic: parameter `dir` is missing.\n")
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
  
   if(missing(kinship)) df2solar(data, dir)

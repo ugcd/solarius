@@ -133,7 +133,7 @@ solarAssoc <- function(formula, data, dir,
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarAssoc-")
   }
-  if(verbose) cat(" * solarAssoc: parameter `dir` is missing.\n")
+  if(verbose > 1) cat(" * solarAssoc: parameter `dir` is missing.\n")
   if(verbose > 1) cat("  -- temporary directory `", dir, "` used\n")
 
   ### step 3: compute a polygenic model by calling `solarPolygenic`
@@ -419,7 +419,11 @@ run_assoc <- function(out, dir)
 
   ### case 1
   if(length(genocov.files) > 1) {
-    out.gr <- llply(1:length(genocov.files), function(i) {
+    num.genocov.files <- length(genocov.files)
+    out.gr <- llply(1:num.genocov.files, function(i) {
+      if(out$verbose) {
+         cat(" * solarAssoc: ", i, "/", num.genocov.files, "genocov.files...\n")
+      }
       solar_assoc(dir, out, genocov.files[i], snplists.files[i], out.dirs[i], out.files[i])
     }, .parallel = parallel)
   ### case 2 (length(genocov.files) == 1)
