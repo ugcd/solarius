@@ -4,7 +4,9 @@ R package wrapper to SOLAR
 
 * Vignettes `SOALR models`
   * R code [vignettes/](vignettes/)
-  * html preview: [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
+  * hmlt output:
+     1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
+     2. [models.html](http://ugcd.github.io/solarius/vignettes/models.html)
 
 ## References
 
