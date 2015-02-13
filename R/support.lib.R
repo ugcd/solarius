@@ -5,7 +5,9 @@
 procc_tprofile <- function(tprofile)
 {
   tprocf <- list()
-  for(i in 1:length(tprofile$tproc)) {
+  
+  num.tproc <- length(tprofile$tproc)
+  for(i in 1:num.tproc) {
     df <- ldply(tprofile$tproc[[i]])
     
     df <- rename(df, c(.id = "unit"))
@@ -24,7 +26,7 @@ procc_tprofile <- function(tprofile)
   ### return
   tprofile$tprocf <- tprocf
   
-  tprofile$cputime.sec <- tail(tprofile$tprocf$tsolarAssoc$elapsed.diff, 1)
+  tprofile$cputime.sec <- tail(tprofile$tprocf[[num.tproc]]$elapsed.diff, 1)
   
   return(tprofile)
 }

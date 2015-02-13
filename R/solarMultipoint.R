@@ -179,7 +179,34 @@ run_multipoint <- function(out, dir)
   if(class(ret)[1] != "try-error") {
     lodf <- ret
   }
-    
+
+  # passes 2 & 3 (if necessary)
+  lodf2 <- data.frame()
+  lodf3 <- data.frame()  
+  if(class(num.passes) == "integer") {
+    # pass 2
+    if(num.passes >= 2) {
+      lodf2 <- results.list
+      ret <- try({
+        ldply(lodf2, function(x) x$df2)
+      })
+
+      if(class(ret)[1] != "try-error") {
+        lodf2 <- ret
+      }
+    }
+    # pass 3
+    if(num.passes >= 3) {
+      lodf3 <- results.list
+      ret <- try({
+        ldply(lodf3, function(x) x$df3)
+      })
+
+      if(class(ret)[1] != "try-error") {
+        lodf3 <- ret
+      }
+    }    
+  }  
   # -- extract multipoint. solar outputs
   multipoint.solar <- llply(out.gr, function(x) x$solar)
 
@@ -187,12 +214,11 @@ run_multipoint <- function(out, dir)
       solar.ok = llply(multipoint.solar, function(x) x$solar.ok))
     
   # -- final output
-  out.multipoint <- list(num.passes = num.passes, lodf = lodf, solar = out.multipoint.solar)
-
-  ### assign
-  out$lodf <- out.multipoint$lodf
-  out$multipoint$num.passes <- out.multipoint$num.passes
-  out$multipoint$solar <- out.multipoint$solar
+  out$lodf <- lodf
+  out$lodf2 <- lodf2
+  out$lodf3 <- lodf3    
+  out$multipoint$num.passes <- num.passes
+  out$multipoint$solar <- out.multipoint.solar
   
   ### return
   trun_multipoint$return <- proc.time()
