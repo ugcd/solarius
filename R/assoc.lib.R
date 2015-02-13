@@ -12,16 +12,13 @@
 # - out$traits
 # - out$solar$model.filename
 # - out$solar$phe.filename)
-solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.file)
+solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.file, tmp.dir = FALSE)
 {
   ### check arguments
   stopifnot(file.exists(dir))
   
   ### var
-  cores <- out$assoc$cores
-  is.tmp <- (cores > 1)  
-  
-  if(!is.tmp) {
+  if(!tmp.dir) {
     dir.assoc <- dir
     out.path <- out.dir
     tab.file <- file.path(dir, out.path, out.file)
@@ -84,7 +81,7 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
   solar.ok <- file.exists(tab.file)
 
   ### clean
-  if(is.tmp) {
+  if(tmp.dir) {
     unlink(dir.assoc, recursive = TRUE)
   }
     

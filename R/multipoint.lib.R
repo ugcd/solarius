@@ -1,15 +1,67 @@
+#----------------------------------
+# multipoint functions
+#----------------------------------
+
+solar_multipoint <- function(dir, out, out.dir, out.chr)
+{
+  ### check arguments
+  stopifnot(file.exists(dir))
+
+  ### var  
+  tmp.dir <- !missing(out.dir)
+
+  trait.dir <- paste(out$traits, collapse = ".")
+  model.dir <- file.path(trait.dir, out$solar$model.filename)
+
+  ### `dir.poly`  
+  dir.poly <- out$multipoint$dir.poly
+
+  out.path <- file.path(dir, out.dir)
+  stopifnot(dir.create(out.path))
+  out.path <- normalizePath(out.path)
+
+  ### create a temp. dir.
+  dir.multipoint <- file.path(dir, paste0("solar_multipoint_", out.dir))
+  stopifnot(dir.create(dir.multipoint))
+  
+  files.dir <- list.files(dir.poly, include.dirs = TRUE, full.names = TRUE)
+  stopifnot(file.copy(from = files.dir, to = dir.multipoint, recursive = TRUE))
+    
+  ### make `cmd`
+  cmd <- c(paste("load model", model.dir),
+    paste("mibddir", out$multipoint$mibddir), 
+    paste("chromosome", out.chr),
+    paste("interval", out$multipoint$interval),
+    out$multipoint$multipoint.settings,
+    paste("multipoint -overwrite", out$multipoint$multipoint.options))
+
+  ret <- solar(cmd, dir.multipoint, result = FALSE) 
+
+  ### copy result files
+  files.dir <- list.files(file.path(dir.multipoint, trait.dir), include.dirs = TRUE, full.names = TRUE)
+  stopifnot(file.copy(from = files.dir, to = out.path, recursive = TRUE))
+  
+  ### `tab.dir`
+  tab.dir <- out.path
+  tab.file <- file.path(tab.dir, "multipoint.out")
+  solar.ok <- file.exists(tab.file)
+
+  ### clean
+  unlink(dir.multipoint, recursive = TRUE)
+    
+  ### return  
+  out <-  list(solar = list(cmd = cmd, solar.ok = solar.ok), tab.dir = tab.dir)
+
+  return(out)
+}
 
 #----------------------------------
 # mibd functions
 #----------------------------------
 
-covert_mibd <- function(indir, outdir, pedindex.out)
+convert_mibd <- function(indir, outdir, pedindex.out, verbose = 1)
 {
-  dir <- "inst/extdata/solarOutput"
-  pedindex.out <- file.path(dir, "pedindex.out")
-  indir <- file.path(dir, "solarMibds")
-  outdir <- "mibds"
-  
+  stopifnot(file.exists(indir))
   stopifnot(dir.create(outdir))
   
   ### infiles
@@ -21,6 +73,10 @@ covert_mibd <- function(indir, outdir, pedindex.out)
   
   for(i in 1:length(infiles)) {
     f <- infiles[i]
+    
+    if(verbose) {
+      cat(" *", i, "/", length(infiles), "file", f, "\n")
+    }
     
     mf <- read_mibd_gz(f)
     N.diag <- with(mf, sum(IBDID1 == IBDID2))

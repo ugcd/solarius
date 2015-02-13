@@ -421,10 +421,8 @@ run_assoc <- function(out, dir)
   if(length(genocov.files) > 1) {
     num.genocov.files <- length(genocov.files)
     out.gr <- llply(1:num.genocov.files, function(i) {
-      if(out$verbose) {
-         cat(" * solarAssoc: ", i, "/", num.genocov.files, "genocov.files...\n")
-      }
-      solar_assoc(dir, out, genocov.files[i], snplists.files[i], out.dirs[i], out.files[i])
+      if(out$verbose) cat(" * solarAssoc: ", i, "/", num.genocov.files, "genocov.files...\n")
+      solar_assoc(dir, out, genocov.files[i], snplists.files[i], out.dirs[i], out.files[i], tmp.dir = parallel)
     }, .parallel = parallel)
   ### case 2 (length(genocov.files) == 1)
   } else if(cores == 1) {
@@ -433,9 +431,11 @@ run_assoc <- function(out, dir)
     })
   ### case 2 (length(genocov.files) == 2)
   } else {
-    out.gr <- llply(1:length(snplists.files), function(i) {
-      solar_assoc(dir, out, genocov.files, snplists.files[i], out.dirs[i], out.files[i])
-    }, .parallel = TRUE)
+    num.snplists.files <- length(snplists.files)
+    out.gr <- llply(1:num.snplists.files, function(i) {
+      if(out$verbose) cat(" * solarAssoc: ", i, "/", num.snplists.files, "snplists.files...\n")
+      solar_assoc(dir, out, genocov.files, snplists.files[i], out.dirs[i], out.files[i], tmp.dir = parallel)
+    }, .parallel = parallel)
   }
       
   ### process results
