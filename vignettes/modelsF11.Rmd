@@ -17,201 +17,75 @@ bibliography: ref.bib
 
 ## About
 
-This vignette introduces examples on fitting statistical models available in `SOLAR`.
-Three types of models for quantitative genetic analysis in family-based studies are introduced:
-polygenic, association and linkage.
+This pages shows particular examples to illustrate the 'solarius' package's behaviour with large datasets. In particular, these examples were generated wuth the GAIT (Genetic Analysis of Idiopathic Thrombophilia) dataset. The GAIT Project included 397 individuals from 21 extended Spanish families (mean pedigree size = 19) [1]. A genome-wide set of 307,984 SNPs was typed in all of the participants using the Infinium 317 k Beadchip on the Illumina platform (San Diego, CA, USA).
 
-
-## `SOLAR`
-
-via [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
-
-* The main reference for SOLAR, including theoretical explanations of the variance component linkage method and the approximate multipoint IBD calculations in pedigrees, is [@Almasy1998] 
-* Bivariate Quantitative trait linkage is described in the following papers: [@Almasy1997], [@Williams1999]
-* The Liability Threshold model for discrete traits is described in the preceding paper as well as the following one: [@Duggirala1997]
-* Gene By Environment Interaction is discussed in: [@Towne1997], [@Blangero2009]
-* An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001]
-* Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b]
-
-
-## Statistical models
-
-\[
-y_{n \times 1} = X \beta + a_{n \times 1} + e_{n \times 1}
-\]
-
-## Data sets
-
-* GAW10 data distributed within `SOLAR`
-* Simulated data `dat30` from `multic` R package [@Andrade2006]
-* Simulated data `dat50` from `FFBSKAT` R package
-* GAIT1 data 
-
-`dat50` data set is adapted from `example.data` data set in 
-[FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) R package. 
-The following variables are in the data set.
-
-* `phenodata`: A data.frame with the phenotypes `trait`, `sex` and `age`.
-* `genodata`: A matrix of 50 genetic variants (columns) given for 66 individuals (rows).
-  The genotypes are coded in the format as `1/1`, `1/2` and `2/2`.
-* `genocovdata`: A matrix of covariates derived from the genotype data (additive model).
-  The covariates are coded as integers 0, 1 and 2.
-* `snpdata`: A data.frame of anotation for genetic variantes. 
-   The variables iclude `name` of the variant, the chromose `chrom`, `position` in bp and `gene`.
-* `kin`: A kinship matrix for 66 individuals.     
-
-## Structure of `solarius` R package 
-
-```{r}
-library(solarius)
-```
-
-## Polygenic model (univariate)
-
-```{r, cache = TRUE}
-M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
-M1
-```
-
-### Testing covariates
-
-```{r, cache = TRUE}
-M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
-M2
-```
-
-```{r, cache = TRUE}
-M2$cf
-```
-
-### Custom kinship matrix
-
-`dat50` data set is used.
-
-```{r, cache = TRUE}
-M3 <- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
-M3
-```
-
-The polygenic and sporadic models have the same LRT statistics.
-
-```{r, cache = TRUE}
-M3$lf
-```
-
-## Polygenic model (bivariate)
-
-```{r, cache = TRUE}
-B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
-B1
-```
-
-### Testing correlations
-
-```{r, cache = TRUE}
-B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
-B2
-```
-
-```{r, cache = TRUE}
-B2$vcf
-```
-
-### Trait-specific covariates
-
-```{r, cache = TRUE}
-B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
-B3
-```
-
-```{r}
-l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
-
-```
-
-## Association model
-
-`dat50` data set is used.
-
-### SNP data by `snpdata` argument
-
-```{r genodata, cache = TRUE}
-A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
-A1
-```
-
-### SNP data by `snpcovdata` argument
-
-```{r genocovdata, cache = TRUE}
-A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
-A2
-```
-
-
-```{r genocovdata2, cache = TRUE}
-genocovdata2 <- genocovdata
-genocovdata2[genocovdata2 == 2] <- 1.9
-
-A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata2, kinship = kin)
-A2
-```
-
-
-### SNP data by `genocov.files` (single value)
  
-```{r genocov, cache = TRUE}
-dir <- system.file("extdata/solarAssoc/", package = "solarius")
-genocov.files <- file.path(dir, "snp.genocov")
-snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
+We selected 3 specific examples where we could compare the results obtained with the 'solarius' package with those previously obtained and published. In particular we applied a GWAS and a Linkage model to the BMI and the Factor XI phenotypes and the Trhombosis affection. For each of these traits, we show how the main functions of the a'solarius' package were applied and we confirm that they are in concordance with the previsouly published ones.
 
-A3 <- solarAssoc(trait ~ 1, phenodata, 
-  genocov.files = genocov.files, snplists.files = snplists.files)
-A3
-```
-
-### SNP data by `genocov.files` (many values)
- 
-```{r genocov2, cache = TRUE}
-dir <- system.file("extdata/solarAssoc/", package = "solarius")
-genocov.files <- file.path(dir, c("snp.genocov1", "snp.genocov2"))
-snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
-
-A4 <- solarAssoc(trait ~ 1, phenodata, 
-  genocov.files = genocov.files, snplists.files = snplists.files)
-A4
-```
-
-### Parallelization
-
-```{r assoc_par, cache = TRUE}
-A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
-```
-
-```{r}
-A1$assoc$tprofile$cputime.sec
-A5$assoc$tprofile$cputime.sec
-```
-
-
-## Linkage model
-
-## Advanced models
-
-## Large-scale study: GAIT1 phenotypes
 
 ### BMI
 
-### FXI
-```{r}
+*LNA: FALTA plot trait, transform, h2r y correlations
 
+```{r load, echo=FALSE}
+load("dat/gait1.bmi.A.RData")
+```
+
+```{r compare_A1_A2}
+A1
+A2
+```
+
+```{r A2.manh, cache = TRUE}
+plot(A2)
+```
+
+```{r A2.qq, cache = TRUE}
+plot(A2, "qq")
+```
+compare with [2]
+
+
+## FXI
+
+*LNA: FALTA plot trait, transform, h2r y correlations
+
+```{r, echo=FALSE}
+
+load("/home/results/packages/solarius/GAIT1/resultsF11HH.Rdata")
+```
+
+```{r, echo=T}
 #A <- solarAssoc(newTrait ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
-load("/home/helena/Desktop/resultsF11.Rdata")
+A
+
 plot(A)
 plot(A, "qq")
-annotateSignifSNPs(A)
+#annotateSignifSNPs(A)
 
 ```
+compare with [3]
+
+* LNA: falta linkage
+
 
 ### Throm
 
+*LNA: FALTA plot trait, transform, h2r y correlations
+
+```{r A3.manh, cache = TRUE}
+plot(A3)
+```
+
+```{r A3.qq, cache = TRUE}
+plot(A3, "qq")
+```
+* LNA: falta linkage
+
 ## Refences
+
+[1] JC Souto, L Almasy, M Borrell , F Blanco-Vaca, J Mateo, et al. Genetic susceptibility to thrombosis and its relationship to physiological risk factors: the GAIT study Genetic Analysis of Idiopathic Thrombophilia. American Journal of Human Genetics.2000; 67:1452–1459.
+[2] J.C. Souto, G.Pena, A. Ziyatdinov, A.Buil, S. López, J. Fontcuberta, J.M. Soria. A genomewide study of body mass index and its genetic correlation with thromboembolic risk. Thrombosis & Haemostasis. 2014;112(5):1036-43.
+[3] Maria Sabater-Lleal, Angel Martinez-Perez, Alfonso Buil, Lasse Folkersen, Juan Carlos Souto, Maria Bruzelius, Montserrat Borrell, Jacob Odeberg, Angela Silveira, Per Eriksson, Laura Almasy, Anders Hamsten, José Manuel Soria. A genome-wide association study identifies KNG1 as a genetic determinant of plasma factor XI Level and activated partial thromboplastin time.Arteriosclerosis, Thrombosis, and Vascular Biology. 2012; 32 (8): 2008-16.
+
+
