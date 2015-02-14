@@ -5,21 +5,15 @@
 #' @export
 ManhattanPlot <- function(A)
 {
-require(qqman)
-dataP <- as.data.frame(A$snpf)
-dataP <- dataP[,c("SNP", "pSNP", "pos", "chr")]
-names(dataP)[2] <- "P"
-names(dataP)[3] <- "BP"
-dataP$CHR <- as.numeric(dataP$chr)
-
-pos <- which(is.na(dataP$CHR))
-if(length(pos)) {
-  dataPP<- dataP[-pos,]
-} else {
-  dataPP<- dataP
-}
-
-manhattan(dataPP)
+  require(qqman)
+  
+  stopifnot(all(c("chr", "pSNP", "pos") %in% names(A$snpf)))
+  
+  dt <- A$snpf[!is.na(chr) & !is.na(pSNP) & !is.na(pos)]
+  
+  dt <- rename(dt, c(chr = "CHR", pos = "BP", pSNP = "P"))
+  
+  manhattan(dt)
 }
 
 #' @export
