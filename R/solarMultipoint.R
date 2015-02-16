@@ -44,7 +44,60 @@ solarMultipoint <- function(formula, data, dir,
   
   is.tmpdir <- missing(dir)
   
-  ### step 2: SOLAR dir
+  ### step 2.1: rename
+  renames <- match_id_names(names(data)) # match ID/SEX names
+  unrelated <- ifelse(all(c("FA", "MO") %in% renames), FALSE, TRUE)
+  
+  # rename
+  data <- rename(data, renames)
+  
+  ### step 2.2: take care of IDs in (1) pehnotypes in `data` argument; 
+  # (2) IBD matrices in `mibddir` argument
+  mibd.info <- get_info_mibd(mibddir)
+  
+  # match ids
+  if(mibd.info$mibddir.format == "csv") {
+    ids.data <- data$ID
+    stopifnot(length(ids.data) > 0)
+    ids.data <- as.character(ids.data)
+    
+    stopifnot(!is.null(mibd.info$mibddir.ids))
+    ids.mibd <- mibd.info$mibddir.ids
+    stopifnot(length(ids.mibd) > 0)
+    
+    # compare IDs
+    ids.out <- ids.data[!(ids.data %in% ids.mibd)]
+    if(length(ids.out) > 0) {
+      warning(paste0(" Warning in `solarMultipoint`: some individuals (IDs:", 
+        paste(ids.out, collapse = ", "), ") are not presented in IBDs. ",
+        "Attempted to remove these individuals and pass new pedigree to SOLAR."))
+
+remove_ids_phen <- function(df, ids)
+{
+  stopifnot(all(ids %in% df$ID)) 
+  
+  # remove rows with `ID %in% ids`
+  ind <- which(with(df, ID %in% ids))
+  df <- df[-ind, ]
+  
+  # clean `FA` and `MO`
+  # SOLAR ERROR: both parents must be known or unknown
+  df <- within(df, {
+    FA[!(FA %in% ids)] <- NA
+    MO[!(FA %in% ids)] <- NA
+    
+    MO[!(MO %in% ids)] <- NA
+    FA[!(MO %in% ids)] <- NA
+  })
+  
+  return(df)
+}
+
+      data <- remove_ids_phen(data, ids.out)
+    }
+  }
+  
+  ### step 2.3: SOLAR dir
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarMultipoint-")
   }
@@ -71,7 +124,8 @@ solarMultipoint <- function(formula, data, dir,
     dir.poly = dir.poly,
     out.dirs = "multipoint", out.chr = chr.str,
     # input/output data for multipoint
-    mibddir = mibddir, chr = chr, chr.str = chr.str, interval = interval,
+    mibddir = mibddir, mibd.info = mibd.info,
+    chr = chr, chr.str = chr.str, interval = interval,
     multipoint.options = multipoint.options, multipoint.settings = multipoint.settings,
     tprofile = list(tproc = list()))
 

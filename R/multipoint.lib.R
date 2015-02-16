@@ -59,6 +59,32 @@ solar_multipoint <- function(dir, out, out.dir, out.chr)
 # mibd functions
 #----------------------------------
 
+get_info_mibd <- function(mibddir)
+{
+  stopifnot(file.exists(mibddir))
+
+  files <- list.files(mibddir, pattern = ".gz", full.names = TRUE)
+  stopifnot(length(files) > 0)
+  file1 <- files[1]
+  
+  ### `mibddir.format`
+  mibddir.format <- ifelse(grepl(",", readLines(file1, n = 1)), "csv", "pedindex")
+  
+  ### `mibddir.ids`  
+  mibddir.ids <- NULL
+  if(mibddir.format == "csv") {
+    tab <- read.table(file1, sep = ",", header = TRUE, colClasses = "character")
+    stopifnot(all(c("id1", "id2") %in% names(tab)))
+    
+    mibddir.ids <- unique(with(tab, c(id1, id2)))
+  }
+  
+  out <- list(mibddir.format = mibddir.format, mibddir.ids = mibddir.ids)
+  
+  ### return
+  return(out)
+}
+
 convert_mibd <- function(indir, outdir, pedindex.out, verbose = 1)
 {
   stopifnot(file.exists(indir))

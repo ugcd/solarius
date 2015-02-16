@@ -87,7 +87,7 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
   pnames <- cf$FIELD
   pwidths <- cf$LEN
 
-  pf <- read.fwf(pedindex.out, widths = pwidths)
+  pf <- read.fwf(pedindex.out, widths = pwidths, colClasses = "character")
 
   pf <- pf[, ind]
   names(pf) <- pnames[ind]
@@ -108,7 +108,7 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
 
 read_phi2_gz <- function(phi2.gz)
 {
-  kf <- read.table(gzfile(phi2.gz))
+  kf <- read.table(gzfile(phi2.gz), , colClasses = c("character", "character", "numeric", "numeric"))
   names(kf) <- c("IBDID1", "IBDID2", "phi2", "delta7")
 #> head(kf)
 #  IBDID1 IBDID2      phi2  delta7
