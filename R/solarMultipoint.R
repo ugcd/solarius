@@ -82,12 +82,13 @@ remove_ids_phen <- function(df, ids)
   
   # clean `FA` and `MO`
   # SOLAR ERROR: both parents must be known or unknown
+  ids.fa <- with(df, as.character(FA) %in% ids)
+  ids.mo <- with(df, as.character(MO) %in% ids)
+  ids.par <- ids.fa | ids.mo
+
   df <- within(df, {
-    FA[!(FA %in% ids)] <- NA
-    MO[!(FA %in% ids)] <- NA
-    
-    MO[!(MO %in% ids)] <- NA
-    FA[!(MO %in% ids)] <- NA
+    FA[ids.par] <- "0"
+    MO[ids.par] <- "0"  
   })
   
   return(df)
