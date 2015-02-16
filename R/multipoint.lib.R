@@ -65,7 +65,7 @@ convert_mibd <- function(indir, outdir, pedindex.out, verbose = 1)
   stopifnot(dir.create(outdir))
   
   ### infiles
-  infiles <- list.files(indir, full.names = TRUE)
+  infiles <- list.files(indir, pattern = ".gz", full.names = TRUE)
   
   ### read pedindex
   pf <- read_pedindex(pedindex.out)
