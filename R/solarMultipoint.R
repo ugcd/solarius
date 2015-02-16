@@ -68,9 +68,9 @@ solarMultipoint <- function(formula, data, dir,
     # compare IDs
     ids.out <- ids.data[!(ids.data %in% ids.mibd)]
     if(length(ids.out) > 0) {
-      warning(paste0(" Warning in `solarMultipoint`: some individuals (IDs:", 
+      warning(paste0(" Some individuals (IDs: ", 
         paste(ids.out, collapse = ", "), ") are not presented in IBDs. ",
-        "Attempted to remove these individuals and pass new pedigree to SOLAR."))
+        "Attempted to remove these individuals and pass new pedigrees to SOLAR."))
 
 remove_ids_phen <- function(df, ids)
 {
