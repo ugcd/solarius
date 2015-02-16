@@ -96,8 +96,9 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
     pf[, i] <- as.character(pf[, i])
   }  
   
-  pf <- mutate(pf,
-    ID = gsub(" ", "", ID))
+  for(i in 1:ncol(pf)) {
+    pf[, i] <- gsub(" ", "", pf[, i])
+  } 
   
   if(ids.unique) {
     stopifnot(!all(duplicated(pf$ID)))
@@ -110,6 +111,10 @@ read_phi2_gz <- function(phi2.gz)
 {
   kf <- read.table(gzfile(phi2.gz), , colClasses = c("character", "character", "numeric", "numeric"))
   names(kf) <- c("IBDID1", "IBDID2", "phi2", "delta7")
+
+  pf <- mutate(pf,
+    IBDID1 = gsub(" ", "", IBDID1),
+    IBDID2 = gsub(" ", "", IBDID2))
 #> head(kf)
 #  IBDID1 IBDID2      phi2  delta7
 #1      1      1 0.1560492  0.2574
