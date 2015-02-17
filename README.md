@@ -5,7 +5,7 @@ R package wrapper to SOLAR
 * Vignettes `SOALR models`
   * R code [vignettes/](vignettes/)
   * hmlt output:
-     1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
+     1. [modelsF11.html](http://ugcd.github.io/solarius/vignettes/modelsF11.html)
      2. [models.html](http://ugcd.github.io/solarius/vignettes/models.html)
 
 ## References
@@ -35,29 +35,19 @@ R package wrapper to SOLAR
 
 ### Current status
 
-Done:
-
-1. `df2solar` function, which export both pedigree and phenotype data into a folder of `SOLAR` format
-2. simple polygenic model (univariate, bivariate, etc); see `solarPolygenic` function
-
 ### TODO
 
 Polygenic model:
 
-* add house-hold effect (start with `df2solar` function)
-* track `PROBND`, `MZTWIN`, `HHID` info; see `polygenic.lib.R` in `salamboR` package
 * extract residuals and make plots for them
 
 Association model:
 
 * think of which formats to support except the `SOLAR` one
-* parallelize calculations
-* check out if `SOLAR` supports dosage format
 
 Linkage model:
 
 * make use of all linkage options availabe in `SOLAR`: second-path, adjustment of inflated scores
-* parallel computations
 
 ### Content of Software Manual
 
@@ -76,6 +66,8 @@ TODO:
 ## Examples 
 
 See tutorial [page](http://ugcd.github.io/solarius/pages/tutorial.html).
+
+## Data sets
 
 Examples given here make use of `dat30` data set distributed with `solarius` package. These are simulated data, and this data set was originally created in `multic` package and stored there in files. The version `dat30` of the data set is a subset for `famid < 30`, and it is stired in `*.RData` file.
 
