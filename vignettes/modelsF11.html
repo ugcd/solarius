@@ -297,15 +297,35 @@ compare with [2]</p>
 <h3>Throm</h3>
 
 <pre><code class="r">M3 &lt;- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
+M3
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;solarPolygenic&quot;
-</code></pre>
-
-<pre><code class="r">M3
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;M3&#39; not found
+<pre><code>## 
+## Call: solarPolygenic(formula = aff ~ AGE, data = pdat, covtest = TRUE)
+## 
+## File polygenic.out:
+##  Pedigree:    dat.ped 
+##  Phenotypes:  dat.phe 
+##  Trait:       aff                   Individuals:  393 
+##  
+##           H2r is 0.5742941  p = 0.0043258  (Significant) 
+##         H2r Std. Error:  0.2183659 
+##  
+##            C2 is 0.1022669  p = 0.2401522  (Not Significant) 
+##          C2 Std. Error:  0.1470262      (C2 retained because nonzero) 
+##  
+##                                       AGE  p = 3.3186035e-14  (Significant) 
+##  
+##  No pedigrees shared households with other pedigrees 
+##  
+##  Kullback-Leibler R-squared is 0.1945195 
+##  
+##  Loglikelihoods and chi&#39;s are in aff/polygenic.logs.out 
+##  Best model is named housepoly and null0 
+##  Final models are named housepoly, house, poly, spor, nocovar 
+##  Initial sporadic and polygenic models are s0 and p0 
+##  Initial household and household polygenic models are h0 and hp0 
+##  Constrained covariate models are named no&lt;covariate name&gt;
 </code></pre>
 
 <pre><code class="r">A3 &lt;- solarAssoc(aff ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
