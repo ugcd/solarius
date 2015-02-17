@@ -38,3 +38,47 @@ test_that("interval", {
   expect_equal(nrow(mod$lodf), 2)
 })
 
+# IDs in IBDs/phen
+test_that("ids(phen) is a subset in ids(IBD)", {
+  data(dat30)
+  mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
+
+  mod <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 5, multipoint.settings = "finemap off")
+  
+  expect_equal(nrow(mod$lodf), 2)
+})
+
+test_that("ids(IBD) is a subset in ids(phen)", {
+  data(dat30)
+  mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsvIncomplete", package = "solarius")  
+
+  suppressWarnings({
+    mod <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir)
+  })
+
+  expect_equal(nrow(mod$lodf), 2)  
+  expect_true(all(mod$lodf$LOD > 1.6))
+})
+
+# Bivariate linkage
+test_that("bivariate linkage", {
+  data(dat30)
+  mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
+
+  mod <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 5, multipoint.settings = "finemap off")
+  
+  expect_equal(nrow(mod$lodf), 2)
+  expect_true(all(mod$lodf$LOD > 0.9))
+})
+
+# Compute linkage in parallel
+test_that("linkage in parallel", {
+  data(dat30)
+  mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
+
+  mod <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, interval = 5, chr = c(2, 5), multipoint.settings = "finemap off", cores = 2)
+  
+  expect_equal(nrow(mod$lodf), 4)
+  expect_true(all(mod$lodf$LOD > 1.4))
+})
+

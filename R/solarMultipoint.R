@@ -234,7 +234,7 @@ run_multipoint <- function(out, dir)
   if(class(ret)[1] != "try-error") {
     lodf <- ret
   }
-
+  
   # passes 2 & 3 (if necessary)
   lodf2 <- data.frame()
   lodf3 <- data.frame()  
