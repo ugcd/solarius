@@ -9,11 +9,22 @@ ManhattanPlot <- function(A)
   
   stopifnot(all(c("chr", "pSNP", "pos") %in% names(A$snpf)))
   
-  dt <- A$snpf[!is.na(chr) & !is.na(pSNP) & !is.na(pos)]
+  df <- as.data.frame(A$snpf)
+
+  #dt <- A$snpf[!is.na(chr) & !is.na(pSNP) & !is.na(pos)]
+  #dt <- rename(dt, c(chr = "CHR", pos = "BP", pSNP = "P"))
+  #dt <- mutate(dt, CHR = as.integer(CHR))
+
+  num.na <- with(df, sum(is.na(chr) | is.na(pSNP) | is.na(pos)))
+  num.snps <- nrow(df)
   
-  dt <- rename(dt, c(chr = "CHR", pos = "BP", pSNP = "P"))
+  #print(num.na)
   
-  manhattan(dt)
+  df <- subset(df, !is.na(chr) & !is.na(pSNP) & !is.na(pos))
+  df <- rename(df, c(chr = "CHR", pos = "BP", pSNP = "P"))
+  df <- mutate(df, CHR = as.integer(CHR))
+    
+  manhattan(df, suggestiveline = -log10(0.05/num.snps), genomewideline = -log10(5e-08))
 }
 
 #' @export
