@@ -109,10 +109,10 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
 
 read_phi2_gz <- function(phi2.gz)
 {
-  kf <- read.table(gzfile(phi2.gz), , colClasses = c("character", "character", "numeric", "numeric"))
+  kf <- read.table(gzfile(phi2.gz), colClasses = c("character", "character", "numeric", "numeric"))
   names(kf) <- c("IBDID1", "IBDID2", "phi2", "delta7")
 
-  pf <- mutate(pf,
+  kf <- mutate(kf,
     IBDID1 = gsub(" ", "", IBDID1),
     IBDID2 = gsub(" ", "", IBDID2))
 #> head(kf)
