@@ -25,6 +25,8 @@ print.solarMultipoint <- function(x, ...)
     format(.POSIXct(t, tz = "GMT"), "%H:%M:%S"), "\n", sep = "")
 }
 
+#' @method plot solarMultipoint
+#' @export
 plot.solarMultipoint <- function(x, 
   pass = 1, ...)
 {

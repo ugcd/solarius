@@ -2,6 +2,7 @@
 # Data loaders
 #----------------------------------
 
+#' @export
 package.file <- function(...)
 {
   path <- system.file(...)

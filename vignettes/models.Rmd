@@ -11,8 +11,8 @@ output:
 bibliography: ref.bib
 ---
 
-```{r}
-opts_chunk$set(eval = TRUE, dev = "png")
+```{r chunk_opt}
+opts_chunk$set(eval = TRUE)
 ```
 
 ## Abstract
@@ -130,7 +130,7 @@ is discussed elsewhere [@Almasy1998].
 
 ### `solarius` R package 
 
-```{r}
+```{r inc_solarius}
 library(solarius)
 ```
 
@@ -163,19 +163,19 @@ The following variables are in the data set.
 
 ### Polygenic model (univariate)
 
-```{r, cache = TRUE}
+```{r M1, cache = TRUE}
 M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
 M1
 ```
 
 #### Testing covariates
 
-```{r, cache = TRUE}
+```{r M2, cache = TRUE}
 M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 M2
 ```
 
-```{r, cache = TRUE}
+```{r M2_cf, cache = TRUE}
 M2$cf
 ```
 
@@ -183,43 +183,43 @@ M2$cf
 
 `dat50` data set is used.
 
-```{r, cache = TRUE}
+```{r M3, cache = TRUE}
 M3 <- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
 M3
 ```
 
 The polygenic and sporadic models have the same LRT statistics.
 
-```{r, cache = TRUE}
+```{r M3_lf, cache = TRUE}
 M3$lf
 ```
 
 ### Polygenic model (bivariate)
 
-```{r, cache = TRUE}
+```{r B1, cache = TRUE}
 B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
 B1
 ```
 
 #### Testing correlations
 
-```{r, cache = TRUE}
+```{r B2, cache = TRUE}
 B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
 B2
 ```
 
-```{r, cache = TRUE}
+```{r B2_vcf, cache = TRUE}
 B2$vcf
 ```
 
 #### Trait-specific covariates
 
-```{r, cache = TRUE}
+```{r B3, cache = TRUE}
 B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
 B3
 ```
 
-```{r}
+```{r tail_mod}
 l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
 
 ```
@@ -282,7 +282,7 @@ A4
 A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kinship = kin)
 ```
 
-```{r manh_plot}
+```{r manh_plot, cache = TRUE}
 plot(A5)
 ```
 
@@ -292,12 +292,55 @@ plot(A5)
 A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
 ```
 
-```{r}
+```{r A_cpu}
 A1$assoc$tprofile$cputime.sec
 A6$assoc$tprofile$cputime.sec
 ```
 
 ### Linkage model
+
+#### Minimal linkage model
+
+```{r data_multic_link}
+mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
+list.files(mibddir)
+```
+
+```{r L1, cache = TRUE}
+L1 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir)
+L1
+```
+
+```{r plot_L1, cache = TRUE}
+plot(L1)
+```
+
+#### Linkage options
+
+```{r L2, cache = TRUE}
+L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
+  multipoint.settings = "finemap off", multipoint.options = "3")
+L2
+```
+
+```{r plot_L2, cache = TRUE}
+plot(L2, pass = 2)
+```
+
+#### Bivariate linkage
+
+```{r L3, cache = TRUE}
+L3 <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, 
+  interval = 2, multipoint.settings = "finemap off")
+L3
+```
+
+```{r L4, cache = TRUE}
+L4 <- solarMultipoint(trait1 + trait2 ~ age + sex(trait1), dat30, 
+  mibddir = mibddir, chr = 5, interval = 2, multipoint.settings = "finemap off")
+L4
+```
+
 
 ### Advanced models
 

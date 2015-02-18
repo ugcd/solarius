@@ -70,7 +70,7 @@ solarMultipoint <- function(formula, data, dir,
     if(length(ids.out) > 0) {
       warning(paste0(" Some individuals (IDs: ", 
         paste(ids.out, collapse = ", "), ") are not presented in IBDs. ",
-        "Attempted to remove these individuals and pass new pedigrees to SOLAR."))
+        "Attempted to remove these individuals (FA/MO fields included) and pass new pedigrees to SOLAR."))
 
 remove_ids_phen <- function(df, ids)
 {
@@ -211,7 +211,7 @@ run_multipoint <- function(out, dir)
   } else {
     num.out.dirs <- length(out.dirs)
     out.gr <- llply(1:num.out.dirs, function(i) {
-      if(out$verbose) cat(" * solarMultipoint: ", i, "/", num.out.dirs, "batches...\n")
+      if(out$verbose) cat(" * solarMultipoint: ", i, "/", num.out.dirs, "batch...\n")
       solar_multipoint(dir, out, out.dirs[i], out.chr[i])
     }, .parallel = parallel)
   }
