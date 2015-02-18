@@ -1,17 +1,20 @@
 ### inc
+library(devtools)
+
 #library(solarius)
 load_all("~/git/ugcd/solarius")
 
-library(gait)
+#library(gait)
+load_all("~/git/ugcd/gait")
 
 ### par
-cores <- 8
+cores <- 64
 
 ### var
-#gait1.snpfiles <- gait1.snpfiles(chr = 1, num.snpdirs = 2)
+gait1.snpfiles <- gait1.snpfiles(chr = 1, num.snpdirs = 2)
 #gait1.snpfiles <- gait1.snpfiles(chr = 22)
 #gait1.snpfiles <- gait1.snpfiles(chr = 1)
-gait1.snpfiles <- gait1.snpfiles()
+#gait1.snpfiles <- gait1.snpfiles()
 #gait1.snpfiles <- gait1.snpfiles(chr = 21:22)
 
 # read phen. data
@@ -32,7 +35,9 @@ M3 <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
 #A <- solarAssoc(bmi ~ 1, pdat, genocov.files = genocov.files, snplists.files = snplists.files)
 #A <- solarAssoc(bmi ~ 1, pdat, genocov.files = genocov.files, snplists.files = snplists.files, snpmap.files = snpmap.files, cores = 2)
 
-A1 <- solarAssoc(tr_bmi ~ 1, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+A1 <- solarAssoc(tr_bmi ~ 1, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores, verbose = 1)
+
+stop()
 
 A2 <- solarAssoc(tr_bmi ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
 
