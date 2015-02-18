@@ -290,7 +290,6 @@ check_var_names <- function(traits, covlist, dnames) {
       covlist3[ind] <- laply(strsplit(covlist3[ind], "\\("), function(x) x[1])
     }
   }
-  
   stopifnot(all(covlist3 %in% dnames))
   
   return(invisible())
@@ -299,7 +298,7 @@ check_var_names <- function(traits, covlist, dnames) {
 #' Function match_id_names
 #
 #' @examples inst/examples/example-fields.R
-match_id_names <- function(fields, sex.optional = FALSE)
+match_id_names <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
 {
   # `fields`: fields in data set
   # `names`: matched names
@@ -356,17 +355,19 @@ match_id_names <- function(fields, sex.optional = FALSE)
   if(length(names) == 1) {
     out <- c(out, "FA")
     out.names <- c(out.names, names)
-  }    
-  # SEX field (obligatory / optional if `sex.optional` argumnet is TRUE)
-  pat <- "^sex$|^SEX$"
-  names <- grep(pat, fields, value = TRUE) 
-  if(!sex.optional) {
-    if(length(names) == 0) stop("SEX name not found; grep pattern '", pat, "'")
   }
-  if(length(names) > 1)  stop("more than one SEX names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
-  if(length(names) == 1) {
-    out <- c(out, "SEX")
-    out.names <- c(out.names, names)
+  if(!skip.sex) {
+    # SEX field (obligatory / optional if `sex.optional` argumnet is TRUE)
+    pat <- "^sex$|^SEX$"
+    names <- grep(pat, fields, value = TRUE) 
+    if(!sex.optional) {
+      if(length(names) == 0) stop("SEX name not found; grep pattern '", pat, "'")
+    }
+    if(length(names) > 1)  stop("more than one SEX names found (", paste(names, collapse = ", "), "); grep pattern '", pat, "'")
+    if(length(names) == 1) {
+      out <- c(out, "SEX")
+      out.names <- c(out.names, names)
+    }
   }
   # FAM (optional)
   pat <- "^fam$|^FAM$"

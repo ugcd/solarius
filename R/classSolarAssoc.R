@@ -129,12 +129,38 @@ plot.solarAssoc.old <- function(x,
   return(p)
 }
 
+#' @method summary solarAssoc
+#' @export
+summary.solarAssoc <- function(x, alpha = 0.05, ...)
+{
+  cat("\nCall: ")
+  print(x$assoc$call)
+  
+  ### var
+  num.snps <- x$assoc$num.snps
+  
+  cat("\nAssociation model\n")
+  cat(" * Number of SNPs:", num.snps, "\n")
+  cat(" * Input format:", x$assoc$assoc.informat, "\n")
+  
+  # signif. SNPs
+  pSNP.thr <- alpha / num.snps
+  snpf <- subset(x$snpf, pSNP < pSNP.thr)
+  num.snps.signif <- nrow(snpf)
+  cat(" * Number of significal SNPs:", num.snps.signif, "\n")
+  if(num.snps.signif > 0) {
+    ord <- with(snpf, order(pSNP))
+    snpf <- snpf[ord, ]
+    print(snpf, 5)
+  }
+}
+
 #--------------------
 # Other methods
 #--------------------
 
 #' @export
-annotate.solarAssoc <- function(x, ..)
+annotate <- function(x, ..)
 {
   annotateSignifSNPs(x, ...)
 }

@@ -51,6 +51,23 @@ plot.solarMultipoint <- function(x,
   ymax <- max(max(lodf$LOD), 3)
   
   ### plot  
-  ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr) + ylim(ymin, ymax)
+  ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr, scales = "free_x") + 
+    ylim(ymin, ymax) + labs(title = getFormula(x))
 }
 
+#' @method summary solarMultipoint
+#' @export
+summary.solarMultipoint <- function(x, ...)
+{
+  cat("\nCall: ")
+  print(x$multipoint$call)
+  
+  cat("\nMultipoint model\n")
+  cat(" * Number of used markers:", nrow(x$lodf), "\n")
+  cat(" * Number of passes:", x$multipoint$num.passes, "\n")
+
+  ind <- which.max(x$lodf$LOD)
+  cat(" * Maximum LOD score:", round(x$lodf$LOD[ind], 2), "\n")
+  cat("  -- chr:", x$lodf$chr[ind], "\n")
+  cat("  -- position:", x$lodf$pos[ind], "cM\n")
+}

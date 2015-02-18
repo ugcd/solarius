@@ -131,7 +131,9 @@ is discussed elsewhere [@Almasy1998].
 ### `solarius` R package 
 
 ```{r inc_solarius}
-library(solarius)
+#library(solarius)
+library(devtools)
+load_all("../")
 ```
 
 ### Data sets
@@ -299,7 +301,9 @@ A6$assoc$tprofile$cputime.sec
 
 ### Linkage model
 
-#### Minimal linkage model
+`dat30` data set will be used for the linkage examples.
+
+#### Basic linkage model
 
 ```{r data_multic_link}
 mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
@@ -311,6 +315,10 @@ L1 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir)
 L1
 ```
 
+```{r L1_sum}
+summary(L1)
+```
+
 ```{r plot_L1, cache = TRUE}
 plot(L1)
 ```
@@ -320,7 +328,7 @@ plot(L1)
 ```{r L2, cache = TRUE}
 L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
   multipoint.settings = "finemap off", multipoint.options = "3")
-L2
+summary(L2)
 ```
 
 ```{r plot_L2, cache = TRUE}
@@ -332,17 +340,26 @@ plot(L2, pass = 2)
 ```{r L3, cache = TRUE}
 L3 <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, 
   interval = 2, multipoint.settings = "finemap off")
-L3
+summary(L3)
 ```
 
 ```{r L4, cache = TRUE}
 L4 <- solarMultipoint(trait1 + trait2 ~ age + sex(trait1), dat30, 
   mibddir = mibddir, chr = 5, interval = 2, multipoint.settings = "finemap off")
-L4
+summary(L4)
 ```
 
+#### Parallelization
 
-### Advanced models
+```{r L5, cache = TRUE}
+L5 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir,
+  chr = c(2, 5), cores = 2)
+```
+
+```{r L1_cpu}
+L1$multipoint$tprofile$cputime.sec
+L5$multipoint$tprofile$cputime.sec
+```
 
 ## Miscellaneous material
 

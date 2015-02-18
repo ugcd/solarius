@@ -36,3 +36,12 @@ summary.solarPolygenic <- function(x, ...)
   cat("\n Variance Components Table:\n")
   print(x$vcf)
 }
+
+#' @export
+getFormula <- function(x, ...)
+{
+  paste(
+    paste(x$traits, collapse = "+"),
+    "~",
+    paste(x$covlist, collapse = "+"))
+}
