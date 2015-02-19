@@ -114,6 +114,34 @@ solarPolygenic <- function(formula, data, dir,
   ### step 3: run polygenic
   out <- solar_polygenic(dir, out)
   
+  ### step 3.1: residual polygenic
+solar_read_residuals <- function(dir, out)
+{
+  stopifnot(file.exists(dir))
+  traits.dir <- paste(out$traits, collapse = ".")
+  file.residuals <- file.path(dir, traits.dir, "polygenic.residuals")
+  
+  ### line 1
+  line1 <- readLines(file.residuals, n = 1)
+  ncol <- length(strsplit(line1, ",")[[1]])
+  colClasses <- rep(as.character(NA), ncol)
+  colClasses[1] <- "character" # `id`
+  
+  tab <- read.table(file.residuals, header = TRUE, sep = ",", colClasses = colClasses)
+  stopifnot(ncol(tab) == ncol)
+
+  return(tab)
+}
+
+  #ret <- suppressWarnings(try(solar_read_residuals(dir), silent = TRUE))
+  ret <- try(solar_read_residuals(dir, out))
+  
+  if(class(ret)[1] == "try-error") {
+    out$resf <- data.frame()
+  } else {
+    out$resf <- ret
+  }
+  
   ### clean 
   if(is.tmpdir) {
     unlink(dir, recursive = TRUE)

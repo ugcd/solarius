@@ -86,3 +86,78 @@ histKinship2 <- function(kmat)
   
   return(invisible())
 }
+
+#----------------------
+# Plot polygenic model
+#----------------------
+
+# source: http://stackoverflow.com/a/27191036/551589
+# alternatives: 
+#  -- qqnorm(res); qqline(res)
+#  -- cars::qqPlot(res, id.method = "identify")
+#' @export
+plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL, 
+  conf = 0.90, 
+  labels = FALSE, text.size = 4)
+{
+  stopifnot(require(ggplot2))
+  
+  stopifnot(!is.null(x$resf))
+  stopifnot(nrow(x$resf) > 0)
+  stopifnot(all(c("id", "residual") %in% names(x$resf)))
+  
+  ### var
+  r <- x$resf$residual
+  labs <- x$resf$id
+  
+  q.function <- eval(parse(text = paste0("q", distribution)))
+  d.function <- eval(parse(text = paste0("d", distribution)))
+
+  r <- na.omit(r)
+  ord <- order(r)
+  n <- length(r)
+  P <- ppoints(length(r))
+  df <- data.frame(ord.r = r[ord], z = q.function(P, ...))
+
+  if(is.null(line.estimate)) {
+    Q.r <- quantile(df$ord.r, c(0.25, 0.75))
+    Q.z <- q.function(c(0.25, 0.75), ...)
+    b <- diff(Q.r)/diff(Q.z)
+    coef <- c(Q.r[1] - b * Q.z[1], b)
+  } else {
+    coef <- coef(line.estimate(ord.r ~ z))
+  }
+
+  zz <- qnorm(1 - (1 - conf)/2)
+  SE <- (coef[2]/d.function(df$z)) * sqrt(P * (1 - P)/n)
+  fit.value <- coef[1] + coef[2] * df$z
+  df$upper <- fit.value + zz * SE
+  df$lower <- fit.value - zz * SE
+
+  df$label <- ifelse(df$ord.r > df$upper | df$ord.r < df$lower, labs[ord], "")
+
+  p <- ggplot(df, aes(x=z, y=ord.r)) + geom_point() + 
+    geom_abline(intercept = coef[1], slope = coef[2]) + 
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+    labs(title = "Q-Q plot", 
+      x = paste0("Theoretical quantiles (", distribution, " distribution)"),
+      y = "Sample quantiles")
+
+  if(labels) {
+    p <- p + geom_text( aes(label = label), size = text.size) # hjust = 0, vjust = 0
+  }
+  
+  ### print
+  if(labels) {
+    labs <- with(df, label[label != ""])
+    if(length(labs) > 0) {
+      cat(" * Sample(s) outside the confidence interval (", conf, "): ", 
+        paste(labs, collapse = ", "), "\n", sep = "")
+    } else {
+      cat(" * All sampes are within the confidence interval (", conf, ")\n", sep = "")
+    }
+
+  }
+  
+  return(p)
+}

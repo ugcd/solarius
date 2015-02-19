@@ -42,7 +42,8 @@ solar_polygenic <- function(dir, out)
   cmd <- c(paste("trait", paste(out$traits, collapse = " ")),
     paste("covariate", paste(covlist2, collapse = " ")),
     out$polygenic.settings,
-    paste("polygenic", out$polygenic.options))
+    paste("polygenic", out$polygenic.options),
+    ifelse(length(covlist2) == 0, "", "residual -fewest -needped")) # 
   
   ### run solar    
   ret.solar <- solar(c(cmd.proc_def, cmd, cmd.proc_call), dir, result = TRUE)

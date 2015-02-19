@@ -237,6 +237,10 @@ A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 A1
 ```
 
+```{r A1_summary}
+summary(A1)
+```
+
 #### SNP data by `snpcovdata` argument
 
 ```{r genocovdata, cache = TRUE}
@@ -257,7 +261,7 @@ A2
 #### SNP data by `genocov.files` (single value)
  
 ```{r genocov, cache = TRUE}
-dir <- system.file("extdata/solarAssoc/", package = "solarius")
+dir <- package.file("extdata", "solarAssoc", package = "solarius")
 genocov.files <- file.path(dir, "snp.genocov")
 snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
 
@@ -269,7 +273,7 @@ A3
 #### SNP data by `genocov.files` (many values)
  
 ```{r genocov2, cache = TRUE}
-dir <- system.file("extdata/solarAssoc/", package = "solarius")
+dir <- package.file("extdata", "solarAssoc", package = "solarius")
 genocov.files <- file.path(dir, c("snp.genocov1", "snp.genocov2"))
 snplists.files <- file.path(dir, c("snp.geno-list1", "snp.geno-list2"))
 
