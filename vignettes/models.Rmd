@@ -163,6 +163,55 @@ The following variables are in the data set.
 
 ### Data exploration
 
+#### Plot kinship matrix
+
+```{r kin_dat}
+data(dat30)
+data(dat50) # phenos in `phenodata`, kinship in `kin`
+```
+
+```{r kin_solar, cache = TRUE}
+kin2.dat30 <- solarKinship2(dat30)
+```
+
+```{r kin_plot, cache = TRUE}
+plotKinship2(kin2.dat30)
+plotKinship2(2*kin)
+```
+
+```{r sub_kin_plot, cache = TRUE}
+plotKinship2(kin2.dat30[1:30, 1:30])
+```
+
+```{r hist_kin, cache = TRUE}
+histKinship2(kin2.dat30)
+```
+
+#### Plot pedigrees
+
+```{r dat30_ped_2}
+plotPed(dat30, 2)
+```
+
+#### Plot residuals
+
+```{r res_mod}
+mod <- solarPolygenic(trait1 ~ age, dat30)
+mod
+```
+
+```{r res}
+r <- residuals(mod)
+summary(r)
+```
+
+```{r plot_res_demo, cache = TRUE}
+plotResQQ(mod)
+plotResQQ(mod, labels = TRUE)
+plotRes(mod)
+```
+
+
 ### Polygenic model (univariate)
 
 ```{r M1, cache = TRUE}

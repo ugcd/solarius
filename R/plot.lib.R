@@ -1,4 +1,38 @@
 #----------------------------------
+# Pedigree plots
+#----------------------------------
+
+#' @export
+plotPed <- function(data, ped)
+{
+  # checks
+  stopifnot(!missing(data))
+  stopifnot(class(data) == "data.frame")
+  stopifnot(!missing(ped))
+  
+  stopifnot(require(kinship2))
+  
+  renames <- match_id_names(names(data))
+  data <- rename(data, renames)
+  stopifnot(all(c("ID", "FA", "MO", "SEX", "FAMID") %in% names(data)))
+  
+  peds <- unique(data$FAMID)
+  
+  # filter by `ped`
+  ped <- switch(class(ped),
+    "integer" = peds[ped],
+    "numeric" = peds[ped],
+    "character" = ped,
+    stop("switch error"))
+  stopifnot(ped %in% peds)  
+  
+  # make `pedigree` object
+  ped <- with(subset(data, FAMID == ped), pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID))
+  
+  plot(ped[1])
+}
+
+#----------------------------------
 # Association plots
 #----------------------------------
 
@@ -92,30 +126,50 @@ histKinship2 <- function(kmat)
 #----------------------
 
 #' @export
-plotRes <- function(x, conf = 0.90, ...)
+plotRes <- function(x, conf = 0.90, 
+  labels = FALSE, text.size = 4, ...)
 {
   stopifnot(require(ggplot2))
   
-  stopifnot(length(x$traits) == 1)
-  trait <- x$traits
+  # var
+  r <- residuals(x)
+  yh <- residuals(x, trait = TRUE)
+  labs <- names(r)
   
-  trait <- tolower(trait) # SOLAR naming in residual files
+  # sd  
+  r.sd <- sd(r, na.rm = TRUE)
+  ind <- which(!(r > 3*r.sd | r < -3*r.sd)) # residuals inside [-3 sd; 3 sd]
+  labs[ind] <- ""
   
-  stopifnot(!is.null(x$resf))
-  stopifnot(nrow(x$resf) > 0)
-  stopifnot(all(c("id", "residual", trait) %in% names(x$resf)))
+  # data for plotting
+  ord <- order(yh)
+  df <- data.frame(ord = ord, yh = yh[ord], r = r[ord], label = labs[ord])
   
-  ### var
-  r <- x$resf$residual
-  yh <- subset(x$resf, select = trait, drop = TRUE)
-  labs <- x$resf$id
-  
-  p <- ggplot(NULL, aes(x = order(yh), y = r)) + geom_point() +
-    geom_hline(yintercept = 0) + geom_smooth(method = "loess", se = FALSE) + #, se = TRUE, level = conf)
+  # plot
+  p <- ggplot(df, aes(x = ord, y = r)) + geom_point() +
+    geom_hline(yintercept = 0) +
+    geom_hline(yintercept = -3*r.sd, linetype = "dashed") + 
+    geom_hline(yintercept = 3*r.sd, linetype = "dashed") +
+    geom_smooth(method = "loess", se = FALSE) + #, se = TRUE, level = conf)
     labs(title = "Residuals",  
-      x = "Trait order index", y = "Residuals")
+      x = "Trait order", y = "Residuals")
   
-  ### return
+  if(labels) {
+    p <- p + geom_text( aes(label = label), size = text.size) # hjust = 0, vjust = 0
+  }
+  
+  # print
+  if(labels) {
+    labs <- with(df, label[label != ""])
+    if(length(labs) > 0) {
+      cat(" * Sample(s) outside the 3*sd interval: ", 
+        paste(labs, collapse = ", "), "\n", sep = "")
+    } else {
+      cat(" * All sampes are within the 3*sd interval\n", sep = "")
+    }
+  }
+  
+  # return
   return(p)
 }
  
@@ -131,13 +185,9 @@ plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL,
 {
   stopifnot(require(ggplot2))
   
-  stopifnot(!is.null(x$resf))
-  stopifnot(nrow(x$resf) > 0)
-  stopifnot(all(c("id", "residual") %in% names(x$resf)))
-  
   ### var
-  r <- x$resf$residual
-  labs <- x$resf$id
+  r <- residuals(x)
+  labs <- names(r)
   
   q.function <- eval(parse(text = paste0("q", distribution)))
   d.function <- eval(parse(text = paste0("d", distribution)))
@@ -185,7 +235,6 @@ plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL,
     } else {
       cat(" * All sampes are within the confidence interval (", conf, ")\n", sep = "")
     }
-
   }
   
   return(p)

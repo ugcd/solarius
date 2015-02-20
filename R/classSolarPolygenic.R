@@ -42,8 +42,27 @@ summary.solarPolygenic <- function(x, ...)
 #--------------------
 
 #' @export
-residuals.solarPolygenic <- function(x, ...)
+residuals.solarPolygenic <- function(x, trait = FALSE, ...)
 {
+  stopifnot(!is.null(x$resf))
+  stopifnot(nrow(x$resf) > 0)
+  stopifnot(all(c("id", "residual") %in% names(x$resf)))
+  
+  if(!trait) {
+    r <- x$resf$residual
+    names(r) <- x$resf$id
+  } else {
+    stopifnot(length(x$traits) == 1)
+    trait <- x$traits
+
+    trait <- tolower(trait) # SOLAR naming in residual files
+    stopifnot(trait %in% names(x$resf))
+  
+    r <- subset(x$resf, select = trait, drop = TRUE)
+    names(r) <- x$resf$id
+  }
+  
+  return(r)
 }
 
 
