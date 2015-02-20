@@ -137,7 +137,7 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
   print(x$assoc$call)
   
   ### var
-  num.snps <- x$assoc$num.snps
+  num.snps <- dim(A$snpf)[1]
   
   cat("\nAssociation model\n")
   cat(" * Number of SNPs:", num.snps, "\n")

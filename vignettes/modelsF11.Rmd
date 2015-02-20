@@ -13,6 +13,7 @@ bibliography: ref.bib
 
 ```{r}
 #opts_chunk$set(eval = TRUE)
+
 ```
 
 ## About
@@ -25,17 +26,46 @@ We selected 3 specific examples where we could compare the results obtained with
 
 ### BMI
 
-*LNA: FALTA plot trait, transform, h2r y correlations
+```{r init, echo=TRUE}
+library(solarius)
+cores <- 64
+```
 
 ```{r load, echo=FALSE}
-load("dat/gait1.bmi.A.RData")
+library(gait)
+load("/home/helena/pdatgait1.Rdata")
+gait1.snpfiles <- gait1.snpfiles()
 ```
 
-```{r compare_A1_A2}
-A1
-A2
+```{r h2r1, echo=TRUE, cache = TRUE}
+# traits previously transformed, only significant covariates
+M1 <- solarPolygenic(tr_bmi ~ AGE, pdat, covtest = TRUE)
+M1
 ```
 
+```{r assoc1, echo=T, cache = TRUE}
+A1 <- solarAssoc(tr_bmi ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+```
+
+```{r A1.manh, cache = TRUE}
+plot(A1)
+```
+
+```{r A1.qq, cache = TRUE}
+plot(A1, "qq")
+```
+compare with [2]
+
+* LNA: missing linkage and compare it with [2] since there are no significant SNPs in the GWAS to discuss on.
+
+## FXI
+
+```{r h2r2, echo=T, cache = TRUE}
+M2 <- solarPolygenic(tr_FXI ~ AGE, pdat, covtest=T)
+```
+```{r assoc2, echo=T, cache = TRUE}
+A2 <- solarAssoc(tr_FXI ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+```
 ```{r A2.manh, cache = TRUE}
 plot(A2)
 ```
@@ -43,35 +73,26 @@ plot(A2)
 ```{r A2.qq, cache = TRUE}
 plot(A2, "qq")
 ```
-compare with [2]
 
 
-## FXI
+We observe that our significant SNPs correspond to those reported in [2]. They are three loci: rs710446 and rs4253399 located in the structural F11 gene,  and and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in [2].
 
-*LNA: FALTA plot trait, transform, h2r y correlations
-
-```{r, echo=FALSE}
-
-load("/home/results/packages/solarius/GAIT1/resultsF11HH.Rdata")
-```
-
-```{r, echo=T}
-#A <- solarAssoc(newTrait ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
-A
-
-plot(A)
-plot(A, "qq")
-#annotateSignifSNPs(A)
-
-```
-compare with [3]
 
 * LNA: falta linkage
 
 
 ### Throm
 
-*LNA: FALTA plot trait, transform, h2r y correlations
+
+
+```{r h2r3, cache = TRUE, cache = TRUE}
+M3 <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
+M3
+```
+
+``` {r assoc3, echo=T, cache = TRUE}
+A3 <- solarAssoc(aff ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+```
 
 ```{r A3.manh, cache = TRUE}
 plot(A3)
@@ -80,6 +101,7 @@ plot(A3)
 ```{r A3.qq, cache = TRUE}
 plot(A3, "qq")
 ```
+
 * LNA: falta linkage
 
 ## Refences
