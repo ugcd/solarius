@@ -51,10 +51,11 @@ rm(list = c("A", "A1", "A2", "A3", "L1", "L2", "L3", "L12", "L1.2"))
 
 ## About
 
-This pages shows particular examples to illustrate the 'solarius' package's behaviour with large datasets. In particular, these examples were generated wuth the GAIT (Genetic Analysis of Idiopathic Thrombophilia) dataset. The GAIT Project included 397 individuals from 21 extended Spanish families (mean pedigree size = 19) [@Souto2000]. A genome-wide set of 307,984 SNPs was typed in all of the participants using the Infinium 317 k Beadchip on the Illumina platform (San Diego, CA, USA).
+This pages shows particular examples to illustrate the 'solarius' package's behaviour with large datasets. In particular, these examples were generated with the GAIT (Genetic Analysis of Idiopathic Thrombophilia) dataset. The GAIT Project included 397 individuals from 21 extended Spanish families (mean pedigree size = 19) (@Souto2000). A genome-wide set of 307,984 SNPs was typed in all of the participants using the Infinium 317 k Beadchip on the Illumina platform (San Diego, CA, USA).
 
  
-We selected 3 specific examples where we could compare the results obtained with the 'solarius' package with those previously obtained and published. In particular we applied a GWAS and a Linkage model to the BMI and the Factor XI phenotypes and the Trhombosis affection. For each of these traits, we show how the main functions of the a'solarius' package were applied and we confirm that they are in concordance with the previsouly published ones.
+We selected 3 specific examples where we could compare the results obtained with the 'solarius' package with those previously obtained and published in Sabater2012 and Souto2014. In particular, we applied the main models of association and Linkage of the package to the (1) FXI levels in blood, (2) the Body Mass Index( BMI) and (3) the Thrombosis affection. The former two are phenotypes previously studied in @Sabater2012 and @Souto2014 respectively. We add an example of a dichotomic trait, the thrombosis affection, in order to iluustrate the behaviour of the 'solarius' package function with  dichtomous variables.
+
 
 ## Load packages
 
@@ -64,6 +65,7 @@ library(gait)
 ``` 
 
 ## Load GAIT1 data
+We first load our data and properly transform the phenotypes under study. 
 
 ```{r load}
 pdat  <- gait1.phen()
@@ -83,12 +85,12 @@ cores <- 64
 
 ## FXI
 
-```{r h2r2, echo=T}
+```{r h2r.F11, echo=T}
 M.F11 <- solarPolygenic(tr_FXI ~ AGE, pdat, covtest=T)
 M.F11
 ```
 
-```{r assoc2, eval = FALSE}
+```{r assoc.F11, eval = FALSE}
 A.F11 <- solarAssoc(tr_FXI ~ AGE, pdat, 
   genocov.files = gait1.snpfiles$genocov.files, 
   snplists.files = gait1.snpfiles$snplists.files, 
@@ -108,10 +110,10 @@ plot(A.F11)
 plot(A.F11, "qq")
 ```
 
-We observe that our significant SNPs correspond to those reported in [@Souto2014]. They are three loci: rs710446 and rs4253399 located in the structural F11 gene,  and and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in [@Souto2014].
+We observe that 3 significant SNPs  are found. These results are in concordance with those previously reported on the FXI pghenotype of the GAIT1 project (@Sabater2012). There are three significant loci: rs710446 and rs4253399 located in the structural F11 gene, and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in (@Sabater2012).
 
 
-```{r linkage2, eval = FALSE}
+```{r linkage.F11, eval = FALSE}
 L.F11 <- solarMultipoint(tr_FXI ~ AGE, data = pdat, 
   mibdir = mibdir, 
   chr = 1:22, interval = 5, 
@@ -125,7 +127,7 @@ summary(L.F11)
 ```{r L.F11, cache=T, fig.height = 9}
 plot(L.F11)
 ```
-
+We observe that no significant loci are found using the linkage model. 
 
 ## BMI
 
@@ -168,8 +170,10 @@ summary(L.bmi)
 ```{r L1, cache=T, message = FALSE, fig.height = 9}
 plot(L.bmi)
 ```
+In this case, we observe that no significantly associated SNPs are detected. However, we obtain a significant peak of linkage at chromosome 13. This replicates the result reported in @Souto2014 with a linkage multiploint analysis of the bmi in the GAIT1. 
 
 ### Two-pass linkage
+In order to evaluate the impact of this finding in related loci, we applied a second univariate linkage analysis, conditioned on the linkage signal obtained at 13q34 locus.
 
 ```{r, eval = FALSE}
 # parallel computation of multi-pass linkage is not implemented in `solarius` yet
@@ -182,10 +186,11 @@ L.bmi.twopass <- solarMultipoint(tr_bmi ~ AGE, pdat,
 ```{r L.bmi2, fig.height = 9, cache = TRUE}
 plot(L.bmi.twopass, pass = 2)
 ```
+We observe that in this second linkage analysis, conditioned on the former significant LOD score, the signal on chromosome 13q34 dropped dramatically to 0, as expected.
 
 ## Throm
 
-```{r h2r3, echo=T, cache=T}
+```{r h2r.aff, echo=T, cache=T}
 M.aff <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
 M.aff
 ```
@@ -198,30 +203,34 @@ A.aff <- solarAssoc(aff ~ AGE, pdat,
   cores = cores)
 ```
 
-```{r A3.manh, cache=T}
+```{r A.aff.manh, cache=T}
 plot(A.aff)
 ```
 
-```{r A3.qq, cache=T}
+```{r A.aff.qq, cache=T}
 plot(A.aff, "qq")
 ```
 
-```{r linkage3, eval = FALSE}
+```{r linkage.aff, eval = FALSE}
 L.aff <- solarMultipoint(aff ~ AGE, data = dat, 
   mibdir = mibdir, 
   chr = 1:22, interval = 5, 
   cores = cores, verbose = 1)
 ```
 
-```{r sum_L3}
+```{r sum_L.aff}
 summary(L.aff)
 ```
 
-```{r L3, cache=T, fig.height = 9, cache = TRUE}
+```{r L.aff, cache=T, fig.height = 9, cache = TRUE}
 plot(L.aff)
 ```
+ We observe that no significant findings are obtained neither in association nor in linkage analyses. 
 
 ## Bivariate analysis of BMI and Throm
+
+We applied the bivariate linkage analysis with BMI and thrombosis affection, under the hypothesis of pleiotropy between BMI and liability to thrombosis.
+
 
 ```{r, eval = FALSE}
 L.aff.bmi <- solarMultipoint(aff + bmi ~ AGE, pdat, 
@@ -238,7 +247,6 @@ summary(L.aff.bmi)
 ```{r L.aff.bmi, fig.height = 9, cache = TRUE}
 plot(L.aff.bmi)
 ```
-
-
+We observe, again, a significant peak of linkage at the 13q34 locus. This supports the hyposthesis proposed in @Souto2014 of combined linkage between that region and BMI/thrombosis risk.
 
 ## Refences
