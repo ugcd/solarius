@@ -65,6 +65,7 @@ library(gait)
 ``` 
 
 ## Load GAIT1 data
+
 We first load our data and properly transform the phenotypes under study. 
 
 ```{r load}
@@ -127,6 +128,7 @@ summary(L.F11)
 ```{r L.F11, cache=T, fig.height = 9}
 plot(L.F11)
 ```
+
 We observe that no significant loci are found using the linkage model. 
 
 ## BMI
@@ -170,9 +172,11 @@ summary(L.bmi)
 ```{r L1, cache=T, message = FALSE, fig.height = 9}
 plot(L.bmi)
 ```
+
 In this case, we observe that no significantly associated SNPs are detected. However, we obtain a significant peak of linkage at chromosome 13. This replicates the result reported in @Souto2014 with a linkage multiploint analysis of the bmi in the GAIT1. 
 
 ### Two-pass linkage
+
 In order to evaluate the impact of this finding in related loci, we applied a second univariate linkage analysis, conditioned on the linkage signal obtained at 13q34 locus.
 
 ```{r, eval = FALSE}
@@ -186,6 +190,7 @@ L.bmi.twopass <- solarMultipoint(tr_bmi ~ AGE, pdat,
 ```{r L.bmi2, fig.height = 9, cache = TRUE}
 plot(L.bmi.twopass, pass = 2)
 ```
+
 We observe that in this second linkage analysis, conditioned on the former significant LOD score, the signal on chromosome 13q34 dropped dramatically to 0, as expected.
 
 ## Throm
@@ -225,7 +230,8 @@ summary(L.aff)
 ```{r L.aff, cache=T, fig.height = 9, cache = TRUE}
 plot(L.aff)
 ```
- We observe that no significant findings are obtained neither in association nor in linkage analyses. 
+
+We observe that no significant findings are obtained neither in association nor in linkage analyses. 
 
 ## Bivariate analysis of BMI and Throm
 
@@ -247,6 +253,7 @@ summary(L.aff.bmi)
 ```{r L.aff.bmi, fig.height = 9, cache = TRUE}
 plot(L.aff.bmi)
 ```
+
 We observe, again, a significant peak of linkage at the 13q34 locus. This supports the hyposthesis proposed in @Souto2014 of combined linkage between that region and BMI/thrombosis risk.
 
 ## Refences
