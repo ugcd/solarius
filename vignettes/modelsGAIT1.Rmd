@@ -1,6 +1,6 @@
 ---
-title: "SOLAR models for quantitative genetic analysis. Part 2: GAIT1"
-author: "Andrey Ziyatdinov, Helena Brunel"
+title: "SOLAR models applied to GAIT1 data set"
+author: "Helena Brunel, Andrey Ziyatdinov"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -8,63 +8,237 @@ output:
     toc: true
   pdf_document:
     toc: true
-bibliography: ref.bib
+bibliography: gait.bib
 ---
 
-```{r}
+```{r, echo = FALSE}
 opts_chunk$set(eval = TRUE, dev = "png")
 ```
 
-```{r inc}
+```{r inc_hidden, echo = FALSE, message = FALSE}
 library(devtools)
 load_all("~/git/ugcd/solarius")
+#library(solarius)
+library(gait)
+```
+
+```{r load_hidden_andrey, echo = FALSE, eval = TRUE, cache = TRUE}
+load("~/Results/packages/solarius/GAIT1/gait1.bmi.A.RData")
+load("~/Results/packages/solarius/GAIT1/resultsF11HH.Rdata")
+load("~/Results/packages/solarius/GAIT1/gait1.L.univar.RData")
+
+load("~/Results/packages/solarius/GAIT1/gait1.L.twopass.RData")
+load("~/Results/packages/solarius/GAIT1/gait1.L12.bivar.RData")
+
+A.F11 <- A
+L.F11 <- L3
+
+A.bmi <- A2
+L.bmi <- L1
+L.bmi.twopass <- L1.2
+
+A.aff <- A3
+L.aff <- L2
+
+L.aff.bmi <- L12
+
+rm(list = c("A", "A1", "A2", "A3", "L1", "L2", "L3", "L12", "L1.2"))
+```
+
+```{r load_hidden_helena, echo = FALSE, eval = FALSE}
 ```
 
 
-## Large-scale study: GAIT1 phenotypes
+## About
+
+This pages shows particular examples to illustrate the 'solarius' package's behaviour with large datasets. In particular, these examples were generated wuth the GAIT (Genetic Analysis of Idiopathic Thrombophilia) dataset. The GAIT Project included 397 individuals from 21 extended Spanish families (mean pedigree size = 19) [@Souto2000]. A genome-wide set of 307,984 SNPs was typed in all of the participants using the Infinium 317 k Beadchip on the Illumina platform (San Diego, CA, USA).
+
+ 
+We selected 3 specific examples where we could compare the results obtained with the 'solarius' package with those previously obtained and published. In particular we applied a GWAS and a Linkage model to the BMI and the Factor XI phenotypes and the Trhombosis affection. For each of these traits, we show how the main functions of the a'solarius' package were applied and we confirm that they are in concordance with the previsouly published ones.
+
+## Load packages
+
+```{r inc_fake, eval = FALSE}
+library(solarius)
+library(gait)
+``` 
+
+## Load GAIT1 data
 
 ```{r load}
-load("dat/gait1.bmi.A.RData")
-load("dat/resultsF11.Rdata")
+pdat  <- gait1.phen()
+pdat <- mutate(pdat, 
+  tr_FXI = FXI_T * 5.1,
+  ln_bmi = log(bmi),  
+  tr_bmi = 6.1 * ln_bmi)
+
+gait1.snpfiles <- gait1.snpfiles()
+
+mibddir <- gait1.mibddir()
 ```
 
-### BMI
-
-```{r compare_A1_A2}
-A1
-A2
+```{r par}
+cores <- 64
 ```
 
-```{r A2.manh, cache = TRUE}
-plot(A2)
+## FXI
+
+```{r h2r2, echo=T}
+M.F11 <- solarPolygenic(tr_FXI ~ AGE, pdat, covtest=T)
+M.F11
 ```
 
-```{r A2.qq, cache = TRUE}
-plot(A2, "qq")
+```{r assoc2, eval = FALSE}
+A.F11 <- solarAssoc(tr_FXI ~ AGE, pdat, 
+  genocov.files = gait1.snpfiles$genocov.files, 
+  snplists.files = gait1.snpfiles$snplists.files, 
+  snpmap.files = gait1.snpfiles$snpmap.files, 
+  cores = cores)
 ```
 
-### Throm
-
-```{r A3.manh, cache = TRUE}
-plot(A3)
+```{r sum_A.F11}
+summary(A.F11)
 ```
 
-```{r A3.qq, cache = TRUE}
-plot(A3, "qq")
+```{r A.F11.manh, cache=T}
+plot(A.F11)
 ```
 
-### FXI
-
-```{A}
-A
+```{r .F11.qq, cache=T}
+plot(A.F11, "qq")
 ```
 
-```{r A.manh, cache = TRUE}
-plot(A)
+We observe that our significant SNPs correspond to those reported in [@Souto2014]. They are three loci: rs710446 and rs4253399 located in the structural F11 gene,  and and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in [@Souto2014].
+
+
+```{r linkage2, eval = FALSE}
+L.F11 <- solarMultipoint(tr_FXI ~ AGE, data = pdat, 
+  mibdir = mibdir, 
+  chr = 1:22, interval = 5, 
+  cores = cores, verbose = 1)
 ```
 
-```{r A.qq, cache = TRUE}
-plot(A, "qq")
+```{r sum_L.F11}
+summary(L.F11)
 ```
+
+```{r L.F11, cache=T, fig.height = 9}
+plot(L.F11)
+```
+
+
+## BMI
+
+```{r h2r1, cache = TRUE}
+# traits previously transformed, only significant covariates
+M.bmi <- solarPolygenic(tr_bmi ~ AGE, pdat, covtest = TRUE)
+M.bmi
+```
+
+```{r assoc1, eval = FALSE}
+A.bmi <- solarAssoc(tr_bmi ~ AGE, pdat, 
+  genocov.files = gait1.snpfiles$genocov.files, 
+  snplists.files = gait1.snpfiles$snplists.files, 
+  snpmap.files = gait1.snpfiles$snpmap.files, 
+  cores = cores)
+```
+
+```{r A1_sum}
+summary(A.bmi)
+```
+
+```{r A1.manh, cache=T, message = FALSE}
+plot(A.bmi)
+```
+
+```{r A1.qq, cache=T}
+plot(A.bmi, "qq")
+```
+
+```{r linkage1, eval = FALSE}
+L.bmi <- solarMultipoint(formula = tr_bmi ~ AGE, data = dat, 
+  mibddir = mibddir, 
+  chr = 1:22, interval = 5, cores = cores, verbose = 1)
+```
+
+```{r L1_sum}
+summary(L.bmi)
+```
+
+```{r L1, cache=T, message = FALSE, fig.height = 9}
+plot(L.bmi)
+```
+
+### Two-pass linkage
+
+```{r, eval = FALSE}
+# parallel computation of multi-pass linkage is not implemented in `solarius` yet
+L.bmi.twopass <- solarMultipoint(tr_bmi ~ AGE, pdat, 
+  mibddir = mibddir, 
+  interval = 5, multipoint.options = "3")
+```
+
+
+```{r L.bmi2, fig.height = 9, cache = TRUE}
+plot(L.bmi.twopass, pass = 2)
+```
+
+## Throm
+
+```{r h2r3, echo=T, cache=T}
+M.aff <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
+M.aff
+```
+
+``` {r assoc3, eval = FALSE}
+A.aff <- solarAssoc(aff ~ AGE, pdat, 
+  genocov.files = gait1.snpfiles$genocov.files, 
+  snplists.files = gait1.snpfiles$snplists.files, 
+  snpmap.files = gait1.snpfiles$snpmap.files, 
+  cores = cores)
+```
+
+```{r A3.manh, cache=T}
+plot(A.aff)
+```
+
+```{r A3.qq, cache=T}
+plot(A.aff, "qq")
+```
+
+```{r linkage3, eval = FALSE}
+L.aff <- solarMultipoint(aff ~ AGE, data = dat, 
+  mibdir = mibdir, 
+  chr = 1:22, interval = 5, 
+  cores = cores, verbose = 1)
+```
+
+```{r sum_L3}
+summary(L.aff)
+```
+
+```{r L3, cache=T, fig.height = 9, cache = TRUE}
+plot(L.aff)
+```
+
+## Bivariate analysis of BMI and Throm
+
+```{r, eval = FALSE}
+L.aff.bmi <- solarMultipoint(aff + bmi ~ AGE, pdat, 
+  mibddir = mibddir, 
+  chr = 1:22, interval = 5, 
+  cores = cores, verbose = 1)
+```
+
+
+```{r sum_Lbi}
+summary(L.aff.bmi)
+```
+
+```{r L.aff.bmi, fig.height = 9, cache = TRUE}
+plot(L.aff.bmi)
+```
+
+
 
 ## Refences

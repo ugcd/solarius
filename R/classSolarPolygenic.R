@@ -37,6 +37,20 @@ summary.solarPolygenic <- function(x, ...)
   print(x$vcf)
 }
 
+#--------------------
+# Generic method
+#--------------------
+
+#' @export
+residuals.solarPolygenic <- function(x, ...)
+{
+}
+
+
+#--------------------
+# Other method
+#--------------------
+
 #' @export
 getFormula <- function(x, ...)
 {

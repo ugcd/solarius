@@ -133,8 +133,7 @@ solar_read_residuals <- function(dir, out)
   return(tab)
 }
 
-  #ret <- suppressWarnings(try(solar_read_residuals(dir), silent = TRUE))
-  ret <- try(solar_read_residuals(dir, out))
+  ret <- suppressWarnings(try(solar_read_residuals(dir), silent = TRUE))
   
   if(class(ret)[1] == "try-error") {
     out$resf <- data.frame()

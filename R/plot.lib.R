@@ -99,6 +99,8 @@ plotRes <- function(x, conf = 0.90, ...)
   stopifnot(length(x$traits) == 1)
   trait <- x$traits
   
+  trait <- tolower(trait) # SOLAR naming in residual files
+  
   stopifnot(!is.null(x$resf))
   stopifnot(nrow(x$resf) > 0)
   stopifnot(all(c("id", "residual", trait) %in% names(x$resf)))
@@ -108,10 +110,10 @@ plotRes <- function(x, conf = 0.90, ...)
   yh <- subset(x$resf, select = trait, drop = TRUE)
   labs <- x$resf$id
   
-  p <- ggplot(NULL, aes(x = 1:length(r), y = r)) + geom_point() +
-    geom_hline(yintercept = 0) + geom_smooth(method = "loess", se = TRUE, level = conf)
-    labs(title = "Residuals vs. Fitted",  
-      x = "Fitted values", y = "Residuals")
+  p <- ggplot(NULL, aes(x = order(yh), y = r)) + geom_point() +
+    geom_hline(yintercept = 0) + geom_smooth(method = "loess", se = FALSE) + #, se = TRUE, level = conf)
+    labs(title = "Residuals",  
+      x = "Trait order index", y = "Residuals")
   
   ### return
   return(p)
