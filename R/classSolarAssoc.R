@@ -137,7 +137,7 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
   print(x$assoc$call)
   
   ### var
-  num.snps <- dim(A$snpf)[1]
+  num.snps <- nrow(x$snpf)
   
   cat("\nAssociation model\n")
   cat(" * Number of SNPs:", num.snps, "\n")
@@ -146,7 +146,7 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
   # signif. SNPs
   pSNP.thr <- alpha / num.snps
   snpf <- subset(x$snpf, pSNP < pSNP.thr)
-  num.snps.signif <- nrow(snpf)
+  num.snps.signif <- length(which(x$snpf$pSNP<pSNP.thr))
   cat(" * Number of significal SNPs:", num.snps.signif, "\n")
   if(num.snps.signif > 0) {
     ord <- with(snpf, order(pSNP))
