@@ -28,13 +28,17 @@ We selected 3 specific examples where we could compare the results obtained with
 
 ```{r init, echo=TRUE}
 library(solarius)
-cores <- 64
+cores <- 32
 ```
 
 ```{r load, echo=FALSE}
 library(gait)
-load("/home/helena/pdatgait1.Rdata")
+
+
+dat  <- gait1.phen()
+mibddir <- gait1.mibddir()
 gait1.snpfiles <- gait1.snpfiles()
+pdat <- mutate(dat, tr_FXIc=dat$FXI_T*5.1,   ln_bmi = log(bmi),  tr_bmi = 6.1 * ln_bmi)
 ```
 
 ```{r h2r1, echo=TRUE, cache = TRUE}
@@ -45,18 +49,25 @@ M1
 
 ```{r assoc1, echo=T, cache = TRUE}
 A1 <- solarAssoc(tr_bmi ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+summary(A1)
 ```
 
-```{r A1.manh, cache = TRUE}
+```{r A1.manh, cache=T}
 plot(A1)
 ```
 
-```{r A1.qq, cache = TRUE}
+```{r A1.qq, cache=T}
 plot(A1, "qq")
 ```
-compare with [2]
 
-* LNA: missing linkage and compare it with [2] since there are no significant SNPs in the GWAS to discuss on.
+```{r linkage1, echo=T, cache=T}
+L1 <- solarMultipoint(formula = tr_bmi ~ AGE, data = dat, mibddir = mibddir, 
+    chr = 1:22, interval = 5, cores = 22, verbose = 1)
+summary(L1)
+```
+```{r L1, cache=T}
+plot(L1)
+```
 
 ## FXI
 
@@ -65,27 +76,35 @@ M2 <- solarPolygenic(tr_FXI ~ AGE, pdat, covtest=T)
 ```
 ```{r assoc2, echo=T, cache = TRUE}
 A2 <- solarAssoc(tr_FXI ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
+summary(A2)
 ```
-```{r A2.manh, cache = TRUE}
+```{r A2.manh, cache=T}
 plot(A2)
 ```
 
-```{r A2.qq, cache = TRUE}
+```{r A2.qq, cache=T}
 plot(A2, "qq")
 ```
-
-
 We observe that our significant SNPs correspond to those reported in [2]. They are three loci: rs710446 and rs4253399 located in the structural F11 gene,  and and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in [2].
 
 
-* LNA: falta linkage
+```{r linkage2, echo=T, cache=T}
+L2 <- solarMultipoint(formula = tr_FXI ~ AGE, data = dat, mibdir = mibdir, chr = 1:22, interval = 5, cores = 22, verbose = 1)
+summary(L2)
+```
+```{r L2, cache=T}
+plot(L2)
+```
+
+
+
 
 
 ### Throm
 
 
 
-```{r h2r3, cache = TRUE, cache = TRUE}
+```{r h2r3, echo=T, cache=T}
 M3 <- solarPolygenic(aff ~ AGE, pdat, covtest = TRUE)
 M3
 ```
@@ -94,15 +113,21 @@ M3
 A3 <- solarAssoc(aff ~ AGE, pdat, genocov.files = gait1.snpfiles$genocov.files, snplists.files = gait1.snpfiles$snplists.files, snpmap.files = gait1.snpfiles$snpmap.files, cores = cores)
 ```
 
-```{r A3.manh, cache = TRUE}
+```{r A3.manh, cache=T}
 plot(A3)
 ```
 
-```{r A3.qq, cache = TRUE}
+```{r A3.qq, cache=T}
 plot(A3, "qq")
 ```
+```{r linkage3, echo=T, cache=T}
+L3<- solarMultipoint(formula = aff ~ AGE, data = dat, mibdir = mibdir, chr = 1:22, interval = 5, cores = 22, verbose = 1)
+summary(L3)
+```
 
-* LNA: falta linkage
+```{r L3, cache=T}
+plot(L3)
+```
 
 ## Refences
 
