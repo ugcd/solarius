@@ -17,7 +17,7 @@ opts_chunk$set(eval = TRUE)
 
 ## Abstract
 
-In human genetics research, the study of complex disorders or related quantitative phenotypes 
+In human genetics research, the study of complex disorders or quantitative phenotypes 
 is targeted to discover the underlying genetic architecture of such disorders.
 Whereas simple Mendelian diseases are results of a mutation in a single gene,
 for example [Huntington's disease](http://en.wikipedia.org/wiki/Huntington%27s_disease),
@@ -40,12 +40,38 @@ and suit for examination of parent-of-origin and sex-specificity effects.
 The analysis of the pedigree data is traditionally based on variance component (VC) model, 
 also known as linear mixed model (LMM).
 `SOLAR` is one of the well-known and widely used tools
-that implements the variance component models and other routines needed for the QTL analysis.
-Similar tools of the interest include `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`.
+that implements the variance component models and other routines needed for the QTL analysis [@Almasy1998]
+([http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)).
+The name `SOLAR` stands for Sequential Oligogenic Linkage Analysis Routines.
+The analyses available in `SOLAR` include 
+customized quantitative genetic analysis, 
+advanced linkage analysis, 
+SNP association analysis (QTN, QTLD, and MGA). 
+Other operations are implemented for calculation of marker-specific or multipoint identity-by-descent (IBD) matrices 
+in pedigrees of arbitrary size and complexity.
+The linkage analysis allows for multiple quantitative traits and/or discrete traits 
+which might involve multiple loci (oligogenic analysis), dominance effects, household effects, and interactions.
 
-This vignette introduces examples on fitting statistical models available in `SOLAR`.
-Three types of models for quantitative genetic analysis in family-based studies are introduced:
-polygenic, association and linkage.
+`solarius` provides an interface from the program `SOLAR` to 
+the environment for statistical computing `R`.
+On one side, main `SOLAR` procedures can be called in `R` by one or a few functions of the `solarius` package,
+that makes the user experience more friendly with the same power of computations implemented in `SOLAR`.
+On the other side, the `solarius` user benefits from the infrastructure available 
+with the R environment and its packages, 
+such as interactive data manipulation, data visualization, parallel computation and so on.
+
+Other tools of the interest (similar to `SOLAR`) include `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`,
+but the R package `solarius` presented here has been especially developed to work with `SOLAR`.
+
+This vignette is a tutorial on the R package `solarius`.
+The document contains a brief description of main statistical models implemented in `SOLAR`
+and accessible in `solarius` (polygenic, association and linkage), 
+installation instructions for both `SOLAR` and `solarius`,
+reproducible examples on synthetic data sets available within the `solarius` package.
+The examples are intended to be end-to-end studies
+which follow all the necessary steps:
+data loading, data exploration, running statistical models 
+and interpreting the obtained results by printing, summarizing and plotting the models in R.
 
 ## Introduction
 
@@ -64,7 +90,7 @@ $$ y = X \beta + Z u + e $$
 where $X$ and $Z$ are respectively $n \times p$ and $n \times q$ incidence matrices,
 and $e$ is a $n \times 1$ vector of residual deviations
 assumed to be distributed independently of the random effects.
-Denote the $n \times $n covariance matrix for the vector $e$ by $R$
+Denote the $n \times n$ covariance matrix for the vector $e$ by $R$
 and the the $q \times q$ covariance matrix for the vector $u$ by $G$.
 
 The first element of the vector $\beta$ is typically the population mean,
