@@ -19,11 +19,11 @@ opts_chunk$set(eval = TRUE)
 
 # Abstract
 
-In human genetics research, the study of complex disorders or quantitative phenotypes 
-is targeted to discover the underlying genetic architecture of such disorders.
+In human genetics research, the study of a complex disorder is targeted 
+to discover its underlying genetic architecture.
 Whereas simple Mendelian diseases are results of a mutation in a single gene,
 for example [Huntington's disease](http://en.wikipedia.org/wiki/Huntington%27s_disease),
-complex phenotypes are the product of the action of multiple genes and environmental factors
+complex disorders or phenotypes are the product of the action of multiple genes and environmental factors
 as well as their interactions.
 For instance, obesity is a complex disease,
 which genetic basis might be better dissected 
@@ -156,7 +156,7 @@ are implemented in a `SOLAR`-specific way.
 ## Polygenic model in `SOLAR`
 
 The polygenic model is a basis for any quantitative genetic analysis in `SOLAR`.
-The model is composed of the fixed effects ($\beta$) 
+The model includes the fixed effects ($\beta$) 
 and three random effects (the genetic additive effect $g$, 
 the house-hold effect $c$, and the residual effect $e$).
 
@@ -171,18 +171,18 @@ $$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 
 The first $g$ term accounts for the additive genetic effect
 with the covariance matrix $A = 2 K$, 
 where $K$ is the kinship matrix.
-`SOLAR` estimates the empirical kinship matrix based on the ID fields in the pedigree data,
-such as `id` sample ID, `sex` gender, `fam` family id, `fa` father id, `mo` mother id,
-and `mztwin` id
+`SOLAR` estimates the empirical kinship matrix based on the identifier(ID) fields in the pedigree data,
+such as `id` individual ID, `sex` gender, `fam` family ID, `fa` father ID, `mo` mother ID,
+and `mztwin` indicator of identical individuals, such as monozygotic twins or triplets
 [@SOLARDOC, Appendix 1, [file-pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#file-pedigree) command].
 
-The second $c$ term represents any shared environmental effect.
+The second $c$ term represents any annotated environmental effect.
 It is named as a house-hold effect, but it is generally related to the sharing of any non-genetic factor among individuals.
-For the hose-hold group analysis the pedigree data must contain a house-hold ID field,
+For the house-hold grouping the pedigree data must contain a house-hold ID field,
 and the expected field name is `hhid`.
 By default, `SOLAR` creates `Pedigree-Household Groups` based on the `hhid` identifiers.
-That means that pedigrees and household groups are merged into larger groups 
-that contain every individual in the same pedigree as well as every individual that has the same 
+That means that pedigrees and household groups are merged into larger groups,
+which contain every individual in the same pedigree as well as every individual that has the same 
 `hhid` as any individual in the pedigree [@SOLARDOC, Section 9.3 [Household Group Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#household)]. 
 In a consequence of this grouping operation by `SOLAR`, 
 the covariance matrix $H$ of the $c$ random effect
@@ -192,8 +192,12 @@ rather than relationships given by the `hhid` field.
 The third $e$ term is the residual error with the diagonal covariance matrix.
 It is important to note that the `residual` command in `SOLAR`
 [@SOLARDOC, Appendix 1, [residual](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#residual) command]
-returns the covariate-free phenotype, expressed as $y - X \beta$,
+returns the covariate-free value of a trait under study, expressed as $y - X \beta$,
 and the returned value is not the residual vector $e$ given in the equation of the polygenic model.
+
+Dominance effect.
+
+Discrete trait.
 
 
 | Alternative model   | Free parameters | Restricted parameters  |
