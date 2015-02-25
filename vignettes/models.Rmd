@@ -6,6 +6,8 @@ output:
   html_document:
     theme: united
     toc: true
+    toc_depth: 2
+    number_sections: true
   pdf_document:
     toc: true
 bibliography: ref.bib
@@ -15,7 +17,7 @@ bibliography: ref.bib
 opts_chunk$set(eval = TRUE)
 ```
 
-## Abstract
+# Abstract
 
 In human genetics research, the study of complex disorders or quantitative phenotypes 
 is targeted to discover the underlying genetic architecture of such disorders.
@@ -73,9 +75,9 @@ which follow all the necessary steps:
 data loading, data exploration, running statistical models 
 and interpreting the obtained results by printing, summarizing and plotting the models in R.
 
-## Introduction
+# Introduction
 
-### General mixed model
+## Linear mixed model
 
 Consider a particular trait, such as body-mass index, 
 is observed in $n$ individuals grouped by families or clusters of related individuals.
@@ -97,7 +99,7 @@ The first element of the vector $\beta$ is typically the population mean,
 and other elements may be age, gender, diet and so on.
 The elements of the incidence matrices are usually equal to 0 or 1,
 that indicate the effect contribution to the individuals's phenotype.
-The model is referred to as a __mixed model__,
+The model is referred to as a _mixed model_,
 because this model jointly accounts for fixed and random effects.
 
 Giving the two terms of the random effects $u$ and $e$,
@@ -121,9 +123,11 @@ $$ Var(y) = V = Z G Z^{T} + R $$
 
 Now the mixed model can be rewritten in a compact form
 
+$$ y = X \beta + Z u + e$$ 
+
 $$
-y = X \beta + Z u + e, \mbox{ where } u \sim (0, G) \mbox{ and } e \sim (0, R) \\
-\mbox{ implying } y \sim (X \beta, V) = (X \beta, Z G Z^T + R)
+\mbox{ where } \mbox{ } \mbox{ } u \sim (0, G) \mbox{ and } e \sim (0, R) \\
+\mbox{ implying } \mbox{ } \mbox{ } y \sim (X \beta, V) = (X \beta, Z G Z^T + R)
 $$
 
 For the mixed model,
@@ -144,17 +148,73 @@ where the necessary theoretical material and accompanying examples are given.
 On the other hand, the implementation of the estimation procedures in `SOLAR`
 is discussed elsewhere [@Almasy1998].  
 
-### Polygenic model in `SOLAR`
+The next three sections will present `SOLAR` models,
+which follow the general definition of linear mixed model given above,
+but parametrization of the models and estimation procedures 
+are implemented in a `SOLAR`-specific way.
 
-### Linkage model in `SOLAR`
+## Polygenic model in `SOLAR`
 
-### Association model in `SOLAR`
+The polygenic model is a basis for any quantitative genetic analysis in `SOLAR`.
+The model is composed of the fixed effects ($\beta$) 
+and three random effects (the genetic additive effect $g$, 
+the house-hold effect $c$, and the residual effect $e$).
 
-## Software
+$$y = X\beta + g + c + e$$
 
-### Installation
+$$\mbox{ where } \mbox{ } \mbox{ } g \sim (0, \sigma_g^2 A) 
+  \mbox{ and } \mbox{ } \mbox{ } h \sim (0, \sigma_c^2 H)
+  \mbox{ and } \mbox{ } \mbox{ } e \sim (0, \sigma_e^2 I)$$ 
+  
+$$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 H + \sigma_e^2 I)$$
 
-### `solarius` R package 
+The first $g$ term accounts for the additive genetic effect
+with the covariance matrix $A = 2 K$, 
+where $K$ is the kinship matrix.
+`SOLAR` estimates the empirical kinship matrix based on the ID fields in the pedigree data,
+such as `id` sample ID, `sex` gender, `fam` family id, `fa` father id, `mo` mother id,
+and `mztwin` id
+[@SOLARDOC, Appendix 1, [file-pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#file-pedigree) command].
+
+The second $c$ term represents any shared environmental effect.
+It is named as a house-hold effect, but it is generally related to the sharing of any non-genetic factor among individuals.
+For the hose-hold group analysis the pedigree data must contain a house-hold ID field,
+and the expected field name is `hhid`.
+By default, `SOLAR` creates `Pedigree-Household Groups` based on the `hhid` identifiers.
+That means that pedigrees and household groups are merged into larger groups 
+that contain every individual in the same pedigree as well as every individual that has the same 
+`hhid` as any individual in the pedigree [@SOLARDOC, Section 9.3 [Household Group Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#household)]. 
+In a consequence of this grouping operation by `SOLAR`, 
+the covariance matrix $H$ of the $c$ random effect
+contains the information related to the pedigree-household groups
+rather than relationships given by the `hhid` field.
+
+The third $e$ term is the residual error with the diagonal covariance matrix.
+It is important to note that the `residual` command in `SOLAR`
+[@SOLARDOC, Appendix 1, [residual](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#residual) command]
+returns the covariate-free phenotype, expressed as $y - X \beta$,
+and the returned value is not the residual vector $e$ given in the equation of the polygenic model.
+
+
+| Alternative model   | Free parameters | Restricted parameters  |
+|----------|-----------|-------|
+| No polygenic effect | $\beta$, $\sigma_c^2$, $\sigma_e^2$      | $\sigma_g^2$ = 0|
+
+
+| Alternative model   | Free parameters | Restricted parameters  |
+|----------|-----------|-------|
+| No age effect | $\sigma_g^2$, $\sigma_c^2$, $\sigma_e^2$      | $\beta_{age}$ = 0|
+
+
+## Linkage model in `SOLAR`
+
+## Association model in `SOLAR`
+
+# Software
+
+## Installation
+
+## `solarius` R package 
 
 ```{r inc_solarius}
 #library(solarius)
@@ -162,7 +222,7 @@ library(devtools)
 load_all("../")
 ```
 
-### Data sets
+## Data sets
 
 * GAW10 data distributed within `SOLAR`
 * Simulated data `dat30` from `multic` R package [@Andrade2006]
@@ -183,13 +243,13 @@ The following variables are in the data set.
 * `kin`: A kinship matrix for 66 individuals.     
 
 
-## Examples
+# Examples
 
-### Loading data
+## Loading data
 
-### Data exploration
+## Data exploration
 
-#### Plot kinship matrix
+### Plot kinship matrix
 
 ```{r kin_dat}
 data(dat30)
@@ -213,13 +273,13 @@ plotKinship2(kin2.dat30[1:30, 1:30])
 histKinship2(kin2.dat30)
 ```
 
-#### Plot pedigrees
+### Plot pedigrees
 
 ```{r dat30_ped_2}
 plotPed(dat30, 2)
 ```
 
-#### Plot residuals
+### Plot residuals
 
 ```{r res_mod}
 mod <- solarPolygenic(trait1 ~ age, dat30)
@@ -238,14 +298,14 @@ plotRes(mod)
 ```
 
 
-### Polygenic model (univariate)
+## Polygenic model (univariate)
 
 ```{r M1, cache = TRUE}
 M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
 M1
 ```
 
-#### Testing covariates
+### Testing covariates
 
 ```{r M2, cache = TRUE}
 M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
@@ -256,7 +316,7 @@ M2
 M2$cf
 ```
 
-#### Custom kinship matrix
+### Custom kinship matrix
 
 `dat50` data set is used.
 
@@ -271,14 +331,14 @@ The polygenic and sporadic models have the same LRT statistics.
 M3$lf
 ```
 
-### Polygenic model (bivariate)
+## Polygenic model (bivariate)
 
 ```{r B1, cache = TRUE}
 B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
 B1
 ```
 
-#### Testing correlations
+### Testing correlations
 
 ```{r B2, cache = TRUE}
 B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
@@ -289,7 +349,7 @@ B2
 B2$vcf
 ```
 
-#### Trait-specific covariates
+### Trait-specific covariates
 
 ```{r B3, cache = TRUE}
 B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
@@ -301,11 +361,11 @@ l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
 
 ```
 
-### Association model
+## Association model
 
 `dat50` data set is used.
 
-#### SNP data by `snpdata` argument
+### SNP data by `snpdata` argument
 
 ```{r genodata, cache = TRUE}
 A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
@@ -316,7 +376,7 @@ A1
 summary(A1)
 ```
 
-#### SNP data by `snpcovdata` argument
+### SNP data by `snpcovdata` argument
 
 ```{r genocovdata, cache = TRUE}
 A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
@@ -333,7 +393,7 @@ A2
 ```
 
 
-#### SNP data by `genocov.files` (single value)
+### SNP data by `genocov.files` (single value)
  
 ```{r genocov, cache = TRUE}
 dir <- package.file("extdata", "solarAssoc", package = "solarius")
@@ -345,7 +405,7 @@ A3 <- solarAssoc(trait ~ 1, phenodata,
 A3
 ```
 
-#### SNP data by `genocov.files` (many values)
+### SNP data by `genocov.files` (many values)
  
 ```{r genocov2, cache = TRUE}
 dir <- package.file("extdata", "solarAssoc", package = "solarius")
@@ -357,7 +417,7 @@ A4 <- solarAssoc(trait ~ 1, phenodata,
 A4
 ```
 
-#### Map information and Manhetten plot
+### Map information and Manhetten plot
 
 ```{r assoc_map, cache = TRUE}
 A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kinship = kin)
@@ -367,7 +427,7 @@ A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kin
 plot(A5)
 ```
 
-#### Parallelization
+### Parallelization
 
 ```{r assoc_par, cache = TRUE}
 A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
@@ -378,11 +438,11 @@ A1$assoc$tprofile$cputime.sec
 A6$assoc$tprofile$cputime.sec
 ```
 
-### Linkage model
+## Linkage model
 
 `dat30` data set will be used for the linkage examples.
 
-#### Basic linkage model
+### Basic linkage model
 
 ```{r data_multic_link}
 mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
@@ -402,7 +462,7 @@ summary(L1)
 plot(L1)
 ```
 
-#### Linkage options
+### Linkage options
 
 ```{r L2, cache = TRUE}
 L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
@@ -414,7 +474,7 @@ summary(L2)
 plot(L2, pass = 2)
 ```
 
-#### Bivariate linkage
+### Bivariate linkage
 
 ```{r L3, cache = TRUE}
 L3 <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, 
@@ -428,7 +488,7 @@ L4 <- solarMultipoint(trait1 + trait2 ~ age + sex(trait1), dat30,
 summary(L4)
 ```
 
-#### Parallelization
+### Parallelization
 
 ```{r L5, cache = TRUE}
 L5 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir,
@@ -440,9 +500,9 @@ L1$multipoint$tprofile$cputime.sec
 L5$multipoint$tprofile$cputime.sec
 ```
 
-## Miscellaneous material
+# Miscellaneous material
 
-### `SOLAR` references
+## `SOLAR` references
 
 
 A list of references given on the official web page of `SOLAR` 
@@ -456,4 +516,4 @@ A list of references given on the official web page of `SOLAR`
 * Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b].
 
 
-## Refences
+# Refences
