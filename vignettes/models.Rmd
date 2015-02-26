@@ -6,10 +6,12 @@ output:
   html_document:
     theme: united
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     number_sections: true
   pdf_document:
     toc: true
+    toc_depth: 3
+    number_sections: true
 bibliography: ref.bib
 ---
 
@@ -17,7 +19,7 @@ bibliography: ref.bib
 opts_chunk$set(eval = TRUE)
 ```
 
-# Abstract
+# Introduction
 
 In human genetics research, the study of a complex disorder is targeted 
 to discover its underlying genetic architecture.
@@ -56,8 +58,8 @@ which might involve multiple loci (oligogenic analysis), dominance effects, hous
 
 `solarius` provides an interface from the program `SOLAR` to 
 the environment for statistical computing `R`.
-On one side, main `SOLAR` procedures can be called in `R` by one or a few functions of the `solarius` package,
-that makes the user experience more friendly with the same power of computations implemented in `SOLAR`.
+On one side, main `SOLAR` procedures can be called in `R` by one or a few commands from the `solarius` package,
+that makes the analysis more user-friendly with the same power of computations implemented in `SOLAR`.
 On the other side, the `solarius` user benefits from the infrastructure available 
 with the R environment and its packages, 
 such as interactive data manipulation, data visualization, parallel computation and so on.
@@ -66,16 +68,16 @@ Other tools of the interest (similar to `SOLAR`) include `Mendel`, `MMM`, `GEMMA
 but the R package `solarius` presented here has been especially developed to work with `SOLAR`.
 
 This vignette is a tutorial on the R package `solarius`.
-The document contains a brief description of main statistical models implemented in `SOLAR`
-and accessible in `solarius` (polygenic, association and linkage), 
+The document contains a brief description of main statistical models (polygenic, association and linkage) 
+implemented in `SOLAR` and accessible via `solarius`, 
 installation instructions for both `SOLAR` and `solarius`,
 reproducible examples on synthetic data sets available within the `solarius` package.
-The examples are intended to be end-to-end studies
-which follow all the necessary steps:
+The examples are intended to cover all the necessary steps 
+in the quantitative genetic analysis with `SOLAR`:
 data loading, data exploration, running statistical models 
 and interpreting the obtained results by printing, summarizing and plotting the models in R.
 
-# Introduction
+# Methodology
 
 ## Linear mixed model
 
@@ -146,7 +148,7 @@ The description of the two estimation procedures is out of scope of this documen
 and the reader is referred to [@Lynch1998, Chapter 26-27], 
 where the necessary theoretical material and accompanying examples are given.
 On the other hand, the implementation of the estimation procedures in `SOLAR`
-is discussed elsewhere [@Almasy1998].  
+is discussed elsewhere [@Almasy1998].
 
 The next three sections will present `SOLAR` models,
 which follow the general definition of linear mixed model given above,
@@ -156,7 +158,7 @@ are implemented in a `SOLAR`-specific way.
 ## Polygenic model in `SOLAR`
 
 The polygenic model is a basis for any quantitative genetic analysis in `SOLAR`.
-The model includes the fixed effects ($\beta$) 
+The model includes fixed effects ($\beta$) 
 and three random effects (the genetic additive effect $g$, 
 the house-hold effect $c$, and the residual effect $e$).
 
@@ -171,16 +173,16 @@ $$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 
 The first $g$ term accounts for the additive genetic effect
 with the covariance matrix $A = 2 K$, 
 where $K$ is the kinship matrix.
-`SOLAR` estimates the empirical kinship matrix based on the identifier(ID) fields in the pedigree data,
-such as `id` individual ID, `sex` gender, `fam` family ID, `fa` father ID, `mo` mother ID,
-and `mztwin` indicator of identical individuals, such as monozygotic twins or triplets
+`SOLAR` estimates the empirical kinship matrix based on the identifier (ID) fields in the pedigree data,
+such as individual ID `id`, gender `sex`, family ID `fam`, father ID `fa`, mother ID `mo`,
+and indicator of identical individuals, e.g. monozygotic twins, `mztwin`
 [@SOLARDOC, Appendix 1, [file-pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#file-pedigree) command].
 
-The second $c$ term represents any annotated environmental effect.
+The second $c$ term represents an annotated environmental effect.
 It is named as a house-hold effect, but it is generally related to the sharing of any non-genetic factor among individuals.
-For the house-hold grouping the pedigree data must contain a house-hold ID field,
-and the expected field name is `hhid`.
-By default, `SOLAR` creates `Pedigree-Household Groups` based on the `hhid` identifiers.
+The house-hold effect is included in the analysis if the pedigree data contain a house-hold ID field
+(the expected field name is `hhid`).
+`SOLAR` automatically creates `Pedigree-Household Groups` based on the `hhid` identifiers.
 That means that pedigrees and household groups are merged into larger groups,
 which contain every individual in the same pedigree as well as every individual that has the same 
 `hhid` as any individual in the pedigree [@SOLARDOC, Section 9.3 [Household Group Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#household)]. 
@@ -195,24 +197,205 @@ It is important to note that the `residual` command in `SOLAR`
 returns the covariate-free value of a trait under study, expressed as $y - X \beta$,
 and the returned value is not the residual vector $e$ given in the equation of the polygenic model.
 
-Dominance effect.
+The polygenic term $g$ represents the additive genetic effect by default.
+The incorporation of the dominance effect into `SOLAR` models is also possible,
+but it is attributed to advanced modeling topics [@SOLARDOC, Section 9.4 [Dominance Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#dominance)].
+The `SOLAR`'s developers suggest that the dominance variance component are unlikely useful in quantitative trait mapping, 
+particularly in human genetic analysis, as only bi-lineal relatives contribute to this component. 
 
-Discrete trait.
+`SOLAR` is able to work with discrete traits,
+which possible values are coded as two consecutive integers, for example, `0` and `1`
+[@SOLARDOC, Appendix 1, [discrete-notes](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#discrete-notes)].
+`SOLAR` uses a _liability threshold model_ to handle discrete traits [@Duggirala1997],
+and more details about implementation and practical notes 
+are available in  [@SOLARDOC, Section 9.1 [Discrete Traits](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html)].
+`SOLAR` authors recommend to work with quantitative traits whenever it is possible.
+The user is able to disable the transformation of discrete traits, if it is necessary.
 
+The likelihood-based statistics, in particular Likelihood Ratio Tests (LRTs),
+is used for the inference of the linear mixed models implemented in `SOLAR`.
+The following table shows the alternative models used to test the significance of the random effects $g$ and $c$.
 
 | Alternative model   | Free parameters | Restricted parameters  |
 |----------|-----------|-------|
 | No polygenic effect | $\beta$, $\sigma_c^2$, $\sigma_e^2$      | $\sigma_g^2$ = 0|
+| No house-hold effect | $\beta$, $\sigma_g^2$, $\sigma_e^2$     | $\sigma_c^2$ = 0|
 
+Under the assumption of multivariate normality, 
+the LRT statistic is asymptotically distributed 
+as a $\frac{1}{2}:\frac{1}{2}$ mixture of of a $\chi_1^2$ variable
+and a point mass at the origin [@Blangero2000].
+This statement is applied to any LRT performed for parameters like $\sigma_g^2$,
+which is greater or equal to `0` by definition.
+
+`SOLAR` takes the decision of rejecting the house-hold effect 
+by considering two factors, the test results and the value of $\sigma_c^2$ parameter.
+If value of $\sigma_c^2$ is non-zero, the house-hold effect is retained in the polygenic model,
+nevertheless the effect is not significant.
+The user has an option to force the rejection of the house-hold effect if it is necessary.
+
+The tests applied to fixed effects (covariates) are also performed by means of LRTs.
+In the table given below the alternative model for the test of significance of `age` covariate is shown.
 
 | Alternative model   | Free parameters | Restricted parameters  |
 |----------|-----------|-------|
 | No age effect | $\sigma_g^2$, $\sigma_c^2$, $\sigma_e^2$      | $\beta_{age}$ = 0|
 
 
+### Multivariate polygenic model
+
+In principle, one can estimate the multivariate polygenic model 
+by simply performing the univariate analysis in an appropriate way.
+Consider two traits $y_1$ and $y_2$ measured in each of $n$ individuals,
+assuming that each trait follows the same univariate polygenic analysis.
+Then the $2 \times n$ dimensional column vector of observations 
+is denoted by the stack of univariate vectors,
+and the polygenic model has the matrix form:
+
+$$
+\begin{pmatrix}
+  y_1 \\
+  y_2
+\end{pmatrix}_{2n \times 1} =
+\begin{pmatrix}
+  X_1 & 0 \\
+  0 & X_2
+\end{pmatrix}_{2n \times nk}
+\begin{pmatrix}
+  \beta_1 \\
+  \beta_2
+\end{pmatrix}_{2n \times 1}
++
+\begin{pmatrix}
+  g_1 \\
+  g_2
+\end{pmatrix}_{2n \times 1}
++
+\begin{pmatrix}
+  e_1 \\
+  e_2
+\end{pmatrix}_{2n \times 1}
+$$
+
+$$
+G_{2n \times 2n} = C_{2 \times 2} \otimes A_{n \times n} =
+\begin{pmatrix}
+  c_{11} A & c_{12} A \\
+  c_{21} A & c_{21} A
+\end{pmatrix} =
+\begin{pmatrix}
+  \sigma_{1}^2 A & \rho \sigma_{1} \sigma_{2} A \\
+  \rho \sigma_{1} \sigma_{2} A & \sigma_{2}^2 A
+\end{pmatrix}_{g}
+$$
+
+$$
+R_{2n \times 2n} = E_{2 \times 2} \otimes I_{n \times n} =
+\begin{pmatrix}
+  e_{11} I & e_{12} I \\
+  e_{21} I & e_{21} I
+\end{pmatrix} =
+\begin{pmatrix}
+  \sigma_{1}^2 I & \rho \sigma_{1} \sigma_{2} I \\
+  \rho \sigma_{1} \sigma_{2} I & \sigma_{2}^2 I
+\end{pmatrix}_{e}
+$$
+
+The model can be generalized to $k$ traits,
+and other random effects such as house-hold can be added in the similar way.
+The _Kronecker product_ notation $\otimes$ is convinient for denoting the covariance matrices.
+More details on the multivariate analysis are given in [@Lynch1998, Chapter 26, Multiple Traits, pp. 774].
+
+The multivariate analysis implemented in `SOLAR` allows for any number of traits,
+but the tests for significance of the correlation coefficients are performed only for the bivariate models.
+The following table describes the main LRTs available in `SOLAR` for the bivariate analysis.
+
+| Alternative model | Free parameters | Restricted parameters |
+---|---|---|
+No genetic correlation | $(\sigma_1^2, \sigma_2^2)_g$, $(\sigma_1^2, \sigma_2^2, \rho)_e$ | $\rho_g = 0$ |
+Complete pleiotropy  | $(\sigma_1^2, \sigma_2^2)_g$, $(\sigma_1^2, \sigma_2^2, \rho)_e$ | $\rho_g = 1$ |
+No environmental correlation | $(\sigma_1^2, \sigma_2^2, \rho)_g$, $(\sigma_1^2, \sigma_2^2)_e$ | $\rho_e = 0$ |
+
+It is important to note that the transformation of discrete traits in the multivariate analysis
+is automatically performed by `SOLAR`.
+
 ## Linkage model in `SOLAR`
 
+`SOLAR` introduces sequential oligogenic linkage analysis, as stated in its name abbreviation.
+Consider the linkage model with a single QTL, which is described by another random effect $q$
+in comparison with the polygenic model.
+
+$$y = X\beta + g + c + q + e$$
+
+$$
+  \mbox{ where } \mbox{ } \mbox{ } g \sim (0, \sigma_g^2 A) 
+  \mbox{ and } \mbox{ } \mbox{ } c \sim (0, \sigma_c^2 H)
+  \mbox{ and } \mbox{ } \mbox{ } q \sim (0, \sigma_q^2 M)
+  \mbox{ and } \mbox{ } \mbox{ } e \sim (0, \sigma_e^2 I)
+$$ 
+  
+$$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 I + \sigma_q^2 M + \sigma_e^2)$$
+
+The QTL under study $q$ corresponds to a specific position in the genome and an identity-by-descent (IBD) matrix.
+The genome-wide linkage analysis assumes that the highly informative markers, such as micro-satellites, are available in the study,
+in order to estimate the two-point or multipoint IBD matrices by `SOLAR` or other specific program like `MERLIN`.
+Once the IBD matrices are calculated, the genome-wide scan is conducted by sequentially running the linkage model for each genome position.
+
+The alternative model for testing the significance of a single QTL effect 
+is the same as the polygenic model.
+
+Alternative model | Free parameters | Restricted parameters |
+---|---|---|
+No linkage | $\beta, \sigma_g^2, \sigma_c^2$, $\sigma_e^2$ | $\sigma_q^2$ = 0 |
+
+Traditionally, the logarithm (base 10) of odds (LOD) values are used to score the QTLs.
+If the LRT statistics for the linkage model is denoted as $\Lambda$, 
+then the correspondent LOD score is equal to $\Lambda / (2 ln(10))$.
+
+`SOLAR` also allows for multi-pass linkage scan,
+that means that any further scan can be conditioned to QTLs found in the previous scans.
+For example, the second-pass scan is conditioned to the previously found QTL $q_1$ has the form:
+
+$$y = X\beta + g + c + q_1 + q + e$$
+
+The second-pass LRT test now looks like in the table below.
+
+Alternative model | Free parameters | Restricted parameters |
+---|---|---|
+No linkage | $\beta, \sigma_g^2, \sigma_c^2$, $\sigma_{q_1}^2$, $\sigma_e^2$ | $\sigma_q^2$ = 0 |
+
+The linkage model is extended to deal with many traits or discrete traits in the same way as for the polygenic model.
+
+Additional information related to the linkage modeling in `SOLAR` 
+can be found in related publications [@Almasy1998], [@Almasy1997], [@Williams1999],
+the `SOLAR` tutorial [@SOLARDOC, Chapter 3 [Tutorial](http://helix.nih.gov/Documentation/solar-6.6.2-doc/03.chapter.html)],
+and the `SOLAR` manual, for example, [@SOLARDOC, Apendix 1, [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) command].
+
 ## Association model in `SOLAR`
+
+A basic association model in `SOLAR` is extended from the polygenic model
+by adding a new covariates `snp`.
+
+$$ y = X\beta + \beta_{snp} * snp + g + c + e$$
+
+$$\mbox{ where } \mbox{ } \mbox{ } g \sim (0, \sigma_g^2 A) 
+  \mbox{ and } \mbox{ } \mbox{ } c \sim (0, \sigma_c^2 H)
+  \mbox{ and } \mbox{ } \mbox{ } e \sim (0, \sigma_e^2 I)$$ 
+  
+$$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 H + \sigma_e^2 I)$$
+
+The genome-wide association scan process SNPs variants under the study according to the given equation one by one.
+The p-value of association between trait and SNP is based on LRT test
+with the alternative model outlined in the table below.
+This alternative model is the same as the polygenic model.
+
+Alternative model | Free parameters | Restricted parameters |
+---|---|---|
+No association | $\beta, \sigma_g^2, \sigma_c^2$, $\sigma_e^2$ | $\beta_{snp} = 0$ |
+
+More details on implementation of the association analysis in `SOLAR`
+can be found in the `SOLAR` manual, for example, [@SOLARDOC, Apendix 1, [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) and [snp](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#snp) commands].
+
 
 # Software
 
