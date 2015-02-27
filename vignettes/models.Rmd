@@ -15,7 +15,7 @@ output:
 bibliography: ref.bib
 ---
 
-```{r chunk_opt}
+```{r chunk_opt, echo = FALSE}
 opts_chunk$set(eval = TRUE)
 ```
 
@@ -322,8 +322,7 @@ is automatically performed by `SOLAR`.
 ## Linkage model in `SOLAR`
 
 `SOLAR` introduces sequential oligogenic linkage analysis, as stated in its name abbreviation.
-Consider the linkage model with a single QTL, which is described by another random effect $q$
-in comparison with the polygenic model.
+Consider the linkage model with a single QTL, which is described by another random effect $q$.
 
 $$y = X\beta + g + c + q + e$$
 
@@ -354,7 +353,7 @@ then the correspondent LOD score is equal to $\Lambda / (2 ln(10))$.
 
 `SOLAR` also allows for multi-pass linkage scan,
 that means that any further scan can be conditioned to QTLs found in the previous scans.
-For example, the second-pass scan is conditioned to the previously found QTL $q_1$ has the form:
+For example, the second-pass scan conditioned to the previously found QTL $q_1$ has the form:
 
 $$y = X\beta + g + c + q_1 + q + e$$
 
@@ -374,7 +373,7 @@ and the `SOLAR` manual, for example, [@SOLARDOC, Apendix 1, [multipoint](http://
 ## Association model in `SOLAR`
 
 A basic association model in `SOLAR` is extended from the polygenic model
-by adding a new covariates `snp`.
+by simply adding a new covariate (fixed effect) `snp`.
 
 $$ y = X\beta + \beta_{snp} * snp + g + c + e$$
 
@@ -384,8 +383,9 @@ $$\mbox{ where } \mbox{ } \mbox{ } g \sim (0, \sigma_g^2 A)
   
 $$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 H + \sigma_e^2 I)$$
 
-The genome-wide association scan process SNPs variants under the study according to the given equation one by one.
-The p-value of association between trait and SNP is based on LRT test
+In the genome-wide association scan `SOLAR` passes through SNPs variants under the study one by one 
+according to the equation given above.
+The p-value of association between trait $y$ and SNP $snp$ is again based on LRT test
 with the alternative model outlined in the table below.
 This alternative model is the same as the polygenic model.
 
@@ -399,14 +399,138 @@ can be found in the `SOLAR` manual, for example, [@SOLARDOC, Apendix 1, [mga](ht
 
 # Software
 
+The idea of the proposed software (the R package `solarius`) 
+is to perform the calculus in `SOLAR` at back-end
+and to offer the user interface in R at front-end. 
+The table given below shows a basic description of the software
+via implementation of the main three models: polygenic, association and linkage.
+
+
+|Model | `SOLAR` command | `solarius` function | `solarius` S3 classes of returned object| Parallel computation | 
+|---|---|---|---|---|
+| Polygenic   | `polygenic` | `solarPolygenic` | `solarPolygenic` | None | 
+| Association | `mga` | `solarAssoc`     | `solarAssoc`, `solarPolygenic` | Automatic or custom (by SNP file) | 
+| Linkage     | `multipoint` | `solarMultipoint`| `solarMultipoint`, `solarPolygenic` | Custom (by chromosome) | 
+
+One can see how the software benefits from both `SOLAR` and R sides.
+On the side of `SOLAR`, the `SOLAR` commands `polygenic`, `mga` and `multipoint`
+perform the correspondent analysis controlled by a set of parameters and settings.
+On the side of `R`, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint`
+prepare the input data for the analysis, pass the arguments to the commands 
+and set up other necessary settings, and finally read the output `SOLAR` files 
+and store the results into R objects of S3 classes in R.
+
+The main advantage of running the `SOLAR` models in `solarius` instead of `SOLAR`
+is that the analysis is conduced by only one function call,
+while the same analysis in `SOLAR` could require typing more commands 
+with appropriate options and settings to be learned from the `SOLAR` manual.
+The `solarius` functions just automate the analysis flow and 
+keep an option for configuration via the R function arguments, if such configuration is required.
+Another advantage of using the R package `solarius` 
+is that the results are stored in objects of specially designed S3 classes
+with associated S3 methods like print, summary, plot and others.
+
+The last column of the table given above contains the information
+related to parallel computation available for the models.
+The implementation of parallel calculations was straightforward in `solarius` package, 
+since the association and linkage analyses are _embarrassingly parallel_ problems
+(easily divisible into different identical independent task)
+and the R environment offers a number of packages with parallel interfaces.
+
+More information about the `solarius` functions is available in the software manual of the package,
+and the practical guide of using the functions is presented in the next section dedicated to examples.
+Meantime, some points should to be stressed to describe some other features and drawbacks of the `solarius` package.
+
+* The `solarius` functions, by default, do not create any directories visible to the user,
+  while the analysis flow in `SOLAR` is heavily based on storing the data in directories and files.
+  However, the input phenotype and genotype data might be stored in CSV data format and passed to the functions.
+  The user can specify a special directory (`dir` argument for the `solarPolygenic`, `solarAssoc` and `solarMultipoint` functions), 
+  where the `SOLAR` output will be saved in addition to the output R object.
+* The `tcl` scripts used by `SOLAR` for automation are not visible to the user.
+  The routine of executing either `SOLAR` separate commands or a block of commands in a `tcl` script
+  is internally organized in the functions of `solarius`.
+* The work on parsing the output of `SOLAR` analysis is implemented in the functions in `solarius`,
+  and the user does not need to manually look for the analysis results.
+* The `SOLAR` commands used to compute the analysis and some `SOLAR` output files
+  are saved in the returned objects.
+  This feature might be necessary for those users who are familiar with `SOLAR`.
+  It is also helps to go back to `SOLAR` and repeat or extend the analysis in the `SOLAR` environment,
+  if it is necessary.
+* The package `solarius` offers only three analyses 
+  via the most powerful `SOLAR` commands `polygenic`, `mga` and `multipoint`.
+  If a more specific genetic analysis is required, the user need to go back to `SOLAR`.
+
 ## Installation
+
+The installation process has three steps: install `SOLAR`, register `SOLAR` and install `solarius`.
+
+### `SOLAR` installation
+
+The `SOLAR` distribution is available on the official web page [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
+for the main operating systems (Linux, Mac OS, Windows).
+
+In the case of [Linux](http://solar.txbiomedgenetics.org/solarlinux.html), 
+the installation files are compressed in `solar_linux.tar.gz` archive.
+Once the archive is downloaded to a local machine of the user and 
+the installation files are unpacked, there are `README` file and `install_solar` script, which installs the program. 
+In particular, the script copies the necessary library, binary and documentation files
+into an installation directory defined by the user.
+A special bash script called `solar` is also created and copied to the system path defined by the user,
+e.g. `/usr/local/bin/solar`, so that the program can be executed by simply typing `solar` in the terminal.
+
+An example of the installation command might be the following.
+
+```
+./install_solar /opt/appl/solar/7.6.6 /usr/local/bin solar
+```
+
+As a result of execution of the command,
+the library, binary and documentation files of `SOLAR` version `7.6.6`
+will be copied to `/opt/appl/solar/7.6.6` directory,
+and `solar` execution script will be copied to `/usr/local/bin` system directory.
+
+After the installation process the new user 
+is required to obtain a registration key as is explained by the message 
+that appears when `SOLAR` program starts.
+The registration key has to be stored in `.solar_reg` file in the home directory of the user.
+
+Once both installation an registration process are finished,
+something similar to the following message will be displayed when `SOLAR` is executed.
+
+```
+SOLAR Eclipse version 7.6.6 (Experimental), last updated on December 11, 2014
+Copyright (c) 1995-2014 Texas Biomedical Research Institute
+Enter help for help, exit to exit, doc to browse documentation.
+
+solar>
+```
+
+### `solarius` installation
+
+`solarius` package is not yet in the CRAN repository for R packages [http://cran.r-project.org/](http://cran.r-project.org/),
+so it can not be install by typing the standard command `install.packages`.
+Instead, the installation is easy with the R package `devtools`,
+that allows to install any package hosted in the GitHub web page [https://github.com](https://github.com).
+
+The code repository of `solarius` package is hosted in the public GitHub repository 
+of the UGCD group [https://github.com/ugcd/solarius](https://github.com/ugcd/solarius).
+The installation commands are the following.
+
+```
+library(devtools)
+install_github("ugcd/solarius")
+```
 
 ## `solarius` R package 
 
-```{r inc_solarius}
+```{r fake_inc_solarius, echo = FALSE, message = FALSE}
 #library(solarius)
 library(devtools)
 load_all("../")
+```
+
+```{r inc_solarius, eval = FALSE}
+library(solarius)
 ```
 
 ## Data sets
@@ -414,7 +538,11 @@ load_all("../")
 * GAW10 data distributed within `SOLAR`
 * Simulated data `dat30` from `multic` R package [@Andrade2006]
 * Simulated data `dat50` from `FFBSKAT` R package
-* GAIT1 data 
+
+
+### `dat30` data set
+
+### `dat50` data set
 
 `dat50` data set is adapted from `example.data` data set in 
 [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) R package. 
@@ -427,7 +555,10 @@ The following variables are in the data set.
   The covariates are coded as integers 0, 1 and 2.
 * `snpdata`: A data.frame of anotation for genetic variantes. 
    The variables iclude `name` of the variant, the chromose `chrom`, `position` in bp and `gene`.
-* `kin`: A kinship matrix for 66 individuals.     
+* `kin`: A kinship matrix for 66 individuals.
+
+
+### GAW10 data set
 
 
 # Examples
@@ -462,18 +593,18 @@ histKinship2(kin2.dat30)
 
 ### Plot pedigrees
 
-```{r dat30_ped_2}
+```{r dat30_ped_2, cache = TRUE}
 plotPed(dat30, 2)
 ```
 
 ### Plot residuals
 
-```{r res_mod}
+```{r res_mod, cache = TRUE}
 mod <- solarPolygenic(trait1 ~ age, dat30)
 mod
 ```
 
-```{r res}
+```{r res, cache = TRUE}
 r <- residuals(mod)
 summary(r)
 ```
@@ -483,7 +614,6 @@ plotResQQ(mod)
 plotResQQ(mod, labels = TRUE)
 plotRes(mod)
 ```
-
 
 ## Polygenic model (univariate)
 
