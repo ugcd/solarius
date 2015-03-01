@@ -52,7 +52,8 @@ plot.solarMultipoint <- function(x,
   
   ### plot  
   ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr, scales = "free_x") + 
-    ylim(ymin, ymax) + labs(title = getFormula(x))
+    ylim(ymin, ymax) + labs(title = getFormula(x)) +
+    theme_bw()
 }
 
 #' @method summary solarMultipoint

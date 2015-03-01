@@ -173,7 +173,7 @@ $$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 
 The first $g$ term accounts for the additive genetic effect
 with the covariance matrix $A = 2 K$, 
 where $K$ is the kinship matrix.
-`SOLAR` estimates the empirical kinship matrix based on the identifier (ID) fields in the pedigree data,
+`SOLAR` estimates the _empirical_ kinship matrix based on the identifier (ID) fields in the pedigree data,
 such as individual ID `id`, gender `sex`, family ID `fam`, father ID `fa`, mother ID `mo`,
 and indicator of identical individuals, e.g. monozygotic twins, `mztwin`
 [@SOLARDOC, Appendix 1, [file-pedigree](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#file-pedigree) command].
@@ -200,7 +200,7 @@ and the returned value is not the residual vector $e$ given in the equation of t
 The polygenic term $g$ represents the additive genetic effect by default.
 The incorporation of the dominance effect into `SOLAR` models is also possible,
 but it is attributed to advanced modeling topics [@SOLARDOC, Section 9.4 [Dominance Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#dominance)].
-The `SOLAR`'s developers suggest that the dominance variance component are unlikely useful in quantitative trait mapping, 
+The `SOLAR`'s developers suggest that the dominance variance component is unlikely useful in quantitative trait mapping, 
 particularly in human genetic analysis, as only bi-lineal relatives contribute to this component. 
 
 `SOLAR` is able to work with discrete traits,
@@ -242,7 +242,7 @@ In the table given below the alternative model for the test of significance of `
 | No age effect | $\sigma_g^2$, $\sigma_c^2$, $\sigma_e^2$      | $\beta_{age}$ = 0|
 
 
-### Multivariate polygenic model
+### Multivariate polygenic model in `SOLAR`
 
 In principle, one can estimate the multivariate polygenic model 
 by simply performing the univariate analysis in an appropriate way.
@@ -414,7 +414,8 @@ via implementation of the main three models: polygenic, association and linkage.
 
 One can see how the software benefits from both `SOLAR` and R sides.
 On the side of `SOLAR`, the `SOLAR` commands `polygenic`, `mga` and `multipoint`
-perform the correspondent analysis controlled by a set of parameters and settings.
+do all the hard job on estimating the variance component models
+with control via a set of parameters and settings.
 On the side of `R`, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint`
 prepare the input data for the analysis, pass the arguments to the commands 
 and set up other necessary settings, and finally read the output `SOLAR` files 
@@ -423,16 +424,16 @@ and store the results into R objects of S3 classes in R.
 The main advantage of running the `SOLAR` models in `solarius` instead of `SOLAR`
 is that the analysis is conduced by only one function call,
 while the same analysis in `SOLAR` could require typing more commands 
-with appropriate options and settings to be learned from the `SOLAR` manual.
+with appropriate options and settings (to be learned from the `SOLAR` manual).
 The `solarius` functions just automate the analysis flow and 
-keep an option for configuration via the R function arguments, if such configuration is required.
+keep configuration options via the R function arguments, if such configuration is required. 
 Another advantage of using the R package `solarius` 
-is that the results are stored in objects of specially designed S3 classes
-with associated S3 methods like print, summary, plot and others.
+is that the results are stored in objects of especially designed S3 classes
+with associated methods like print, summary, plot and others.
 
 The last column of the table given above contains the information
 related to parallel computation available for the models.
-The implementation of parallel calculations was straightforward in `solarius` package, 
+The implementation of parallel calculations is straightforward in `solarius` package, 
 since the association and linkage analyses are _embarrassingly parallel_ problems
 (easily divisible into different identical independent task)
 and the R environment offers a number of packages with parallel interfaces.
@@ -458,7 +459,7 @@ Meantime, some points should to be stressed to describe some other features and 
   if it is necessary.
 * The package `solarius` offers only three analyses 
   via the most powerful `SOLAR` commands `polygenic`, `mga` and `multipoint`.
-  If a more specific genetic analysis is required, the user need to go back to `SOLAR`.
+  If a more specific genetic analysis is required, the user needs to go back to `SOLAR`.
 
 ## Installation
 
@@ -467,7 +468,7 @@ The installation process has three steps: install `SOLAR`, register `SOLAR` and 
 ### `SOLAR` installation
 
 The `SOLAR` distribution is available on the official web page [http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)
-for the main operating systems (Linux, Mac OS, Windows).
+for the most popular operating systems (Linux, Mac OS, Windows).
 
 In the case of [Linux](http://solar.txbiomedgenetics.org/solarlinux.html), 
 the installation files are compressed in `solar_linux.tar.gz` archive.
@@ -490,11 +491,11 @@ will be copied to `/opt/appl/solar/7.6.6` directory,
 and `solar` execution script will be copied to `/usr/local/bin` system directory.
 
 After the installation process the new user 
-is required to obtain a registration key as is explained by the message 
-that appears when `SOLAR` program starts.
+is required to obtain a registration key,
+as it is explained by the message that appears when `SOLAR` program starts.
 The registration key has to be stored in `.solar_reg` file in the home directory of the user.
 
-Once both installation an registration process are finished,
+Once both installation an registration processes are finished,
 something similar to the following message will be displayed when `SOLAR` is executed.
 
 ```
@@ -507,13 +508,11 @@ solar>
 
 ### `solarius` installation
 
-`solarius` package is not yet in the CRAN repository for R packages [http://cran.r-project.org/](http://cran.r-project.org/),
-so it can not be install by typing the standard command `install.packages`.
-Instead, the installation is easy with the R package `devtools`,
-that allows to install any package hosted in the GitHub web page [https://github.com](https://github.com).
-
 The code repository of `solarius` package is hosted in the public GitHub repository 
 of the UGCD group [https://github.com/ugcd/solarius](https://github.com/ugcd/solarius).
+`solarius` package is not yet in the CRAN repository for R packages [http://cran.r-project.org/](http://cran.r-project.org/),
+so it can not be install by calling the usual R function `install.packages`.
+Instead, the R package `devtools` allows to install any package hosted in the GitHub web page [https://github.com](https://github.com).
 The installation commands are the following.
 
 ```
@@ -521,7 +520,24 @@ library(devtools)
 install_github("ugcd/solarius")
 ```
 
-## `solarius` R package 
+## `solarius` R package structure
+
+`solarius` is organized as a standard R package,
+and its structure can be seen in the code repository web site [https://github.com/ugcd/solarius](https://github.com/ugcd/solarius).
+
+* [R](https://github.com/ugcd/solarius/tree/master/R) directory contains `*.R` files with functions, classes and methods.
+* [data](https://github.com/ugcd/solarius/tree/master/data) directory has data sets distributed with the package and stored in `*.RData` files.
+* [inst](https://github.com/ugcd/solarius/tree/master/inst) directory includes directories,
+  where some extra data in any format can be stored for the R package.
+  Sub-directories in `inst` directory will be copied to the installation directory of the package 
+  and, thus, will be available within the package via `system.file` function.
+    * [inst/examples](https://github.com/ugcd/solarius/tree/master/inst/examples) has `*.R` scripts with code examples.
+    * [inst/extdata](https://github.com/ugcd/solarius/tree/master/inst/extdata) mostly contains `SOLAR` data files
+    for data sets of the package.
+    * [inst/tests](https://github.com/ugcd/solarius/tree/master/inst/tests) has `*.R` scripts for testing units
+    during development of the package (R package `testthat`). 
+
+To start using `solarius` package, the user needs to load the package with `library` function.
 
 ```{r fake_inc_solarius, echo = FALSE, message = FALSE}
 #library(solarius)
@@ -535,99 +551,226 @@ library(solarius)
 
 ## Data sets
 
-* GAW10 data distributed within `SOLAR`
-* Simulated data `dat30` from `multic` R package [@Andrade2006]
-* Simulated data `dat50` from `FFBSKAT` R package
+The genome-wide QTL analysis typically involves large-scale data sets.
+Data sets distributed within `solarius` package contain relatively small simulated data,
+which are used for reproducible demonstrations of how functions of the package work.
+There are three data sets available in `solarius`:
 
+* Simulated data from the R package `multic` [@Andrade2006] (polygenic and linkage models);
+* Simulated data `dat50` from the R package [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) (polygenic model with custom kinship matrix and association model);
+* GAW10 data distributed within `SOLAR` (polygenic and linkage models).
 
-### `dat30` data set
+The simulated data from `multic` R package 
+are distributed in `SOLAR` format 
+in [inst/extdata/solarOutput](https://github.com/ugcd/solarius/tree/master/inst/extdata/solarOutput)
+directory of `solarius` package.
+12000 individuals in 200 families are included in the study.
+The simulated phenotypes include two traits `trait1` and `trait2` and two covariates `age` and `sex`.
+The two traits possess a high genetic correlation.
+For the linkage analysis 6 IBD matrices for chromosome 5 are are available from `multic` package.
+These six matrices are duplicated for chromosome 2 in `solarius`,
+in order to test parallel calculation (separated by chromosome) of the linkage model.
 
-### `dat50` data set
+A smaller subset of the simulated data from `multic` package is provided in `dat30` data set
+(`dat30.RData` file in [data](https://github.com/ugcd/solarius/tree/master/data) directory).
+This smaller data set contains only 174 individuals in 29 families.
 
-`dat50` data set is adapted from `example.data` data set in 
-[FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) R package. 
-The following variables are in the data set.
+The simulated data from the R package `FFBSKAT` are stored in `dat50` data set
+(`dat50.RData` file in [data](https://github.com/ugcd/solarius/tree/master/data) directory).
+This data set is adapted from `example.data` data set in the R package `FFBSKAT`. 
+The following variables are included.
 
-* `phenodata`: A data.frame with the phenotypes `trait`, `sex` and `age`.
+* `phenodata`: A data.frame with the phenotypes `trait`, `sex` and `age` given for 66 individuals (related and unrelated).
 * `genodata`: A matrix of 50 genetic variants (columns) given for 66 individuals (rows).
-  The genotypes are coded in the format as `1/1`, `1/2` and `2/2`.
-* `genocovdata`: A matrix of covariates derived from the genotype data (additive model).
+  The genotypes are coded in the format such as `1/1`, `1/2` and `2/2`.
+* `genocovdata`: A matrix of covariates derived from the genotype data (the additive model).
   The covariates are coded as integers 0, 1 and 2.
-* `snpdata`: A data.frame of anotation for genetic variantes. 
-   The variables iclude `name` of the variant, the chromose `chrom`, `position` in bp and `gene`.
+* `snpdata`: A data.frame of annotation for genetic variants. 
+   The variables name of the variant `name`, chromosome `chrom`, 
+   gene name `gene` and position in bp `position`.
 * `kin`: A kinship matrix for 66 individuals.
 
-
-### GAW10 data set
-
+The simulated data from the workshop GAW10 are described elsewhere
+[@SOLARDOC, Chapter 3 [Tutorial](http://helix.nih.gov/Documentation/solar-6.6.2-doc/03.chapter.html)].
 
 # Examples
 
 ## Loading data
 
+To load both data sets `dat30` and `dat50`,
+the user needs to use the standard R function `data`
+A quick view to the data tables might be performed by means of `str` function.
+
+```{r dat30, cache = TRUE}
+data(dat30)
+str(dat30)
+```
+
+```{r dat50, cache = TRUE}
+data(dat50)
+str(phenodata)
+str(genodata)
+str(genocovdata)
+```
+
+`loadMulticPhen` function in `solarius` package 
+loads the complete version of the data from the R package `multic`
+(12000 individuals).
+
+```{r multic, cache = TRUE}
+mdat <- loadMulticPhen()
+str(mdat)
+```
+
+`loadExamplesPhen` function
+returns the GAW10 data sets available in `SOLAR`.
+
+```{r ex, cache = TRUE}
+gawdat <- loadExamplesPhen()
+str(gawdat)
+```
+
+Both `loadMulticPhen` and `loadExamplesPhen` functions
+are based on a more general function `readPhen`,
+which reads the phenotype data from text files of a table format.
+The data from the R package `multic` can be also loaded by means of `readPhen` function.
+
+```{r, eval = FALSE}
+dat.dir <- system.file("extdata", "solarOutput", package = "solarius")
+
+mdat <- readPhen(phen.file = file.path(dat.dir, "simulated.phen"), sep.phen = ",", 
+  ped.file = file.path(dat.dir, "simulated.ped"), sep.ped = ",")
+```
+
 ## Data exploration
 
 ### Plot kinship matrix
 
-```{r kin_dat}
-data(dat30)
-data(dat50) # phenos in `phenodata`, kinship in `kin`
+The two times kinship coefficients describe the relatedness among individuals
+in the family-based sample.
+Two functions `solarKinship2` and `plotKinship2`
+allows to compute and plot the kinship matirx of a given data set.
+`solarKinship2` function runs `SOLAR` for estimation of the kinship coefficients
+based on the ID fields in the data.
+The returned value of the function is two times kinship coefficients in a matrix form.
+`plotKinship2` plots the two times kinship matrix by using the R package `Matrix`.
+
+For example, the kinship matrix for `dat50` data sets has the following image.
+
+```{r kin_dat30, cache = TRUE}
+plotKinship2(2*kin)
 ```
+
+One can see that both unrelated and related individuals are presented in `dat50` data set.
+
+The relationships among individuals in `dat30` data set 
+is examined in the following two lines of code.
 
 ```{r kin_solar, cache = TRUE}
 kin2.dat30 <- solarKinship2(dat30)
+plotKinship2(kin2.dat30)
 ```
 
-```{r kin_plot, cache = TRUE}
-plotKinship2(kin2.dat30)
-plotKinship2(2*kin)
-```
+The structure of patterns in the kinship matrix can be explored more closely
+if the first 30 individuals are plotted.
 
 ```{r sub_kin_plot, cache = TRUE}
 plotKinship2(kin2.dat30[1:30, 1:30])
 ```
 
+It seems that the simulated data 
+include only sib-pair relationships.
+Such an observation can be visually confirmed 
+by `histKinship2` function.
+
 ```{r hist_kin, cache = TRUE}
 histKinship2(kin2.dat30)
 ```
 
+One see that all the related individuals have the twice kinship coefficient equal to `0.5`.
+The unique values of `kin2.dat30` matrix can also be extracted by the following code.
+
+```{r unique_k2, cahce = TRUE}
+unique(as.vector(kin2.dat30))
+```
+
 ### Plot pedigrees
+
+The family trees are plotted by `plotPed`,
+which reuses some routines from the R package `kinship2`.
+The family with index `2` from `dat30` data set is plotted in the following code.
 
 ```{r dat30_ped_2, cache = TRUE}
 plotPed(dat30, 2)
 ```
 
-### Plot residuals
+### Transform traits
 
-```{r res_mod, cache = TRUE}
-mod <- solarPolygenic(trait1 ~ age, dat30)
-mod
+To show an example of trait transformation,
+a trait with a _poisoned_ distribution `exp_trait1` is created in `dat30` data set.
+
+```{r exp_trait1}
+dat30 <- mutate(dat30,
+  exp_trait1 = exp(trait1))
 ```
 
-```{r res, cache = TRUE}
-r <- residuals(mod)
-summary(r)
+The list of available transforms in `soalrius` 
+is returned by `availableTransforms` function.
+
+```{r}
+availableTransforms()
 ```
 
-```{r plot_res_demo, cache = TRUE}
-plotResQQ(mod)
-plotResQQ(mod, labels = TRUE)
-plotRes(mod)
+The following code plots the distribution of the original values of `exp_trait1`
+and its diffrent transformations.
+
+```{r plot_transform, cache = TRUE}
+library(ggplot2)
+library(gridExtra)
+
+theme_set(theme_bw())
+
+with(dat30, {
+  grid.arrange(
+    qplot(exp_trait1),
+    qplot(transformTrait(exp_trait1, "out")),
+    qplot(transformTrait(exp_trait1, "log")),
+    qplot(transformTrait(exp_trait1, "inormal"))
+  )
+})
 ```
+
 
 ## Polygenic model (univariate)
+
+`solarPolygenic` function runs the polygenic analysis in `SOLAR` 
+and returns back the results in R.
+The basic call looks like the standard call of `lm` function with the formula interface.
 
 ```{r M1, cache = TRUE}
 M1 <- solarPolygenic(trait1 ~ age + sex, dat30)
 M1
 ```
 
+The print method for the returned object of class `solarPolygenic`
+shows the output produced by `SOLAR`.
+The tables of the results are printed by `summary` method.
+
+```{r M1_sum, cache = TRUE}
+summary(M1)
+```
+
 ### Testing covariates
+
+By default `SOLAR` does not perform the LRT tests for the covariates.
+`covtest` argument of `solarPolygenic` function tells to `SOLAR` to make this job.
 
 ```{r M2, cache = TRUE}
 M2 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 M2
 ```
+
+The test statistics and p-values are stored in `cf` slot of the returned object `M2`.
 
 ```{r M2_cf, cache = TRUE}
 M2$cf
@@ -635,20 +778,28 @@ M2$cf
 
 ### Custom kinship matrix
 
-`dat50` data set is used.
+The custom kinship matrix is passed by `kinship` argument.
+The following code shows such an example of `dat50` data set,
+which phenotype data are stored in `phenodata` data.frame.
 
 ```{r M3, cache = TRUE}
 M3 <- solarPolygenic(trait ~ 1, phenodata, kinship = kin)
 M3
 ```
 
-The polygenic and sporadic models have the same LRT statistics.
+The polygenic and sporadic models have the same LRT statistics,
+that means `SOLAR` was not able to make the polygenic analysis in a proper way.
 
 ```{r M3_lf, cache = TRUE}
 M3$lf
 ```
 
+This bug seems the case of unrelated individuals or the individuals withount 
+such ID fields as `fa` and `mo`.
+
 ## Polygenic model (bivariate)
+
+The bivariate polygenic analysis is run in the same way as the univariate one.
 
 ```{r B1, cache = TRUE}
 B1 <- solarPolygenic(trait1 + trait2 ~ 1, dat30)
@@ -657,10 +808,15 @@ B1
 
 ### Testing correlations
 
+The test of significance of environmental and genetic correlation coefficients
+is indicated by `polygenic.options` argument of `solarPolygenic` function.
+
 ```{r B2, cache = TRUE}
 B2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = "-testrhoe -testrhog")
 B2
 ```
+
+The results are stored in `vcf` slot of the returned object.
 
 ```{r B2_vcf, cache = TRUE}
 B2$vcf
@@ -668,38 +824,86 @@ B2$vcf
 
 ### Trait-specific covariates
 
+It might happe that traits in the multivariate polygenic analysis 
+have different covariates.
+Trait-specific covariates are passed to `solarPolygenic` function
+according the specification of `SOLAR`.
+
 ```{r B3, cache = TRUE}
 B3 <- solarPolygenic(trait1 + trait2 ~ sex + age(trait2), dat30)
 B3
 ```
 
+In the results of this analysis,
+`sex` covariate is common for both traits,
+while `age` covariate is applied only to `trait2`.
+The given model specification can be ckecked
+by looking at the model files from `SOLAR`.
+
 ```{r tail_mod}
-l_ply(tail(B3$solar$files$model$poly.mod, 3), function(x) cat(x, "\n"))
+tail(B3$solar$files$model$poly.mod, 3)
 
 ```
 
 ## Association model
 
-`dat50` data set is used.
+`solarAssoc` function runs the association analysis in `SOLAR`,
+in particular via [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) command.
+The genotype data are passed to `solarAssoc` function in the form of 
+SNP genotypes (`snpdata` argument) or covariates
+(`snpcovdata` or `genocov.files` arguments).
+The later case assumes that the user 
+has converted the genotypes to covariates by some method (outside `solarius` package)
+before computing the association model.
+
+The function returns an object of class `solarAssoc`.
+This class has additional methods such as `annotate`, `plotQQ` and `plotManh`
+for exploration of the association results.
+The main table of the results is `snpf` slot of the returned object,
+which class is `data.table` from the R package `data.table`.
+
+The association analysis is demonstrated 
+on `dat50` data set with 66 individuals and 50 SNP variants.
+The kinship matrix `kin` of this data set is also used.
 
 ### SNP data by `snpdata` argument
+
+The option of using `snpdata` is recommended in the case
+when the small number of SNPs is to be tested.
 
 ```{r genodata, cache = TRUE}
 A1 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin)
 A1
 ```
 
+`summary` method reports the number of significant SNPs
+based on Bonferroni correction.
+
 ```{r A1_summary}
 summary(A1)
 ```
 
+The significance threshold can be passed as `alpha` parameter of `summary` method.
+
+```{r A1_summary_2}
+summary(A1, alpha = 1)
+```
+
+
 ### SNP data by `snpcovdata` argument
+
+SNP covariates are passed to the association model by `snpcovdata` parameter.
 
 ```{r genocovdata, cache = TRUE}
 A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
 A2
 ```
 
+The values of the SNP covariates are any numeric numbers,
+that means the dosage format of the imputed SNP data can be accepted.
+
+The previous example is repeated for the SNP covariate data,
+where values of `2` are replaced by `1.9`.
 
 ```{r genocovdata2, cache = TRUE}
 genocovdata2 <- genocovdata
@@ -712,6 +916,12 @@ A2
 
 ### SNP data by `genocov.files` (single value)
  
+`genocov.files` argument is supported to pass the SNP covariate data in files
+of the appropriate `SOLAR` format.
+This option suits for large-scale calculations,
+when the real genome-wide scan is run.
+Both arguments `genocov.files` and `snplists.files` are required by `SOLAR`.
+ 
 ```{r genocov, cache = TRUE}
 dir <- package.file("extdata", "solarAssoc", package = "solarius")
 genocov.files <- file.path(dir, "snp.genocov")
@@ -723,6 +933,9 @@ A3
 ```
 
 ### SNP data by `genocov.files` (many values)
+
+Many values can be passed to `genocov.files` parameter,
+but this case is thought for parallel calculations.
  
 ```{r genocov2, cache = TRUE}
 dir <- package.file("extdata", "solarAssoc", package = "solarius")
@@ -734,7 +947,10 @@ A4 <- solarAssoc(trait ~ 1, phenodata,
 A4
 ```
 
-### Map information and Manhetten plot
+### Exploration of association results
+
+QQ and Manhattan plots
+help to explore the association results visually.
 
 ```{r assoc_map, cache = TRUE}
 A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kinship = kin)
@@ -744,11 +960,21 @@ A5 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, snpmap = snpdata, kin
 plot(A5)
 ```
 
-### Parallelization
+```{r manh_qq, cache = TRUE}
+plot(A5, "qq")
+```
+
+### Parallel computation 
+
+Parallelization of the association analysis is an easy task with `solarius`.
+The user only needs to specify how many cores are to be used for the computation.
 
 ```{r assoc_par, cache = TRUE}
 A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
 ```
+
+The gain in CPU time is not obvious,
+as the number of SNPs (50) is too small.
 
 ```{r A_cpu}
 A1$assoc$tprofile$cputime.sec
@@ -757,9 +983,19 @@ A6$assoc$tprofile$cputime.sec
 
 ## Linkage model
 
-`dat30` data set will be used for the linkage examples.
+`solarMultipoint` function performs the linkage analysis
+by calling `SOLAR` command [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint).
+The function looks for multipoint IBD matrices in directory pointed out by `mibddir` argument.
+The analysis can be customized by combination of options via 
+`multipoint.options` and `multipoint.settings` arguments.
+
+Phenotypes in `dat30` data set and IBD matrices in a directory distributed withing `solarius`
+are used for demonstration of the linkage analysis.
 
 ### Basic linkage model
+
+The basic model requires only the path to a directory with IBD matrices (`mibddir` argument).
+By default, all `SOLAR` specific files, which represent IBD matrices, will be used in the analysis.
 
 ```{r data_multic_link}
 mibddir <- package.file("extdata", "solarOutput", "solarMibdsCsv", package = "solarius")  
@@ -771,6 +1007,9 @@ L1 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir)
 L1
 ```
 
+Methods `print`, `summary` and `plot` help to explore the results of analysis.
+The data table of results is stored in `lodf` slot of the returned object.
+
 ```{r L1_sum}
 summary(L1)
 ```
@@ -779,7 +1018,15 @@ summary(L1)
 plot(L1)
 ```
 
+The results for chromosomes 2 and 5 are identical,
+since the IBD matrices for chromosome 2 are duplicated of the matrices for chromosome 5.
+
 ### Linkage options
+
+The following code shows an example of a custom linkage analysis.
+In particular, the linkage is run on chromosome 5 with 2 cM interval,
+fine mapping is disabled and the second pass will be conducted,
+if the maximum LOD score will be higher than 3.
 
 ```{r L2, cache = TRUE}
 L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
@@ -787,11 +1034,15 @@ L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 
 summary(L2)
 ```
 
+The LOD scores for the second path (stored in `lodf2`) are plotted in the code given below.
+
 ```{r plot_L2, cache = TRUE}
 plot(L2, pass = 2)
 ```
 
 ### Bivariate linkage
+
+The bivariate linkage analysis is performed in the same way as the bivariate linkage analysis.
 
 ```{r L3, cache = TRUE}
 L3 <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, 
@@ -805,7 +1056,12 @@ L4 <- solarMultipoint(trait1 + trait2 ~ age + sex(trait1), dat30,
 summary(L4)
 ```
 
-### Parallelization
+### Parallel computation
+
+Parallelization of the linkage analysis
+is again parametrized with `cores` argument,
+but the chromosome values are expected to be a vector of values.
+That means that each core does the job on a single chromosome.
 
 ```{r L5, cache = TRUE}
 L5 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir,

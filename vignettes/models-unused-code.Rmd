@@ -1,0 +1,18 @@
+### Plot residuals
+
+```{r res_mod, cache = TRUE}
+mod <- solarPolygenic(trait1 ~ age, dat30)
+mod
+```
+
+```{r res, cache = TRUE}
+r <- residuals(mod)
+summary(r)
+```
+
+```{r plot_res_demo, cache = TRUE}
+plotResQQ(mod)
+plotResQQ(mod, labels = TRUE)
+plotRes(mod)
+```
+

@@ -111,14 +111,16 @@ imageKinship2 <- function(kmat)
 
 #' Function histKinship2 
 #'
-#' @importFrom ggplot2 qplot
 #' @export histKinship2
 histKinship2 <- function(kmat)
 {
-  p <- ggplot2::qplot(as.vector(kmat))
-  print(p)
+  stopifnot(require(ggplot2))
   
-  return(invisible())
+  df <- data.frame(kin = as.vector(kmat))
+  
+  ggplot(df, aes(kin)) + geom_histogram() + 
+    labs(x = "") +
+    theme_bw()
 }
 
 #----------------------
