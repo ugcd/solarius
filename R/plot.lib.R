@@ -26,9 +26,25 @@ plotPed <- function(data, ped)
     stop("switch error"))
   stopifnot(ped %in% peds)  
   
-  # make `pedigree` object
-  ped <- with(subset(data, FAMID == ped), pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID))
+  ### create `df`
+  df <- subset(data, FAMID == ped)
   
+  ### filter `df`
+  ids <- df$ID
+  df <- within(df, {
+    ind <- !(FA %in% ids)
+    FA[ind] <- ""
+    MO[ind] <- ""
+    
+    ind <- !(MO %in% ids)
+    FA[ind] <- ""
+    MO[ind] <- ""
+  })
+  
+  # make `pedigree` object
+  ped <- with(df, 
+    pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID))  
+
   plot(ped[1])
 }
 
