@@ -333,7 +333,7 @@ $$
   \mbox{ and } \mbox{ } \mbox{ } e \sim (0, \sigma_e^2 I)
 $$ 
   
-$$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 I + \sigma_q^2 M + \sigma_e^2)$$
+$$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 H + \sigma_q^2 M + \sigma_e^2)$$
 
 The QTL under study $q$ corresponds to a specific position in the genome and an identity-by-descent (IBD) matrix.
 The genome-wide linkage analysis assumes that the highly informative markers, such as micro-satellites, are available in the study,
@@ -564,7 +564,7 @@ The simulated data from `multic` R package
 are distributed in `SOLAR` format 
 in [inst/extdata/solarOutput](https://github.com/ugcd/solarius/tree/master/inst/extdata/solarOutput)
 directory of `solarius` package.
-12000 individuals in 200 families are included in the study.
+1200 individuals in 200 families are included in the study.
 The simulated phenotypes include two traits `trait1` and `trait2` and two covariates `age` and `sex`.
 The two traits possess a high genetic correlation.
 For the linkage analysis 6 IBD matrices for chromosome 5 are are available from `multic` package.
@@ -615,7 +615,7 @@ str(genocovdata)
 
 `loadMulticPhen` function in `solarius` package 
 loads the complete version of the data from the R package `multic`
-(12000 individuals).
+(1200 individuals).
 
 ```{r multic, cache = TRUE}
 mdat <- loadMulticPhen()
@@ -714,7 +714,7 @@ dat30 <- mutate(dat30,
   exp_trait1 = exp(trait1))
 ```
 
-The list of available transforms in `soalrius` 
+The list of available transforms in `solarius` 
 is returned by `availableTransforms` function.
 
 ```{r}
@@ -722,7 +722,7 @@ availableTransforms()
 ```
 
 The following code plots the distribution of the original values of `exp_trait1`
-and its diffrent transformations.
+and its transformed values.
 
 ```{r plot_transform, cache = TRUE}
 library(ggplot2)
@@ -824,7 +824,7 @@ B2$vcf
 
 ### Trait-specific covariates
 
-It might happe that traits in the multivariate polygenic analysis 
+It might happen that traits in the multivariate polygenic analysis 
 have different covariates.
 Trait-specific covariates are passed to `solarPolygenic` function
 according the specification of `SOLAR`.
@@ -1089,4 +1089,4 @@ A list of references given on the official web page of `SOLAR`
 * Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b].
 
 
-# Refences
+# References

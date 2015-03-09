@@ -115,7 +115,7 @@ plot(A.F11)
 plot(A.F11, "qq")
 ```
 
-We observe that 3 significant SNPs  are found. These results are in concordance with those previously reported on the FXI pghenotype of the GAIT1 project (@Sabater2012). There are three significant loci: rs710446 and rs4253399 located in the structural F11 gene, and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in (@Sabater2012).
+We observe that 3 significant SNPs  are found. These results are in concordance with those previously reported on the FXI phenotype of the GAIT1 project (@Sabater2012). There are three significant loci: rs710446 and rs4253399 located in the structural F11 gene, and rs4241824, located in the kininogen 1 (KNG1) gene. Both rs710446 and rs4241824 were reported in our previous GWAS published in (@Sabater2012).
 
 
 ```{r linkage.F11, eval = FALSE}
