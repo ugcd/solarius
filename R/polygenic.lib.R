@@ -43,7 +43,7 @@ solar_polygenic <- function(dir, out)
     paste("covariate", paste(covlist2, collapse = " ")),
     out$polygenic.settings,
     paste("polygenic", out$polygenic.options),
-    ifelse(length(covlist2) == 0, "", "residual -fewest -needped")) # 
+    ifelse(length(covlist2) == 0 | length(out$traits) > 1, "", "residual -fewest -needped")) # 
   
   ### run solar    
   ret.solar <- solar(c(cmd.proc_def, cmd, cmd.proc_call), dir, result = TRUE)
@@ -385,7 +385,7 @@ extractLoglik <- function(dir, out)
     df2 <- ldply(out2, function(x) data.frame(model = x$model, Chi = x$Chi,
       deg = x$deg, pval = x$pval))
     
-    df <- join(df, df2, by = "model")      
+    df <- plyr::join(df, df2, by = "model")      
   }
   
   return(df)
