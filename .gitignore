@@ -2,3 +2,6 @@ man/
 multic/
 solar*/
 examples/
+inst/web/
+inst/staticdocs/
+

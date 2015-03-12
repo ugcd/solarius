@@ -1,7 +1,21 @@
 #' Function solarPolygenic.
 #'
-#' @importFrom methods hasArg
+#' @param formula
+#' @param data
+#' @param dir
+#' @param kinship
+#' @param traits
+#' @param covlist The default value is \code{"1"}.
+#' @param covtest The default value is \code{FALSE}.
+#' @param screen The default value is \code{FALSE}.
+#' @param household The default value is \code{as.logical(NA)}.
+#' @param transforms The default value is \code{character(0)}.
+#' @param alpha The default value is \code{0.05}.
+#' @param polygenic.settings The default value is \code{""}.
+#' @param polygenic.options The default value is \code{""}.
+#' @param verbose The default value is \code{0}.
 #' 
+#' @importFrom methods hasArg
 #' @export
 solarPolygenic <- function(formula, data, dir,
   kinship,

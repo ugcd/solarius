@@ -119,8 +119,8 @@ plotKinship2 <- function(x, y = "image")
 #' @export imageKinship2
 imageKinship2 <- function(kmat)
 { 
-  p <- Matrix::image(Matrix::Matrix(kmat))
-  print(p)
+  stopifnot(require(Matrix))
+  Matrix::image(Matrix::Matrix(kmat))
   
   return(invisible())
 }
