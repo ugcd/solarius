@@ -21,7 +21,8 @@ Suggests:
     iterators,
     parallel,
     knitr,
-    qqman
+    qqman,
+    NCBI2R
 Collate:
     'data.lib.R'
     'support.lib.R'
