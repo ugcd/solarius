@@ -9,10 +9,6 @@ R package wrapper to SOLAR
      1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
      2. [models.html](http://ugcd.github.io/solarius/vignettes/models.html)
 
-The X-files
-
-* http://ugcd.github.io/solarius/projects/02-compare-tools/01-solar-lme4.html
-
 ## References
 
 * [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
