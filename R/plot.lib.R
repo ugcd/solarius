@@ -12,7 +12,7 @@ plotPed <- function(data, ped)
   
   stopifnot(require(kinship2))
   
-  renames <- match_id_names(names(data))
+  renames <- matchIdNames(names(data))
   data <- rename(data, renames)
   stopifnot(all(c("ID", "FA", "MO", "SEX", "FAMID") %in% names(data)))
   

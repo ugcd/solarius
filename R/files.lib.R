@@ -24,7 +24,7 @@ readPhen <- function(phen.file, sep.phen = ",",
   sep <- sep.phen
   dat1 <- read.table(phen.file, nrow = 1,
     sep = sep, header = header, stringsAsFactors = stringsAsFactors)
-  new.names <- match_id_names(names(dat1), sex.optional = sex.optional)
+  new.names <- matchIdNames(names(dat1), sex.optional = sex.optional)
   old.names <- names(new.names)
   
   ind <- which(names(dat1) %in% old.names)
@@ -48,7 +48,7 @@ readPhen <- function(phen.file, sep.phen = ",",
     ped <- read.table(ped.file, colClasses = "character",
       sep = sep, header = header, stringsAsFactors = stringsAsFactors)
    
-    new.names <- match_id_names(names(ped))
+    new.names <- matchIdNames(names(ped))
     ped <- rename(ped, new.names)
 
     if(id.unique) {

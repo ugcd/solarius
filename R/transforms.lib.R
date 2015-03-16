@@ -3,6 +3,11 @@
 # Configure functions
 #---------------
 
+#' A list of available transforms.
+#'
+#' @return A character vector of transform names.
+#' @examples
+#'  availableTransforms()
 #' @export
 availableTransforms <- function() c("none", "inormal", "log", "out")
 
@@ -39,6 +44,19 @@ transformData <- function(transforms, data, ...)
   return(data)
 }
 
+#' Transform a trait.
+#'
+#'@param x 
+#'    a numeric vector (of a trait).
+#'@param transform
+#'    a character vector, the name of transformation.
+#'    Possible values are returned by \code{\link{availableTransforms}} function.
+#'@param ...
+#'    additional parameters passed to internal \code{transform_trait_*} functions.
+#'    Possible parameters might be \code{log.base}, \code{log.intercept} (\code{"log"} transformation).
+#'
+#'@return A numeric vector, which contains the transformed values (of a trait).
+#'
 #' @export
 transformTrait <- function(x, transform, ...)
 {

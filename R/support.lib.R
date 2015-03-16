@@ -296,7 +296,7 @@ check_var_names <- function(traits, covlist, dnames) {
 }
 
 # @examples inst/examples/example-fields.R
-match_id_names <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
+matchIdNames <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
 {
   # `fields`: fields in data set
   # `names`: matched names
@@ -407,7 +407,7 @@ match_id_names <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
   return(out)
 }
 
-match_map_names <- function(fields)
+matchMapNames <- function(fields)
 {
   # `fields`: fields in data set
   # `names`: matched names

@@ -45,7 +45,7 @@ solarMultipoint <- function(formula, data, dir,
   is.tmpdir <- missing(dir)
   
   ### step 2.1: rename
-  renames <- match_id_names(names(data), skip.sex = TRUE) # match IDs, skip SEX
+  renames <- matchIdNames(names(data), skip.sex = TRUE) # match IDs, skip SEX
   unrelated <- ifelse(all(c("FA", "MO") %in% renames), FALSE, TRUE)
   
   # rename

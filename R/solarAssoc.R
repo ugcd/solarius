@@ -233,7 +233,7 @@ solarAssoc <- function(formula, data, dir,
     tsolarAssoc$map <- proc.time()
     snpmap <- as.data.table(snpmap)
     
-    renames <- match_map_names(names(snpmap))
+    renames <- matchMapNames(names(snpmap))
     snpmap <- rename(snpmap, renames)
     
     snpmap <- subset(snpmap, select = renames)
@@ -247,7 +247,7 @@ solarAssoc <- function(formula, data, dir,
     tsolarAssoc$map <- proc.time()
     snpmap <- read_map_files(out$assoc$snpmap.files, cores = out$assoc$cores)
     
-    renames <- match_map_names(names(snpmap))
+    renames <- matchMapNames(names(snpmap))
     snpmap <- rename(snpmap, renames)
     
     snpmap <- subset(snpmap, select = renames)

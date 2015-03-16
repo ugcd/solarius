@@ -76,15 +76,15 @@ solar_polygenic <- function(dir, out)
   files.model <- solarReadFiles(model.path)
   
   ### extract vars from output files
-  out$cf <- try({
-    extactCovariateFrame(model.path, out)
-  })
-  out$vcf <- try({
+  out$cf <- suppressWarnings(try({
+    extractCovariateFrame(model.path, out)
+  }, silent = TRUE))
+  out$vcf <- suppressWarnings(try({
     extractVarCompFrame(model.path, out)
-  })
-  out$lf <- try({
+ }, silent = TRUE))
+  out$lf <- suppressWarnings(try({
     extractLoglik(model.path, out)
-  })
+  }, silent = TRUE))
   
   ### update `out`
   out$solar$files <- list(model = files.model)
@@ -95,12 +95,12 @@ solar_polygenic <- function(dir, out)
 #----------------------------------
 # Check functions
 #----------------------------------
-hasHousehold <- function(cnames) "HHID" %in% match_id_names(cnames)
+hasHousehold <- function(cnames) "HHID" %in% matchIdNames(cnames)
 
 #----------------------------------
 # Extract functions
 #----------------------------------
-extactCovariateFrame <- function(dir, out)
+extractCovariateFrame <- function(dir, out)
 {
   vals <- scan(file.path(dir, "out.covariate"), character(), quiet = TRUE)
   stopifnot(vals[1] == "covariate")

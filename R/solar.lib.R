@@ -48,7 +48,7 @@ solar <- function(cmd, dir = "solar", result = TRUE,
 df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz", sort.ped = TRUE)
 {
   # match ID/SEX names
-  renames <- match_id_names(names(df))
+  renames <- matchIdNames(names(df))
   
   # set up `unrelated`
   unrelated <- ifelse(all(c("FA", "MO") %in% renames), FALSE, TRUE)

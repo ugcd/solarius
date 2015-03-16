@@ -1,14 +1,14 @@
 #' S3 class solarPolygenic.
 #'
-#' @name solarPolygenic-class
-#' @rdname solarPolygenic-class
+#' @name solarPolygenicClass
+#' @rdname solarPolygenicClass
 #' @exportClass solarPolygenic
 
 #--------------------
 # Print method
 #--------------------
 
-#' @rdname solarPolygenic-class
+#' @rdname solarPolygenicClass
 #' @export
 print.solarPolygenic <- function(x, ...)
 {
@@ -19,7 +19,7 @@ print.solarPolygenic <- function(x, ...)
   l_ply(x$solar$files$model$polygenic.out, function(x) cat(x, "\n"))
 }
 
-#' @rdname solarPolygenic-class
+#' @rdname solarPolygenicClass
 #' @export
 summary.solarPolygenic <- function(x, ...)
 {
@@ -43,7 +43,7 @@ summary.solarPolygenic <- function(x, ...)
 # Generic method
 #--------------------
 
-#' @rdname solarPolygenic-class
+#' @rdname solarPolygenicClass
 #' @export
 residuals.solarPolygenic <- function(x, trait = FALSE, ...)
 {
