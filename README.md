@@ -2,7 +2,8 @@
 
 R package wrapper to SOLAR
 
-* Vignettes `SOALR models`
+* Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/).
+* Vignettes 
   * R code [vignettes/](vignettes/)
   * hmlt output:
      1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
@@ -14,7 +15,7 @@ R package wrapper to SOLAR
 * [SOLAR web page at txbiomedgenetics.org](http://solar.txbiomedgenetics.org/)
 * [SOLAR Eclipse is a new collaboration to develop genetic analysis tools for imaging applications](http://www.nitrc.org/projects/se_linux/)
 
-### Ideas
+## Motivation
 
 * do not automate things in R, which `SOLAR` has already automated
   * call `SOLAR` from system.call with `options` and `settings` parameters
@@ -33,46 +34,29 @@ R package wrapper to SOLAR
   * store models/phenos in folders/files
 * make use of github infrastructure: collaborative coding, issues, gh-pages, etc
 
-### Current status
+ 
+### On the SOLAR side
 
-### TODO
+* Designed for the family-based studies (HHID, PROBND, FAMID)
+  * support for extended pedigrees
+* Optimization routines for computing VC
+* Advanced polygenic models
+  * support for multivariate models
+  * liability threshold model
+  * LRT applied to both covariates and variance components
+* Elaborated linkage models
+  * Multi-pass
+  * Multivariate
+  * Adjustment of LOD scores
+* Association models
+  * Speed-up with residuals
+* Advanced VC models
+  * Sex-specificity (custom scripts)
+  * Longitudinal (custom scripts)
 
-Polygenic model:
+### On the R side
 
-* extract residuals and make plots for them
-
-Association model:
-
-* think of which formats to support except the `SOLAR` one
-
-Linkage model:
-
-* make use of all linkage options availabe in `SOLAR`: second-path, adjustment of inflated scores
-
-### Content of Software Manual
-
-TODO:
-
-* Polygenic model (univariate)
-  * house-hold effect
-  * screen covariates
-  * SOLAR options (`polygenic.settings`, `polygenic.options`)
-* Polygenic model (bivariate)
-  * Trouble-shooting
-* Association model
-  * parallelization (`options(cores = 2)`)
-* Linkage model
-
-## Examples 
-
-See tutorial [page](http://ugcd.github.io/solarius/pages/tutorial.html).
-
-## Data sets
-
-Examples given here make use of `dat30` data set distributed with `solarius` package. These are simulated data, and this data set was originally created in `multic` package and stored there in files. The version `dat30` of the data set is a subset for `famid < 30`, and it is stired in `*.RData` file.
-
-`dat30` data set is lazy loaded. Hence, the user just needs to load the package:
-
-```
-library(solarius)
-```
+* Interactive environment for data manipulation
+* Graphics
+  * Plot residuals, QQ-plot, Manhattan plot
+* Parallel computing
