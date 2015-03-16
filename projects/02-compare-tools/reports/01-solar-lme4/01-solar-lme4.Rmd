@@ -1,5 +1,5 @@
 ---
-title: "Comparison of SOLAR and lme4 on GAIT1 data set"
+title: "Comparison between SOLAR and lme4 on GAIT1 data set"
 author: "Andrey Ziyatdinov"
 date: "`r Sys.Date()`"
 output:
@@ -54,6 +54,56 @@ system.time({
 system.time({
   m2 <- solarPolygenic(tr_FXI ~ AGE, pdat)
 })
+```
+
+### Compare varianse components
+
+```{r m1_sum}
+summary(m1)
+```
+
+```{r m2_print}
+m2
+```
+
+Proportion of variance for model `m1`:
+
+```{r sig2_m1}
+sig2 <- c(0.3843, 0.1754, 0.4763)
+names(sig2) <- c("ID", "HHID", "Residual")
+round(sig2 / sum(sig2), 3)
+```
+
+Proportion of variance for model `m2`:
+
+```{r sig2_m2}
+sig2 <- m2$vcf$Var
+names(sig2) <- m2$vcf$varcomp
+round(sig2 / sum(sig2), 3)
+```
+
+### REML = FALSE
+
+```{r m3}
+m3 <- solaris(tr_FXI ~ AGE + (1|HHID) + (1|ID), pdat, 
+  relmat = list(ID = k2), control = lmerControl, REML = FALSE)
+summary(m3)  
+```
+    
+Proportion of variance for model `m3`:
+
+```{r sig2_m3}
+sig2 <- c(0.3793, 0.1725, 0.4763)
+names(sig2) <- c("ID", "HHID", "Residual")
+round(sig2 / sum(sig2), 3)
+```
+
+Proportion of variance for model `m2`:
+
+```{r sig2_m2_2}
+sig2 <- m2$vcf$Var
+names(sig2) <- m2$vcf$varcomp
+round(sig2 / sum(sig2), 3)
 ```
 
 ## Benchmarking
@@ -114,7 +164,7 @@ run <- function(len, times)
 
 ```{r run, echo = FALSE, cache = TRUE}
 sample.size <- c(110, 220, 330)
-time.ratio <- laply(sample.size, function(x) run(x, 50))
+time.ratio <- laply(sample.size, function(x) run(x, 5))
 ```
 
 ```{r plot_run}
