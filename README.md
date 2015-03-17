@@ -9,6 +9,14 @@ R package wrapper to SOLAR
      1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
      2. [models.html](http://ugcd.github.io/solarius/vignettes/models.html)
 
+
+### Install package
+
+```
+library(devtools)
+install_github("ugcd/solarius")
+```
+
 ## References
 
 * [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
@@ -62,9 +70,12 @@ R package wrapper to SOLAR
 * Parallel computing
 
 
-### Quick start
+## Quick start
 
 ```
+# load library
+library(solarius)
+
 # load data set for running polygenic and linkage models
 data(dat30)
 
