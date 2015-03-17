@@ -60,3 +60,29 @@ R package wrapper to SOLAR
 * Graphics
   * Plot residuals, QQ-plot, Manhattan plot
 * Parallel computing
+
+
+### Quick start
+
+```
+# load data set for running polygenic and linkage models
+data(dat30)
+
+# univariate polygenic model
+mod1 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+ 
+# bivariate polygenic model
+mod2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30,
+  polygenic.options = '-testrhoe -testrhog')
+
+# specify directory with IBD matrices and run linkage model
+mibddir <- system.file('extdata', 'solarOutput',
+  'solarMibdsCsv', package = 'solarius') 
+link <- solarMultipoint(trait1 ~ 1, dat30,
+  mibddir = mibddir, chr = 5)
+
+# load data set and run association model in parallel
+data(dat50)
+assoc <- solarAssoc(trait ~ age + sex, phenodata,
+  kinship = kin, snpdata = genodata, cores = 2)
+```  
