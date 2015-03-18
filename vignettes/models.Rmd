@@ -21,13 +21,23 @@ opts_chunk$set(eval = TRUE)
 
 # Introduction
 
+This vignette is a tutorial on the R package `solarius`.
+The document contains a brief description of the main statistical models (polygenic, association and linkage) 
+implemented in `SOLAR` and accessible via `solarius`, 
+installation instructions for both `SOLAR` and `solarius`,
+reproducible examples on synthetic data sets available within the `solarius` package.
+The examples are intended to cover all the necessary steps 
+in the quantitative genetic analysis with `SOLAR`:
+data loading, data exploration, running statistical models 
+and interpreting the obtained results by printing, summarizing and plotting the models in R.
+
 In human genetics research, the study of a complex disorder is targeted 
 to discover its underlying genetic architecture.
 Whereas simple Mendelian diseases are results of a mutation in a single gene,
 for example [Huntington's disease](http://en.wikipedia.org/wiki/Huntington%27s_disease),
 complex disorders or phenotypes are the product of the action of multiple genes and environmental factors
 as well as their interactions.
-For instance, obesity is a complex disease,
+For instance, obesity is a complex disease
 which genetic basis might be better dissected 
 via measurable quantitative variation in phenotypes,
 such as body-mass index, closely related to the disease risk.
@@ -41,10 +51,11 @@ possess more power to detect rare variants,
 permits explicit control for population stratification in association studies,
 and suit for examination of parent-of-origin and sex-specificity effects.
 
-The analysis of the pedigree data is traditionally based on variance component (VC) model, 
-also known as linear mixed model (LMM).
+The analysis of the pedigree data is traditionally based on variance component (VC) models, 
+also known as linear mixed models.
 `SOLAR` is one of the well-known and widely used tools
-that implements the variance component models and other routines needed for the QTL analysis [@Almasy1998]
+that implements the variance component models and other routines needed for the QTL analysis
+in extended pedigrees [@Almasy1998]
 ([http://solar.txbiomedgenetics.org/](http://solar.txbiomedgenetics.org/)).
 The name `SOLAR` stands for Sequential Oligogenic Linkage Analysis Routines.
 The analyses available in `SOLAR` include 
@@ -56,32 +67,22 @@ in pedigrees of arbitrary size and complexity.
 The linkage analysis allows for multiple quantitative traits and/or discrete traits 
 which might involve multiple loci (oligogenic analysis), dominance effects, household effects, and interactions.
 
+There are other tools similar to `SOLAR`, such as `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`,
+but the R package `solarius` presented here has been especially developed to work with `SOLAR`.
+
 `solarius` provides an interface from the program `SOLAR` to 
 the environment for statistical computing `R`.
 On one side, main `SOLAR` procedures can be called in `R` by one or a few commands from the `solarius` package,
 that makes the analysis more user-friendly with the same power of computations implemented in `SOLAR`.
 On the other side, the `solarius` user benefits from the infrastructure available 
 with the R environment and its packages, 
-such as interactive data manipulation, data visualization, parallel computation and so on.
-
-Other tools of the interest (similar to `SOLAR`) include `Mendel`, `MMM`, `GEMMA` and `FAST-LMM`,
-but the R package `solarius` presented here has been especially developed to work with `SOLAR`.
-
-This vignette is a tutorial on the R package `solarius`.
-The document contains a brief description of main statistical models (polygenic, association and linkage) 
-implemented in `SOLAR` and accessible via `solarius`, 
-installation instructions for both `SOLAR` and `solarius`,
-reproducible examples on synthetic data sets available within the `solarius` package.
-The examples are intended to cover all the necessary steps 
-in the quantitative genetic analysis with `SOLAR`:
-data loading, data exploration, running statistical models 
-and interpreting the obtained results by printing, summarizing and plotting the models in R.
+such as interactive data manipulation, data visualization and parallel computation.
 
 # Methodology
 
 ## Linear mixed model
 
-Consider a particular trait, such as body-mass index, 
+Consider that a particular trait, such as body-mass index, 
 is observed in $n$ individuals grouped by families or clusters of related individuals.
 A $n \times 1$ vector $y$ contains the phenotypic values measured for the trait.
 One assumes that these observations are described adequately by a linear model
@@ -165,7 +166,7 @@ the house-hold effect $c$, and the residual effect $e$).
 $$y = X\beta + g + c + e$$
 
 $$\mbox{ where } \mbox{ } \mbox{ } g \sim (0, \sigma_g^2 A) 
-  \mbox{ and } \mbox{ } \mbox{ } h \sim (0, \sigma_c^2 H)
+  \mbox{ and } \mbox{ } \mbox{ } c \sim (0, \sigma_c^2 H)
   \mbox{ and } \mbox{ } \mbox{ } e \sim (0, \sigma_e^2 I)$$ 
   
 $$ \mbox{ implying } \mbox{ } \mbox{ } y \sim (X\beta, V) = (X\beta, \sigma_g^2 A + \sigma_c^2 H + \sigma_e^2 I)$$
@@ -186,7 +187,7 @@ The house-hold effect is included in the analysis if the pedigree data contain a
 That means that pedigrees and household groups are merged into larger groups,
 which contain every individual in the same pedigree as well as every individual that has the same 
 `hhid` as any individual in the pedigree [@SOLARDOC, Section 9.3 [Household Group Analysis](http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html#household)]. 
-In a consequence of this grouping operation by `SOLAR`, 
+As a consequence of this grouping operation by `SOLAR`, 
 the covariance matrix $H$ of the $c$ random effect
 contains the information related to the pedigree-household groups
 rather than relationships given by the `hhid` field.
@@ -347,7 +348,7 @@ Alternative model | Free parameters | Restricted parameters |
 ---|---|---|
 No linkage | $\beta, \sigma_g^2, \sigma_c^2$, $\sigma_e^2$ | $\sigma_q^2$ = 0 |
 
-Traditionally, the logarithm (base 10) of odds (LOD) values are used to score the QTLs.
+Traditionally, the logarithm (base 10) of the odds (LOD) values are used to score the QTLs.
 If the LRT statistics for the linkage model is denoted as $\Lambda$, 
 then the correspondent LOD score is equal to $\Lambda / (2 ln(10))$.
 
@@ -473,7 +474,7 @@ for the most popular operating systems (Linux, Mac OS, Windows).
 In the case of [Linux](http://solar.txbiomedgenetics.org/solarlinux.html), 
 the installation files are compressed in `solar_linux.tar.gz` archive.
 Once the archive is downloaded to a local machine of the user and 
-the installation files are unpacked, there are `README` file and `install_solar` script, which installs the program. 
+the installation files are unpacked, one can find the `README` file and `install_solar` script. 
 In particular, the script copies the necessary library, binary and documentation files
 into an installation directory defined by the user.
 A special bash script called `solar` is also created and copied to the system path defined by the user,
@@ -556,20 +557,22 @@ Data sets distributed within `solarius` package contain relatively small simulat
 which are used for reproducible demonstrations of how functions of the package work.
 There are three data sets available in `solarius`:
 
-* Simulated data from the R package `multic` [@Andrade2006] (polygenic and linkage models);
-* Simulated data `dat50` from the R package [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) (polygenic model with custom kinship matrix and association model);
+* An adapted version of the simulated data from the R package `multic` [@Andrade2006] (polygenic and linkage models);
+* An adapted version of the simulated data `dat50` from the R package [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) (polygenic model with custom kinship matrix and association model);
 * GAW10 data distributed within `SOLAR` (polygenic and linkage models).
 
-The simulated data from `multic` R package 
-are distributed in `SOLAR` format 
-in [inst/extdata/solarOutput](https://github.com/ugcd/solarius/tree/master/inst/extdata/solarOutput)
+The simulated data set (in `SOLAR` format) from `multic` R package 
+is placed in [inst/extdata/solarOutput](https://github.com/ugcd/solarius/tree/master/inst/extdata/solarOutput)
 directory of `solarius` package.
 1200 individuals in 200 families are included in the study.
 The simulated phenotypes include two traits `trait1` and `trait2` and two covariates `age` and `sex`.
 The two traits possess a high genetic correlation.
-For the linkage analysis 6 IBD matrices for chromosome 5 are are available from `multic` package.
-These six matrices are duplicated for chromosome 2 in `solarius`,
-in order to test parallel calculation (separated by chromosome) of the linkage model.
+For the linkage analysis 6 IBD matrices for chromosome 5 
+6 IBD matrices for chromosome 2 are available.
+The six matrices of chromosome 5 are the original data from `multic` package,
+while the six matrices of chromosome 2 are the exact copies of those of chromosome 5.
+Data for the two chromosomes are needed
+to test parallel calculation (separated by chromosome) of the linkage model.
 
 A smaller subset of the simulated data from `multic` package is provided in `dat30` data set
 (`dat30.RData` file in [data](https://github.com/ugcd/solarius/tree/master/data) directory).
@@ -661,7 +664,7 @@ For example, the kinship matrix for `dat50` data sets has the following image.
 plotKinship2(2*kin)
 ```
 
-One can see that both unrelated and related individuals are presented in `dat50` data set.
+One can see that both unrelated and related individuals appear in `dat50` data set.
 
 The relationships among individuals in `dat30` data set 
 is examined in the following two lines of code.
@@ -707,7 +710,7 @@ plotPed(dat30, 2)
 ### Transform traits
 
 To show an example of trait transformation,
-a trait with a _poisoned_ distribution `exp_trait1` is created in `dat30` data set.
+a trait with an anomalous distribution `exp_trait1` is created in `dat30` data set.
 
 ```{r exp_trait1}
 dat30 <- mutate(dat30,
@@ -862,8 +865,8 @@ for exploration of the association results.
 The main table of the results is `snpf` slot of the returned object,
 which class is `data.table` from the R package `data.table`.
 
-The association analysis is demonstrated 
-on `dat50` data set with 66 individuals and 50 SNP variants.
+The association analysis is shown
+with `dat50` data set with 66 individuals and 50 SNP variants.
 The kinship matrix `kin` of this data set is also used.
 
 ### SNP data by `snpdata` argument
@@ -899,8 +902,9 @@ A2 <- solarAssoc(trait ~ 1, phenodata, snpcovdata = genocovdata, kinship = kin)
 A2
 ```
 
-The values of the SNP covariates are any numeric numbers,
-that means the dosage format of the imputed SNP data can be accepted.
+The values of the SNP covariates 
+can take any numerical values.
+That means dosage format of imputed SNP data is allowed.
 
 The previous example is repeated for the SNP covariate data,
 where values of `2` are replaced by `1.9`.
@@ -920,7 +924,8 @@ A2
 of the appropriate `SOLAR` format.
 This option suits for large-scale calculations,
 when the real genome-wide scan is run.
-Both arguments `genocov.files` and `snplists.files` are required by `SOLAR`.
+Both arguments `genocov.files` and `snplists.files` are required,
+and `snpmap.files` argument is optional.
  
 ```{r genocov, cache = TRUE}
 dir <- package.file("extdata", "solarAssoc", package = "solarius")
@@ -985,12 +990,12 @@ A6$assoc$tprofile$cputime.sec
 
 `solarMultipoint` function performs the linkage analysis
 by calling `SOLAR` command [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint).
-The function looks for multipoint IBD matrices in directory pointed out by `mibddir` argument.
+The function looks for multipoint IBD matrices in the directory pointed out by `mibddir` argument.
 The analysis can be customized by combination of options via 
 `multipoint.options` and `multipoint.settings` arguments.
 
-Phenotypes in `dat30` data set and IBD matrices in a directory distributed withing `solarius`
-are used for demonstration of the linkage analysis.
+Phenotypes in `dat30` data set and IBD matrices are placed
+in [inst/extdata/solarOutput](https://github.com/ugcd/solarius/tree/master/inst/extdata/solarOutput) directory of the package.
 
 ### Basic linkage model
 
@@ -1024,9 +1029,8 @@ since the IBD matrices for chromosome 2 are duplicated of the matrices for chrom
 ### Linkage options
 
 The following code shows an example of a custom linkage analysis.
-In particular, the linkage is run on chromosome 5 with 2 cM interval,
-fine mapping is disabled and the second pass will be conducted,
-if the maximum LOD score will be higher than 3.
+In particular, the linkage is run on chromosome 5 with a 2 cM interval,
+Fine mapping is disabled and the second pass will is parametrized
 
 ```{r L2, cache = TRUE}
 L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
@@ -1034,7 +1038,7 @@ L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 
 summary(L2)
 ```
 
-The LOD scores for the second path (stored in `lodf2`) are plotted in the code given below.
+The LOD scores for the second path (stored in `lodf2`) are plotted with the code given below.
 
 ```{r plot_L2, cache = TRUE}
 plot(L2, pass = 2)
@@ -1042,7 +1046,7 @@ plot(L2, pass = 2)
 
 ### Bivariate linkage
 
-The bivariate linkage analysis is performed in the same way as the bivariate linkage analysis.
+The bivariate linkage analysis is performed in the same way as the bivariate polygenic analysis.
 
 ```{r L3, cache = TRUE}
 L3 <- solarMultipoint(trait1 + trait2 ~ 1, dat30, mibddir = mibddir, chr = 5, 
