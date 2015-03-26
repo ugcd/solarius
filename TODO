@@ -1,11 +1,12 @@
 ## TODO
 
+* Parse the value of kurtosis (computed for residuals).
 * Fix the polygenic analysis with `screen` argument.
 * Guess the chromosomes; check out on parallel computing
 * Update DESCRIPTION and R code to switch from Depends to Imports.
-* Make `dat50` SNP data available in plink format.
 
 ## Done 
 
 * Work on the residuals from the polygenic model. See documentation on 
   `polygenic` SOLAR comand (`-residinor` option).
+* Make `dat50` SNP data available in plink format.  
