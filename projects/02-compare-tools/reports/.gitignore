@@ -1,0 +1,5 @@
+*.html
+*.md
+*_cache/
+*_files/
+

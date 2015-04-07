@@ -1,0 +1,105 @@
+---
+title: "SOLAR command fix"
+author: "Andrey Ziyatdinov"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+    keep_md: true
+---
+
+
+## Include
+
+```{r inc}
+library(solarius)
+```
+
+## Parameters
+
+```{r par}
+dir1 <- "solar1"
+dir2 <- "solar2"
+```
+
+```{r dir_create}
+dir.create(dir1, showWarnings = FALSE)
+dir.create(dir2, showWarnings = FALSE)
+```
+
+
+## Example 1
+
+```{r ex1}
+dat <- loadMulticPhen()
+df2solar(dat, dir1)
+
+cmd1 <- c("load pedigree dat.ped", 
+  "load phenotypes dat.phe",
+  "trait trait1",
+  "covariate",
+  "polygenic",
+  "quit")
+
+ret1 <- solar(cmd1, dir1)
+grep("H2r", ret1, value = TRUE)
+
+cmd2 <- c("load model trait1/null0",
+  "covariate age",
+  "polygenic",
+  "quit")
+ret2 <- solar(cmd2, dir1)
+grep("H2r", ret2, value = TRUE)
+```
+
+## Example 2
+
+Compute two models:
+
+* `trait1/null0`: no covariates, free `h2r`
+* `constrained.mod`: `age` covariate, constrained `h2r` to that value in the previous model
+
+```{r ex2}
+dat <- loadMulticPhen()
+df2solar(dat, dir2)
+
+cmd1 <- c("load pedigree dat.ped", 
+  "load phenotypes dat.phe",
+  "trait trait1",
+  "covariate",
+  "polygenic",
+  "quit")
+
+ret1 <- solar(cmd1, dir2)
+grep("H2r", ret1, value = TRUE)
+
+cmd2 <- c("load model trait1/null0",
+  "covariate age",
+  "fix h2r",
+  "maximize", "save model trait1/constrained",
+  "quit")
+ret2 <- solar(cmd2, dir2)
+grep("H2r", ret2, value = TRUE)
+```
+
+Compare likelihoods:
+
+```{r read_constrained}
+tail(readLines("solar2/trait1/null0.mod"), 1)
+tail(readLines("solar2/trait1/constrained.mod"), 1)
+```
+
+Make sure that the first likelihood is the same as that computed by `solarPolygenic` function:
+
+```{r mod1}
+mod1 <- solarPolygenic(trait1 ~ 1, dat)
+mod1$lf
+```
+
+Compare h2r:
+
+```{r compare_h2r}
+grep("h2r", readLines("solar2/trait1/null0.mod"), value = TRUE)[1]
+grep("h2r", readLines("solar2/trait1/constrained.mod"), value = TRUE)[1]
+```
