@@ -201,9 +201,10 @@ kmat2phi2 <- function(kmat, dir, kin2.gz = "kin2.gz")
   kf2phi2(kf, dir, kin2.gz = kin2.gz)  
 }
 
-#' @importFrom gdata write.fwf
 kf2phi2 <- function(kf, dir, kin2.gz = "kin2.gz")
 {
+  stopifnot(requre(gdata))
+  
   pedindex.out <- file.path(dir, "pedindex.out")
   pf <- read_pedindex(pedindex.out)
   

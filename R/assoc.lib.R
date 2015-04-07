@@ -98,7 +98,7 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 #' @export 
 annotateSignifSNPs <- function(A)
 {
-require(NCBI2R)
+  stopifnot(require(NCBI2R))
 
 d <- dim(A$snpf)
 posSig <- which(A$snpf$pSNP*d[1]<0.05)

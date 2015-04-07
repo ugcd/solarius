@@ -1,5 +1,97 @@
-#' Function solarAssoc.
+#' Run association analysis.
 #'
+#' The association analysis is conducted in the following sequence:
+#' parse input files of SNP markers,
+#' export data to a directory by \code{\link{df2solar}} function, 
+#' run the polygenic analysis in a directory,
+#' run the association analysis on the top of the polygenic analysis,
+#' parse output files and 
+#' store results in an object of \code{solarAssoc} class (see \code{\link{solarAssocClass}}).
+#'
+#'@param formula
+#'  an object of class \code{formula} or one that can be coerced to that class.
+#'  It is a symbolic description of fixed effects (covariates) to be fitted. 
+#'@param data
+#'    A data frame containing the variables in the model, 
+#'    including ID fields needed to construct random effects: genetic and house-hold (both optional).
+#'    Other classes such as list, environment or object coercible by \code{as.data.frame} to a data frame
+#'    are not supported.
+#'@param dir
+#'    an optional character string, the name of directory,
+#'    where SOLAR performs the analysis.
+#'    In this case, the analysis within related input/output files is 
+#'    conducted in the given folder instead of a temporary one
+#'    (the default work flow).
+#'@param kinship
+#'    A matrix of the kinship coefficients (custom kinship matrix). 
+#'    The IDs are required to be in row and column names.
+#'@param traits
+#'    a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.
+#'@param covlist 
+#'    a vector of characters to specify fixed effects (covariates) in the model.
+#'    It is alternative to the formula interface.
+#'    The default value is \code{"1"}.
+#'@param snpformat
+#'    a character, the format of SNP data passsed by \code{snpdata} argument.
+#'    Currently, this argument is not used.
+#'@param snpdata
+#'    A matrix of SNP data.
+#'    SNPs are given in the columns, and individuals correspond to the rows. 
+#'    The IDs of individuals are required to be in row and column names.
+#'@param snpcovdata
+#'    A matrix of SNP data, which are converted to covariates (numeric format).
+#'    SNPs are given in the columns, and individuals correspond to the rows. 
+#'    The IDs of individuals are required to be in row and column names.
+#'@param snpmap
+#'    A data.frame of annotation for SNPs.
+#'@param snplist
+#'    a vector of characters, the names of SNPs to be used in the analysis.
+#'    This argument may be used when a subset of SNPs is of the interest.
+#'@param snpind
+#'    a vector of positive integers, the indices of SNPs to be used in the analysis.
+#'    This argument may be used when a subset of SNPs is of the interest.
+#'@param genocov.files
+#'    A vector of characters, the file paths to \code{genocov} SOLAR files.
+#'@param snplists.files
+#'    A vector of characters, the file paths to \code{snplists} SOLAR files.
+#'@param snpmap.files
+#'    A vector of characters (optional), the file paths to \code{snpmap} SOLAR files.
+#'@param assoc.outformat
+#'    A character, the output format.
+#'    Possible values are \code{"df"}, \code{"outfile"} and \code{"outfile.gz"}.
+#'    Currently, the only supported output format is \code{"df"}.
+#'    That means the table of results is stored in \code{snpf} slot of a returned object.
+#'@param assoc.outdir
+#'    a character, the path to the output directory.
+#'    Currently, this argument is not used.
+#'@param cores
+#'    A positive integer, the number of cores for parallel computing.
+#'    The default value is taken from \code{getOption("cores")}.
+#'    If the default value is \code{NULL} then the number of cores is \code{1}.
+#'@param ...
+#'    Arguments to be passed to  \code{\link{solarPolygenic}} function.
+#'    For example, one of such arguments may be \code{polygenic.settings = "option EnableDiscrete 0"}.
+#'    Arguments of \code{solarMultipoint},
+#'    which are also passed to \code{\link{solarPolygenic}},
+#'    include \code{formula}, \code{data}, \code{dir}, 
+#'    \code{kinship}, \code{traits} and \code{covlist}.
+#'@param verbose 
+#'    An non-negative integer of the verbose level.
+#'    The default value is \code{0}.
+#'
+#'@examples
+#' ### load data 
+#' data(dat50)
+#' dim(phenodata)
+#' dim(kin)
+#' dim(genodata)
+#'
+#' \dontrun{
+#' ### basic (univariate) association model with a custom kinship
+#' mod <- solarAssoc(trait~age+sex, phenodata,
+#'   kinship = kin, snpdata = genodata)
+#' mod$snpf # table of results for 50 SNPs
+#' }
 #' @export
 solarAssoc <- function(formula, data, dir,
   kinship,
@@ -7,7 +99,7 @@ solarAssoc <- function(formula, data, dir,
   # input data to association 
   snpformat, snpdata, snpcovdata, snpmap,
   snplist, snpind,
-  genocov.files, genolist.file, snplists.files, snpmap.files,
+  genocov.files, snplists.files, snpmap.files,
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
   # misc

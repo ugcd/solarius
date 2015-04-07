@@ -1,14 +1,14 @@
 #' S3 class solarAssoc.
 #'
-#' @name solarAssoc-class
-#' @rdname solarAssoc-class
+#' @name solarAssocClass
+#' @rdname solarAssocClass
 #' @exportClass solarAssoc
 
 #--------------------
 # Print method
 #--------------------
 
-#' @rdname solarAssoc-class
+#' @rdname solarAssocClass
 #' @export
 print.solarAssoc <- function(x, ...)
 {
@@ -39,7 +39,7 @@ print.solarAssoc <- function(x, ...)
     format(.POSIXct(t, tz = "GMT"), "%H:%M:%S"), "\n", sep = "")
 }
 
-#' @rdname solarAssoc-class
+#' @rdname solarAssocClass
 #' @export
 plot.solarAssoc <- function(x, y = "manh", ...)
 {
@@ -131,7 +131,7 @@ plot.solarAssoc.old <- function(x,
   return(p)
 }
 
-#' @rdname solarAssoc-class
+#' @rdname solarAssocClass
 #' @export
 summary.solarAssoc <- function(x, alpha = 0.05, ...)
 {
@@ -161,7 +161,7 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
 # Other methods
 #--------------------
 
-#' @rdname solarAssoc-class
+#' @rdname solarAssocClass
 #' @export
 annotate.solarAssoc <- function(x, ..)
 {

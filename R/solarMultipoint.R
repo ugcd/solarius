@@ -1,5 +1,109 @@
-#' Function solarMultipoint.
+#' Run multipoint linkage analysis.
 #'
+#' The linkage analysis is conducted in the following sequence:
+#' parse input files of multipoint IBD matrices,
+#' export data to a directory by \code{\link{df2solar}} function, 
+#' run the polygenic analysis in a directory,
+#' run the linkage analysis on the top of the polygenic analysis,
+#' parse output files and 
+#' store results in an object of \code{solarMultipoint} class (see \code{\link{solarMultipointClass}}).
+#'
+#'@param formula
+#'  an object of class \code{formula} or one that can be coerced to that class.
+#'  It is a symbolic description of fixed effects (covariates) to be fitted. 
+#'@param data
+#'    A data frame containing the variables in the model, 
+#'    including ID fields needed to construct random effects: genetic and house-hold (both optional).
+#'    Other classes such as list, environment or object coercible by \code{as.data.frame} to a data frame
+#'    are not supported.
+#'@param dir
+#'    an optional character string, the name of directory,
+#'    where SOLAR performs the analysis.
+#'    In this case, the analysis within related input/output files is 
+#'    conducted in the given folder instead of a temporary one
+#'    (the default work flow).
+#'@param kinship
+#'    A matrix of the kinship coefficients (custom kinship matrix). 
+#'    The IDs are required to be in row and column names.
+#'@param traits
+#'    a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.
+#'@param covlist 
+#'    a vector of characters to specify fixed effects (covariates) in the model.
+#'    It is alternative to the formula interface.
+#'    The default value is \code{"1"}.
+#'@param mibddir 
+#'    A character, the name of directory with files representing the IBD matrices in SOLAR format.
+#'    These matrices can be evaluated by SOLAR or by other program.
+#'    See SOLAR help for \code{ibd} command for more details
+#'    (\url{http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#ibd}).
+#'@param chr 
+#'    A character or one that can be coerced to that class,
+#'    the value to be passed to SOLAR command \code{chromosome}.
+#'    If it is missing, the default value is \code{"all"}.
+#'    See SOLAR help for \code{chromosome} command for more details
+#'    (\url{http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#chromosome}).
+#'@param interval
+#'    A character or one that can be coerced to that class,
+#'    the value to be passed to SOLAR command \code{interval}.
+#'    If it is missing, the default value is \code{1}.
+#'    See SOLAR help for \code{interval} command for more details.
+#'@param multipoint.options
+#'    A character of options to be passed to \code{multipoint} SOLAR command.
+#'    For example, one or more LOD scores may be specified
+#'    to run multi-pass linkage analysis.
+#'    If the argument is \code{"3"}, that means a two-pass linkage scan
+#'    with condition of the highest LOD of \code{3} to start the second pass.
+#'    See SOLAR help page for \code{multipoint} command for more details
+#'    (\url{http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#multipoint}).
+#'    The default value is \code{""}.
+#'@param multipoint.settings
+#'    A vector of characters, that contains SOLAR commands to be executed just before calling \code{multipoint}.
+#'    For example, the fine mapping for the linkage scan can be disabled
+#'    by setting the given argument to \code{"finemap off"}.
+#'    The default value is \code{""}.
+#'@param cores
+#'    A positive integer, the number of cores for parallel computing.
+#'    The default value is taken from \code{getOption("cores")}.
+#'    If the default value is \code{NULL} then the number of cores is \code{1}.
+#'@param ...
+#'    Arguments to be passed to  \code{\link{solarPolygenic}} function.
+#'    For example, one of such arguments may be \code{polygenic.settings = "option EnableDiscrete 0"}.
+#'    Arguments of \code{solarMultipoint},
+#'    which are also passed to \code{\link{solarPolygenic}},
+#'    include \code{formula}, \code{data}, \code{dir}, 
+#'    \code{kinship}, \code{traits} and \code{covlist}.
+#'@param verbose 
+#'    An non-negative integer of the verbose level.
+#'    The default value is \code{0}.
+#'
+#'@examples
+#' ### load phenotype data 
+#' data(dat30)
+#'
+#' ### load marker data
+#' mibddir <- system.file('extdata', 'solarOutput',
+#'   'solarMibdsCsv', package = 'solarius') 
+#' list.files(mibddir)
+#'
+#' \dontrun{
+#' ### basic (univariate) linkage model
+#' mod <- solarMultipoint(trait1 ~ 1, dat30,
+#'   mibddir = mibddir, chr = 5)
+#' mod$lodf # table of results (LOD scores) (the highest 3.56)
+#'
+#' ### basic (bivariate) linkage model
+#' mod <- solarMultipoint(trait1 + trait2 ~ 1, dat30,
+#'   mibddir = mibddir, chr = 5)
+#' mod$lodf # table of results (LOD scores) (the highest 2.74)
+#'
+#' ### two-pass linkage model
+#' mod <- solarMultipoint(trait1 ~ 1, dat30,
+#'   mibddir = mibddir, chr = 5,
+#'   multipoint.options = "3")
+#' mod$lodf # table of results (LOD scores, 1 pass) (the highest 2.74)
+#' mod$lodf2 # table of results (LOD scores, 2 pass) (all nearly zero LOD scores)
+#'
+#' }
 #' @export
 solarMultipoint <- function(formula, data, dir,
   kinship,

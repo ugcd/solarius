@@ -114,15 +114,12 @@ plotKinship2 <- function(x, y = "image")
 
 #' Function imageKinship2 
 #'
-#' @importFrom Matrix Matrix
-#' @importFrom Matrix image
 #' @export imageKinship2
 imageKinship2 <- function(kmat)
 { 
   stopifnot(require(Matrix))
-  Matrix::image(Matrix::Matrix(kmat))
   
-  return(invisible())
+  Matrix::image(Matrix::Matrix(kmat))
 }
 
 #' Function histKinship2 

@@ -1,14 +1,14 @@
 #' S3 class solarMultipoint.
 #'
-#' @name solarMultipoint-class
-#' @rdname solarMultipoint-class
+#' @name solarMultipointClass
+#' @rdname solarMultipointClass
 #' @exportClass solarMultipoint
 
 #--------------------
 # Print method
 #--------------------
 
-#' @rdname solarMultipoint-class
+#' @rdname solarMultipointClass
 #' @export
 print.solarMultipoint <- function(x, ...)
 {
@@ -27,7 +27,7 @@ print.solarMultipoint <- function(x, ...)
     format(.POSIXct(t, tz = "GMT"), "%H:%M:%S"), "\n", sep = "")
 }
 
-#' @rdname solarMultipoint-class
+#' @rdname solarMultipointClass
 #' @export
 plot.solarMultipoint <- function(x, 
   pass = 1, ...)
@@ -58,7 +58,7 @@ plot.solarMultipoint <- function(x,
     theme_bw()
 }
 
-#' @rdname solarMultipoint-class
+#' @rdname solarMultipointClass
 #' @export
 summary.solarMultipoint <- function(x, ...)
 {

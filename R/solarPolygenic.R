@@ -1,9 +1,9 @@
 #' Run polygenic analysis.
 #'
 #' The polygenic analysis is conducted in the following sequence:
-#' export data to a directory \code{\link{df2solar}}, 
+#' export data to a directory by \code{\link{df2solar}} function, 
 #' form a SOLAR call with a list of settings and options,
-#' execute SOLAR \code{\link{solar}}, 
+#' execute SOLAR by \code{\link{solar}} function, 
 #' parse output files and 
 #' store results in an object of \code{solarPolygenic} class (see \code{\link{solarPolygenicClass}}).
 #'
@@ -24,7 +24,7 @@
 #'    conducted in the given folder instead of a temporary one
 #'    (the default work flow).
 #'@param kinship
-#'    A matrix of the kinship coefficient (custom kinship matrix). 
+#'    A matrix of the kinship coefficients (custom kinship matrix). 
 #'    The IDs are required to be in row and column names.
 #'    Currently, it does not work for unrelated individuals (SOLAR issue).
 #'@param traits
@@ -36,13 +36,13 @@
 #'    for example, \code{"age^1,2,3#sex"} that means \code{sex age agesex age^2 age^2sex age^3 age^3*sex}.
 #'    The default value is \code{"1"}.
 #'@param covtest 
-#'    a logical value, indicating where to test the significance of the fixed effects (covariates).
+#'    a logical value, indicating whether to test the significance of the fixed effects (covariates).
 #'    Likelihood ratio test (LRT) is used by SOLAR.
 #'    \code{polygenic} SOLAR command is called with a combination of \code{-screen -all} options.
 #'    As a result, \code{cf} slot will have p-values in \code{pval} column.
 #'    The default value is \code{FALSE}.
 #'@param screen 
-#'    a logical value, indicating where to screen the fixed effects (covariates).
+#'    a logical value, indicating whether to screen the fixed effects (covariates).
 #'    \code{polygenic} SOLAR command is called with \code{-screen} option.
 #'    As a result, only significant covariates will be maintained in the model.
 #'    The default value is \code{FALSE}.
@@ -72,13 +72,15 @@
 #'    This parameter makes the \code{polygenic} SOLAR call to be like \code{polygenic -prob 0.05}.
 #'@param polygenic.settings 
 #'    A vector of characters, that contains SOLAR commands to be executed just before calling \code{polygenic}.
-#'    For example, the liability threshold model applied to a binary trait by default in SOLAR
-#'    is disabled by setting this parameter to \code{"option EnableDiscrete 0"}.
+#'    For example, the liability threshold model applied to a binary trait (the default behavior in SOLAR).
+#'    This behavior is disabled by setting the given argument to \code{"option EnableDiscrete 0"}.
 #'    The default value is \code{""}.
 #'@param polygenic.options 
 #'    A character of options to be passed to \code{polygenic} SOLAR command.
 #'    For example, the comprehensive analysis of a bivariate model might be parametrized
 #'    by setting this parameter to \code{"-testrhoe -testrhog -testrhoc -testrhop -rhopse"}.
+#'    See SOLAR help page for \code{polygenic} command for more details
+#'    (\url{http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#polygenic}).
 #'    The default value is \code{""}.
 #'@param verbose 
 #'    An non-negative integer of the verbose level.
