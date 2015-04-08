@@ -128,7 +128,6 @@
 #'
 #' }
 #'
-#' @importFrom methods hasArg
 #' @export
 solarPolygenic <- function(formula, data, dir,
   kinship,

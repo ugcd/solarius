@@ -8,7 +8,7 @@ Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
 Description: R package wrapper to SOLAR
 License: GPL (>= 3)
 LazyData: true
-Depends:
+Imports:
     methods,
     plyr (>= 1.8.1),
     data.table
@@ -22,6 +22,7 @@ Suggests:
     parallel,
     qqman
 Collate:
+    'package.R'
     'data.lib.R'
     'support.lib.R'
     'solar.lib.R'
@@ -37,4 +38,3 @@ Collate:
     'solarMultipoint.R'
     'multipoint.lib.R'
     'transforms.lib.R'
-VignetteBuilder: knitr

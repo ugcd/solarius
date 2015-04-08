@@ -3,7 +3,7 @@
 # Configure functions
 #---------------
 
-#' A list of available transforms.
+#' Get a list of available transforms.
 #'
 #' @return A character vector of transform names.
 #' @examples
@@ -15,6 +15,21 @@ availableTransforms <- function() c("none", "inormal", "log", "out")
 # Transform functions
 #---------------
 
+#' Apply transforms to a data set.
+#'
+#' @param transforms 
+#'    A named character vector of transforms,
+#'    where traits are given in the names of the vector.
+#' @param data
+#'    A matrix or a data.frame, where the column names represent the names of traits.
+#' @param ...
+#'    Additional parameters to be passed to \code{transformTrait} function called inside of \code{transformData}.
+#'    For example, it might be a parameter \code{log.base} for \code{\link{transformTrait}} function
+#'    in the case \code{transform} is equal to \code{"log"}.
+#' @return
+#'    a matrix or a data.frame of the transformed data.
+#'
+#' @seealso availableTransforms, transformTrait
 #' @export
 transformData <- function(transforms, data, ...)
 {
@@ -127,8 +142,12 @@ transform_trait_inormal <- function(x, mean = 0, sd = 1)
   of <- join(df0, df[, c("sample", "y")], by = "sample") # join input and output data.frames
   of <- of[with(of, order(sample)), ]
   
-  ### duplicate values
-  of <- arrange(ddply(of, .(x), mutate, y = median(y,na.rm=TRUE)),sample)
+  ### duplicated values
+  y <- NULL # due to R CMD check: no visible binding for global variable ‘y’
+  of <- ddply(of, .(x), mutate, 
+    y = median(y, na.rm = TRUE))
+
+  of <- arrange(of, sample)
   
   return(of$y)
 }
