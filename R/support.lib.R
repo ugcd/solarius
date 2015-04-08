@@ -203,7 +203,7 @@ kmat2phi2 <- function(kmat, dir, kin2.gz = "kin2.gz")
 
 kf2phi2 <- function(kf, dir, kin2.gz = "kin2.gz")
 {
-  stopifnot(requre(gdata))
+  stopifnot(require(gdata))
   
   pedindex.out <- file.path(dir, "pedindex.out")
   pf <- read_pedindex(pedindex.out)
