@@ -550,6 +550,14 @@ load_all("../")
 library(solarius)
 ```
 
+Other R packages will be needed for the tutorial.
+
+```{r inc_other}
+library(plyr)
+```
+
+
+
 ## Data sets
 
 The genome-wide QTL analysis typically involves large-scale data sets.
