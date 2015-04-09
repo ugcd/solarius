@@ -43,7 +43,7 @@ plotPed <- function(data, ped)
   
   # make `pedigree` object
   ped <- with(df, 
-    pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID))  
+    pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  
 
   plot(ped[1])
 }

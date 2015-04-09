@@ -31,7 +31,7 @@ availableTransforms <- function() c("none", "inormal", "log", "out")
 #'
 #' @seealso availableTransforms, transformTrait
 #' @export
-transformData <- function(transforms, data, ...)
+transformData <- function(transforms, data, transform.prefix = "tr_", ...)
 {
   ### arg
   stopifnot(!missing(transforms))
@@ -52,7 +52,7 @@ transformData <- function(transforms, data, ...)
     x <- data[, var]    
     xt <- transformTrait(x, tr, ...)
     
-    vart <- paste0("tr_", var)
+    vart <- paste0(transform.prefix, var)
     data[, vart] <- xt
   }
   
