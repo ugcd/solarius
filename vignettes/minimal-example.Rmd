@@ -1,0 +1,46 @@
+---
+title: "Minimal example for `solarius` R package"
+author: "Andrey Ziyatdinov"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+    toc_depth: 3
+    number_sections: true
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+---
+
+```{r chunk_opt, echo = FALSE}
+opts_chunk$set(eval = TRUE)
+#opts_chunk$set(fig.path = "figures-minexample/")
+```
+
+```{r min_example, cache = TRUE}
+# load library
+library(solarius)
+
+# load data set for running polygenic and linkage models
+data(dat30)
+
+# univariate polygenic model
+mod1 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+
+# bivariate polygenic model
+mod2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30,
+  polygenic.options = '-testrhoe -testrhog')
+
+# specify directory with IBD matrices and run linkage model
+mibddir <- system.file('extdata', 'solarOutput',
+  'solarMibdsCsv', package = 'solarius') 
+link <- solarMultipoint(trait1 ~ 1, dat30,
+  mibddir = mibddir, chr = 5)
+
+# load data set and run association model in parallel
+assoc <- solarAssoc(trait1 ~ 1, dat30, cores = 2,
+  snpcovdata = genocovdat30, snpmap = mapdat30)
+```  
+

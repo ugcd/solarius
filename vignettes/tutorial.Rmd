@@ -17,6 +17,9 @@ bibliography: ref.bib
 
 ```{r chunk_opt, echo = FALSE}
 opts_chunk$set(eval = TRUE)
+#opts_chunk$set(fig.path = "figures-tutorial/")
+```
+
 ```
 
 # Introduction

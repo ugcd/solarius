@@ -5,4 +5,5 @@ dat/
 *_files/
 cache/
 figure/
+figures-*/
 *.md

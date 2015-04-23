@@ -17,6 +17,7 @@ bibliography: gait.bib
 
 ```{r, echo = FALSE}
 opts_chunk$set(eval = TRUE, dev = "png")
+opts_chunk$set(fig.path = "figures-modelsGAIT1/")
 ```
 
 ```{r inc_hidden, echo = FALSE, message = FALSE}
