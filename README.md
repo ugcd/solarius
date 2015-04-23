@@ -6,8 +6,9 @@ R package wrapper to SOLAR
 * Vignettes 
   * R code [vignettes/](vignettes/)
   * hmlt output:
-     1. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
-     2. [models.html](http://ugcd.github.io/solarius/vignettes/models.html)
+     1. [tutorial.html](http://ugcd.github.io/solarius/vignettes/tutorial.html)
+     2. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
+     
 
 
 ### Install package
