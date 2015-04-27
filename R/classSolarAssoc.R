@@ -44,8 +44,8 @@ print.solarAssoc <- function(x, ...)
 plot.solarAssoc <- function(x, y = "manh", ...)
 {
   switch(y,
-    manh = ManhattanPlot(x, ...),
-    qq = qqPlot(x, ...),
+    manh = plotManh(x, ...),
+    qq = plotQQ(x, ...),
     stop("switch error"))
 }
 

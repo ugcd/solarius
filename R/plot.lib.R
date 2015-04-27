@@ -53,48 +53,52 @@ plotPed <- function(data, ped)
 #----------------------------------
 
 #' @export
-ManhattanPlot <- function(A)
+plotManh <- function(A, alpha = 0.05, ...)
 {
-  require(qqman)
+  stopifnot(require(qqman))
   
   stopifnot(all(c("chr", "pSNP", "pos") %in% names(A$snpf)))
   
   df <- as.data.frame(A$snpf)
 
-  #dt <- A$snpf[!is.na(chr) & !is.na(pSNP) & !is.na(pos)]
-  #dt <- rename(dt, c(chr = "CHR", pos = "BP", pSNP = "P"))
-  #dt <- mutate(dt, CHR = as.integer(CHR))
-
-  num.na <- with(df, sum(is.na(chr) | is.na(pSNP) | is.na(pos)))
-  num.snps <- nrow(df)
+  ind <- with(df, !is.na(chr) & !is.na(pSNP) & !is.na(pos))
+  num.na <- sum(!ind)
+  num.snps <- sum(ind)
   
-  #print(num.na)
+  stopifnot(num.snps > 0)
   
-  df <- subset(df, !is.na(chr) & !is.na(pSNP) & !is.na(pos))
-  df <- rename(df, c(chr = "CHR", pos = "BP", pSNP = "P"))
-  df <- mutate(df, CHR = as.integer(CHR))
+  df <- df[ind, ]
+  df <- mutate(df,
+    chr = as.integer(chr))
     
-  manhattan(df, suggestiveline = -log10(0.05/num.snps), genomewideline = -log10(5e-08))
+  manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", ...)
+  abline(h = -log10(0.05 / num.snps), col = "black", lty = 2)
 }
 
 #' @export
-qqPlot <- function(A)
+plotQQ <- function(A, df = 1, ...)
 {
-require(qqman)
-dataP <- as.data.frame(A$snpf)
-dataP <- dataP[,c("SNP", "pSNP", "pos", "chr")]
-names(dataP)[2] <- "P"
-names(dataP)[3] <- "BP"
-dataP$CHR <- as.numeric(dataP$chr)
+  stopifnot(require(qqman))
+  
+  # get p-values
+  stopifnot("pSNP" %in% names(A$snpf))
+  
+  snpf <- as.data.frame(A$snpf)
 
-pos <- which(is.na(dataP$CHR))
-if(length(pos)) {
-  dataPP<- dataP[-pos,]
-} else {
-  dataPP<- dataP
-}
-
-qq(dataPP$P)
+  ind <- with(snpf, !is.na(chr) & !is.na(pSNP) & !is.na(pos))
+  num.na <- sum(!ind)
+  num.snps <- sum(ind)
+  
+  stopifnot(num.snps > 0)
+  
+  pvals <- snpf[ind, "pSNP"]
+  
+  # estimate lambda inflation-statistics
+  lambda <- median(pvals, na.rm = TRUE) / qchisq(0.5, df)
+  sub <- paste("lambda", round(lambda, 2))
+  
+  # plot
+  qq(pvals, sub = sub, ...)
 }
 
 #----------------------------------
