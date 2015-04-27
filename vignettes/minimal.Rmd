@@ -19,6 +19,8 @@ opts_chunk$set(eval = TRUE)
 #opts_chunk$set(fig.path = "figures-minexample/")
 ```
 
+# All code in one block
+
 ```{r min_example, cache = TRUE}
 # load library
 library(solarius)
@@ -27,7 +29,7 @@ library(solarius)
 data(dat30)
 
 # univariate polygenic model
-mod1 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+mod1 <- solarPolygenic(trait1 ~ 1, dat30)
 
 # bivariate polygenic model
 mod2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30,
@@ -43,4 +45,102 @@ link <- solarMultipoint(trait1 ~ 1, dat30,
 assoc <- solarAssoc(trait1 ~ 1, dat30, cores = 2,
   snpcovdata = genocovdat30, snpmap = mapdat30)
 ```  
+
+# Results
+
+Estimation of the heritability of `trait1` (`mod1` model) is `r sprintf("%.2f", with(mod1$vcf, Var[varcomp == "h2r"]))`
+$\pm$ `r sprintf("%.2f", with(mod1$vcf, SE[varcomp == "h2r"]))`
+with p-value `r sprintf("%.2e", with(mod1$vcf, pval[varcomp == "h2r"]))`.
+
+Estimation of the genetic correlation between `trait1` and `trait2` (`mod2` model) 
+is `r sprintf("%.2f", with(mod2$vcf, Estimate[varcomp == "rhog"]))`
+$\pm$ `r sprintf("%.2f", with(mod2$vcf, SE[varcomp == "rhog"]))`
+with p-value `r sprintf("%.2e", with(mod2$lf, pval[model == "rhog0"]))`.
+
+Estimation of the environmental correlation between `trait1` and `trait2` (`mod2` model) 
+is `r sprintf("%.2f", with(mod2$vcf, Estimate[varcomp == "rhoe"]))`
+$\pm$ `r sprintf("%.2f", with(mod2$vcf, SE[varcomp == "rhoe"]))`
+with p-value `r sprintf("%.2f", with(mod2$lf, pval[model == "rhoe0"]))`.
+
+
+
+# Polygenic model (univariate)
+
+The model with covariates can be fitted in the following way.
+
+```{r mod0, cache = TRUE}
+mod0 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+```
+
+`print` method applied to `mod0` shows that none of the covariates are significant.
+
+```{r}
+mod0
+```
+
+The test statistics and p-values for the covariates are stored in `cf` (**c**covariate **f**rame) slot.
+
+```{r cf}
+mod0$cf
+```
+
+The estimations of heritabilities in `mod0` and `mod1` models are slightly different.
+
+```{r}
+mod1
+```
+
+# Polygenic model (bivariate)
+
+The `print` method applied to `mod2` shows estimation of the main parameters of the model.
+
+```{r}
+mod2
+```
+
+The same values printed above are extracted and saved into `vcf` (**v**ariance **c**omponent **f**rame) slot .
+
+```{r}
+mod2$vcf
+```
+
+The information about the test statistic and p-values are given in `lf` (**l**ikelihood **f**rame) slot.
+
+```{r}
+mod2$lf
+```
+
+# Linkage model
+
+Table of the results with LOD scores and marker information is stored in `lodf` (**LOD** scores **f**rame) slost.
+
+```{r}
+link$lodf
+```
+
+Summary method reports the maximum LOD score.
+
+```{r}
+summary(link)
+```
+
+The plot method graphically shows the results.
+
+```{r plot_link}
+plot(link)
+```
+
+# Asssociation model
+
+```{r}
+summary(assoc)
+```
+
+```{r plot_assoc_man}
+plot(assoc)
+```
+
+```{r plot_assoc_qq}
+plot(assoc, "qq")
+```
 
