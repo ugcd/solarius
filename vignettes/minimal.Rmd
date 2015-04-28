@@ -16,7 +16,7 @@ output:
 
 ```{r chunk_opt, echo = FALSE}
 opts_chunk$set(eval = TRUE)
-#opts_chunk$set(fig.path = "figures-minexample/")
+opts_chunk$set(fig.path = "figures-minimal/")
 ```
 
 # All code in one block
@@ -62,7 +62,13 @@ is `r sprintf("%.2f", with(mod2$vcf, Estimate[varcomp == "rhoe"]))`
 $\pm$ `r sprintf("%.2f", with(mod2$vcf, SE[varcomp == "rhoe"]))`
 with p-value `r sprintf("%.2f", with(mod2$lf, pval[model == "rhoe0"]))`.
 
+The highest LOD score in the linkage analysis of `trait1` on Chromosome 5 
+is `r sprintf("%.2f", max(link$lodf$LOD))` at `r link$lodf$pos[which.max(link$lodf$LOD)]` cM position.
 
+The only significant SNP in the association analysis of `trait1` 
+on a set of `r nrow(assoc$snpf)` (synthetic) SNPs is 
+`r as.character(assoc$snpf$SNP[which.min(assoc$snpf$pSNP)])`
+with p-value `r sprintf("%.2e", min(assoc$snpf$pSNP))`.
 
 # Polygenic model (univariate)
 
@@ -132,13 +138,27 @@ plot(link)
 
 # Asssociation model
 
+`summary` method applies the Bonferroni correction with a given value of `alpha` (the default value is 0.05).
+
 ```{r}
-summary(assoc)
+summary(assoc, alpha = 0.05)
 ```
 
-```{r plot_assoc_man}
-plot(assoc)
+Table of the results is stored in `snpf` (**SNP** frame) slot.
+
+```{r}
+head(assoc$snpf)
 ```
+
+The default plot method is Manhattan plot.
+The black dashed line shows the Bonferroni correction level at a given value of `alpha` (the default value is 0.05).
+
+```{r plot_assoc_man}
+plot(assoc, alpha = 0.01)
+```
+
+The second plot available for `assoc` object is QQ-plot.
+The inflation parameter $\lambda$ (median method) is computed and dipicted at the bottom of the figure.
 
 ```{r plot_assoc_qq}
 plot(assoc, "qq")

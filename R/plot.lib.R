@@ -72,7 +72,7 @@ plotManh <- function(A, alpha = 0.05, ...)
     chr = as.integer(chr))
     
   manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", ...)
-  abline(h = -log10(0.05 / num.snps), col = "black", lty = 2)
+  abline(h = -log10(alpha / num.snps), col = "black", lty = 2)
 }
 
 #' @export

@@ -149,7 +149,8 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
   pSNP.thr <- alpha / num.snps
   snpf <- subset(x$snpf, pSNP < pSNP.thr)
   num.snps.signif <- length(which(x$snpf$pSNP<pSNP.thr))
-  cat(" * Number of significal SNPs:", num.snps.signif, "\n")
+  cat(" * Number of significal SNPs: ", num.snps.signif, 
+    " (Bonferroni correction with alpha ", alpha, ")\n", sep = "")
   if(num.snps.signif > 0) {
     ord <- with(snpf, order(pSNP))
     snpf <- snpf[ord, ]
@@ -161,9 +162,8 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
 # Other methods
 #--------------------
 
-#' @rdname solarAssocClass
 #' @export
-annotate.solarAssoc <- function(x, ..)
+annotate <- function(x, ...)
 {
   annotateSignifSNPs(x, ...)
 }
