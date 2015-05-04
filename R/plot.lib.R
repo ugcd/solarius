@@ -53,7 +53,7 @@ plotPed <- function(data, ped)
 #----------------------------------
 
 #' @export
-plotManh <- function(A, alpha = 0.05, ...)
+plotManh <- function(A, alpha = 0.05, main, ...)
 {
   stopifnot(require(qqman))
   
@@ -70,13 +70,25 @@ plotManh <- function(A, alpha = 0.05, ...)
   df <- df[ind, ]
   df <- mutate(df,
     chr = as.integer(chr))
+  ### plot parameters
+  if(missing(main)) {
+    main1 <- paste(paste(A$traits, collapse = "+"), "~", paste(A$covlist, collapse = "+"))
+    main2 <- paste("#SNPs:", num.snps) 
+    if(num.na > 0) {
+      main2 <- paste(main2, " (#SNPs missing: ", num.na, ")", sep = "")
+    }
     
-  manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", ...)
+    main <- paste(main1, main2, sep = "\n")
+  }
+  
+  ### plot    
+  manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", 
+    main = main, ...)
   abline(h = -log10(alpha / num.snps), col = "black", lty = 2)
 }
 
 #' @export
-plotQQ <- function(A, df = 1, ...)
+plotQQ <- function(A, df = 1, main, ...)
 {
   stopifnot(require(qqman))
   
@@ -97,8 +109,19 @@ plotQQ <- function(A, df = 1, ...)
   lambda <- median(pvals, na.rm = TRUE) / qchisq(0.5, df)
   sub <- paste("lambda", round(lambda, 2))
   
+  # plot par
+  if(missing(main)) {
+    main1 <- paste(paste(A$traits, collapse = "+"), "~", paste(A$covlist, collapse = "+"))
+    main2 <- paste("#SNPs:", num.snps) 
+    if(num.na > 0) {
+      main2 <- paste(main2, " (#SNPs missing: ", num.na, ")", sep = "")
+    }
+    
+    main <- paste(main1, main2, sep = "\n")
+  }
+  
   # plot
-  qq(pvals, sub = sub, ...)
+  qq(pvals, main = main, sub = sub, ...)
 }
 
 #----------------------------------

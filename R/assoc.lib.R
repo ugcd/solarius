@@ -96,22 +96,71 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 #----------------------------------
 
 #' @export
-annotateSignifSNPs <- function(x, ...)
+annotateSNPs <- function(x, mode = c("significant", "top", "all"), 
+  alpha = 0.05,
+  num.top = 10, 
+  quiet = TRUE, capture.output = FALSE,
+  ...)
 {
-  stopifnot(require(NCBI2R))
+  mode <- match.arg(mode)
 
-  d <- dim(x$snpf)
-  posSig <- which(x$snpf$pSNP*d[1]<0.05)
-  snplist <- as.character(x$snpf$SNP[posSig])
-
-  if(length(snplist) == 0) {  
-    warning("there are no significant SNPs.")
+  fun.exists <- exists("AnnotateSNPList", mode = "function")
+  if(!fun.exists) {
+    warning("R package `NCBI2R` is required. Load the package before calling `annotateSNPs` function. See the web page https://ncbi2r.wordpress.com/ for more details.")
+    return(invisible())
+  }
+  
+  ### get list of SNPs
+  if(class(x)[1] == "solarAssoc") {
+    num.snps <- nrow(x$snpf)
+    if(mode == "significant") {  
+      snplist <- subset(x$snpf, pSNP <= (alpha/num.snps))[, SNP]
+    
+      if(length(snplist) == 0) {  
+        warning("There are no significant SNPs.")
+        return(invisible())
+      }
+    } else if(mode == "top") {
+      num.top <- min(num.top, num.snps)
+      
+      ord <- order(A$snpf$pSNP)
+      ord <- ord[seq(1, num.top)]
+      
+      snplist <- A$snpf[ord, SNP]
+    } else if(mode == "all") {
+      snplist <- A$snpf[, SNP]
+    } else {
+      stop("`mode` is unknown.")
+    }
+    
+    snplist <- as.character(snplist)
+  } else if (class(x)[1] == "character") {
+    snplist <- x
+  } else {
+     stop("Class of `x` is unknown.")
+  }  
+  
+  ### annotate
+  if(capture.output) {
+    tmp.file <- tempfile("AnnotateSNPList-")
+    capture.output({
+      tab <- try({ 
+          AnnotateSNPList(snplist)
+      })}, 
+      file = tmp.file)
+    ret <- unlink(tmp.file)
+  } else {
+    tab <- try({ 
+      AnnotateSNPList(snplist)
+    }) 
+  }
+      
+  if(class(tab) == "try-error") {
+    warning("`AnnotateSNPList` function in R package `NCBI2R` has not been completed.")
     return(invisible())
   }
 
-  b <- AnnotateSNPList(snplist)
-
-  b[1:12]
+  tab[1:12]
 }
 
 

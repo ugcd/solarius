@@ -144,7 +144,7 @@ plot(link)
 summary(assoc, alpha = 0.05)
 ```
 
-Table of the results is stored in `snpf` (**SNP** frame) slot.
+Table of the results is stored in `snpf` (**SNP** **f**rame) slot.
 
 ```{r}
 head(assoc$snpf)
@@ -154,13 +154,45 @@ The default plot method is Manhattan plot.
 The black dashed line shows the Bonferroni correction level at a given value of `alpha` (the default value is 0.05).
 
 ```{r plot_assoc_man}
-plot(assoc, alpha = 0.01)
+plotManh(assoc, alpha = 0.01)
 ```
+
+This call is equavalent to `plot(assoc, alpha = 0.01)`,
+as `plot` method applied to `assoc` object calls `plotManh` function.
 
 The second plot available for `assoc` object is QQ-plot.
 The inflation parameter $\lambda$ (median method) is computed and dipicted at the bottom of the figure.
 
 ```{r plot_assoc_qq}
-plot(assoc, "qq")
+plotQQ(assoc)
 ```
+
+This call is equavalent to `plot(assoc, "qq")`,
+as `plot` method (applied to `assoc` object) with the second argument equal to `"qq"` calls `plotQQ` function.
+
+The procedure of SNPs annotation is possible if the user loads `NCBI2R` R package.
+
+```{r}
+library(NCBI2R)
+```
+
+```{r}
+tab <- annotate(assoc)
+```
+
+Annotation of the synthetic SNPs generated for `dat30` data sets fails,
+since the names expected by `NCBI2R` R package must begin with *rs* symbols.
+
+Meantime, annotation of the genome-wide significant SNPs 
+from [GWAS of FXIc phenotype in GAIT1 data set](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html#fxi)
+(real data) is accomplished as following.
+
+```{r annot_F11_gait1, cache = TRUE}
+snps <- c("rs710446", "rs4241824", "rs4253399")
+tab <- annotate(snps, capture.output = TRUE)
+tab
+```
+
+In this case `annotate` function takes a vector of characters as its first argument.
+
 

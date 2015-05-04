@@ -165,5 +165,5 @@ summary.solarAssoc <- function(x, alpha = 0.05, ...)
 #' @export
 annotate <- function(x, ...)
 {
-  annotateSignifSNPs(x, ...)
+  annotateSNPs(x, ...)
 }
