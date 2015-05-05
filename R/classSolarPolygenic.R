@@ -21,22 +21,22 @@ print.solarPolygenic <- function(x, ...)
 
 #' @rdname solarPolygenicClass
 #' @export
-summary.solarPolygenic <- function(x, ...)
+summary.solarPolygenic <- function(object, ...)
 {
   cat("\nCall: ")
-  print(x$call)
+  print(object$call)
   
   cat("\nFile polygenic.out:\n")
-  l_ply(x$solar$files$model$polygenic.out, function(x) cat(x, "\n"))
+  l_ply(object$solar$files$model$polygenic.out, function(x) cat(x, "\n"))
   
   cat("\n Loglikelihood Table:\n")
-  print(x$lf)
+  print(object$lf)
   
   cat("\n Covariates Table:\n")
-  print(x$cf)
+  print(object$cf)
 
   cat("\n Variance Components Table:\n")
-  print(x$vcf)
+  print(object$vcf)
 }
 
 #--------------------
@@ -45,24 +45,24 @@ summary.solarPolygenic <- function(x, ...)
 
 #' @rdname solarPolygenicClass
 #' @export
-residuals.solarPolygenic <- function(x, trait = FALSE, ...)
+residuals.solarPolygenic <- function(object, trait = FALSE, ...)
 {
-  stopifnot(!is.null(x$resf))
-  stopifnot(nrow(x$resf) > 0)
-  stopifnot(all(c("id", "residual") %in% names(x$resf)))
+  stopifnot(!is.null(object$resf))
+  stopifnot(nrow(object$resf) > 0)
+  stopifnot(all(c("id", "residual") %in% names(object$resf)))
   
   if(!trait) {
-    r <- x$resf$residual
-    names(r) <- x$resf$id
+    r <- object$resf$residual
+    names(r) <- object$resf$id
   } else {
-    stopifnot(length(x$traits) == 1)
-    trait <- x$traits
+    stopifnot(length(object$traits) == 1)
+    trait <- object$traits
 
     trait <- tolower(trait) # SOLAR naming in residual files
-    stopifnot(trait %in% names(x$resf))
+    stopifnot(trait %in% names(object$resf))
   
-    r <- subset(x$resf, select = trait, drop = TRUE)
-    names(r) <- x$resf$id
+    r <- subset(object$resf, select = trait, drop = TRUE)
+    names(r) <- object$resf$id
   }
   
   return(r)

@@ -275,6 +275,8 @@ extractVarCompFrame <- function(dir, out)
     # Estimate/SE of varcomp
     indSE <- grep("SE$", tab[, 1])
     vcf <- data.frame(varcomp = tab[-indSE, 1], Estimate = tab[-indSE, 2], SE = tab[indSE, 2])
+    
+    Estimate <- SE <- NULL # due to R CMD check: no visible binding
     vcf <- mutate(vcf, zscore = Estimate / SE)
   }  
   

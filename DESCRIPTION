@@ -11,9 +11,10 @@ LazyData: true
 Imports:
     methods,
     plyr (>= 1.8.1),
-    data.table
-Suggests:
     ggplot2,
+    data.table
+Suggests: 
+    kinship2,
     scales,
     Matrix,
     gdata,
@@ -23,6 +24,7 @@ Suggests:
     qqman
 Collate:
     'package.R'
+    'datasets.R'    
     'data.lib.R'
     'support.lib.R'
     'solar.lib.R'

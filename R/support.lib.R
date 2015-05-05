@@ -296,7 +296,10 @@ check_var_names <- function(traits, covlist, dnames) {
   return(invisible())
 }
 
-# @examples inst/examples/example-fields.R
+#' Match ID column names.
+#'
+#' @example inst/examples/example-fields.R
+#' @export
 matchIdNames <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
 {
   # `fields`: fields in data set

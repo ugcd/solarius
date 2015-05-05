@@ -333,7 +333,8 @@ solarAssoc <- function(formula, data, dir,
     
     # annotate 
     tsolarAssoc$annotate <- proc.time()
-    out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+    #out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+    out$snpf <- merge(out$snpf, snpmap, by = "SNP", all.x = TRUE)
   } else if(out$assoc$assoc.mapformat %in% c("snpmap.file", "snpmap.files")) {
     # read map
     tsolarAssoc$map <- proc.time()
@@ -347,7 +348,8 @@ solarAssoc <- function(formula, data, dir,
     
     # annotate 
     tsolarAssoc$annotate <- proc.time()
-    out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+    #out$snpf <- data.table:::merge.data.table(out$snpf, snpmap, by = "SNP", all.x = TRUE)
+    out$snpf <- merge(out$snpf, snpmap, by = "SNP", all.x = TRUE)
   }
   }, silent = TRUE))
   

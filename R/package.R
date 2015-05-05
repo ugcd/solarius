@@ -3,8 +3,8 @@
 #' @name solariusPackage
 #' @docType package
 #' @import methods
-#' @import methods
 #' @import plyr
+#' @import ggplot2
 #' @import data.table
 {}
 

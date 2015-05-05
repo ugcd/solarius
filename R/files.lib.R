@@ -22,7 +22,7 @@ readPhen <- function(phen.file, sep.phen = ",",
   
   ### read `phen` file
   sep <- sep.phen
-  dat1 <- read.table(phen.file, nrow = 1,
+  dat1 <- read.table(phen.file, nrows = 1,
     sep = sep, header = header, stringsAsFactors = stringsAsFactors)
   new.names <- matchIdNames(names(dat1), sex.optional = sex.optional)
   old.names <- names(new.names)

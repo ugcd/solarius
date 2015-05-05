@@ -60,17 +60,17 @@ plot.solarMultipoint <- function(x,
 
 #' @rdname solarMultipointClass
 #' @export
-summary.solarMultipoint <- function(x, ...)
+summary.solarMultipoint <- function(object, ...)
 {
   cat("\nCall: ")
-  print(x$multipoint$call)
+  print(object$multipoint$call)
   
   cat("\nMultipoint model\n")
-  cat(" * Number of used markers:", nrow(x$lodf), "\n")
-  cat(" * Number of passes:", x$multipoint$num.passes, "\n")
+  cat(" * Number of used markers:", nrow(object$lodf), "\n")
+  cat(" * Number of passes:", object$multipoint$num.passes, "\n")
 
-  ind <- which.max(x$lodf$LOD)
-  cat(" * Maximum LOD score:", round(x$lodf$LOD[ind], 2), "\n")
-  cat("  -- chr:", x$lodf$chr[ind], "\n")
-  cat("  -- position:", x$lodf$pos[ind], "cM\n")
+  ind <- which.max(object$lodf$LOD)
+  cat(" * Maximum LOD score:", round(object$lodf$LOD[ind], 2), "\n")
+  cat("  -- chr:", object$lodf$chr[ind], "\n")
+  cat("  -- position:", object$lodf$pos[ind], "cM\n")
 }

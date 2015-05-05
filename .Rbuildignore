@@ -1,0 +1,13 @@
+notes
+projects
+reports
+
+vignettes
+
+inst/scripts
+inst/staticdocs
+inst/web
+
+solarius\.Rcheck
+solarius_*\.gz
+

@@ -133,22 +133,22 @@ plot.solarAssoc.old <- function(x,
 
 #' @rdname solarAssocClass
 #' @export
-summary.solarAssoc <- function(x, alpha = 0.05, ...)
+summary.solarAssoc <- function(object, alpha = 0.05, ...)
 {
   cat("\nCall: ")
-  print(x$assoc$call)
+  print(object$assoc$call)
   
   ### var
-  num.snps <- nrow(x$snpf)
+  num.snps <- nrow(object$snpf)
   
   cat("\nAssociation model\n")
   cat(" * Number of SNPs:", num.snps, "\n")
-  cat(" * Input format:", x$assoc$assoc.informat, "\n")
+  cat(" * Input format:", object$assoc$assoc.informat, "\n")
   
   # signif. SNPs
   pSNP.thr <- alpha / num.snps
-  snpf <- subset(x$snpf, pSNP < pSNP.thr)
-  num.snps.signif <- length(which(x$snpf$pSNP<pSNP.thr))
+  snpf <- subset(object$snpf, pSNP < pSNP.thr)
+  num.snps.signif <- length(which(object$snpf$pSNP<pSNP.thr))
   cat(" * Number of significal SNPs: ", num.snps.signif, 
     " (Bonferroni correction with alpha ", alpha, ")\n", sep = "")
   if(num.snps.signif > 0) {

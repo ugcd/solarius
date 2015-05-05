@@ -113,7 +113,8 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
   ### get list of SNPs
   if(class(x)[1] == "solarAssoc") {
     num.snps <- nrow(x$snpf)
-    if(mode == "significant") {  
+    if(mode == "significant") { 
+      SNP <- pSNP <- NULL # # due to R CMD check: no visible binding 
       snplist <- subset(x$snpf, pSNP <= (alpha/num.snps))[, SNP]
     
       if(length(snplist) == 0) {  
@@ -123,12 +124,12 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
     } else if(mode == "top") {
       num.top <- min(num.top, num.snps)
       
-      ord <- order(A$snpf$pSNP)
+      ord <- order(x$snpf$pSNP)
       ord <- ord[seq(1, num.top)]
       
-      snplist <- A$snpf[ord, SNP]
+      snplist <- x$snpf[ord, SNP]
     } else if(mode == "all") {
-      snplist <- A$snpf[, SNP]
+      snplist <- x$snpf[, SNP]
     } else {
       stop("`mode` is unknown.")
     }

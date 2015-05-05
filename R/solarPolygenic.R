@@ -65,7 +65,7 @@
 #'    The default value is \code{character(0)}.
 #'@param alpha
 #'    a number between 0 an 1, that is the value of
-#'    \code{-p} \code{-prob} option of \code{polygenic} SOLAR command.
+#'    \code{-prob} option of \code{polygenic} SOLAR command.
 #'    That is the probability level for keeping covariates as significant.
 #'    The default value in SOLAR is 0.1,
 #'    but the default value here is \code{0.05}.
