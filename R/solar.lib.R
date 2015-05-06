@@ -3,10 +3,26 @@
 # Main functions
 #----------------------------------
 
-#' Function solar.
+#' Call SOLAR program from R
+#'
+#' The function calls SOLAR via \code{system} function,
+#' that invokes the OS command specified by the command argument.
+#' 
+#' This is the core function in the interface between R and SOLAR.
+#'
+#' @param cmd A vector of characters, that contains the commands to be passed to SOLAR.
+#' @param dir A character, path to the directory, where SOLAR-related files (phenotypes, pedigree, markers)
+#'    were previously created.
+#' @param result A logical, \code{intern} argument to be passed to \code{system} function.
+#'  The default value is TRUE.
+#' @param ignore.stderr A logical, \code{ignore.stderr} argument to be passed to \code{system} function.
+#'  The default value is TRUE.
+#' @param ignore.stdout A logical, \code{ignore.stdout} argument to be passed to \code{system} function.
+#'  The default value is FALSE.
+#' @param ... additional arguments (which are not used).
 #'
 #' @export
-solar <- function(cmd, dir = "solar", result = TRUE,
+solar <- function(cmd, dir, result = TRUE,
   ignore.stdout = TRUE, ignore.stderr = FALSE, ...) 
 {
   stopifnot(!missing(dir))

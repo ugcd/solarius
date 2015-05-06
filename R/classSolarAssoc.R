@@ -52,10 +52,10 @@ plot.solarAssoc <- function(x, y = "manh", ...)
 plot.solarAssoc.old <- function(x, 
   alpha = 0.05, corr = "BF", pval = "pval", ...)
 {
-  ret <- require(ggplot2)
-  if(!ret) {
-    stop("`ggplot2` package is required for plotting")
-  }
+  #ret <- require(ggplot2)
+  #if(!ret) {
+  #  stop("`ggplot2` package is required for plotting")
+  #}
   ret <- require(scales)
   if(!ret) {
     stop("`scales` package is required for plotting")

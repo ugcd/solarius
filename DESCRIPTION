@@ -1,12 +1,26 @@
 Package: solarius
 Type: Package
-Title: R package wrapper to SOLAR
+Title: An R interface to SOLAR program
 Version: 0.2.1
-Date: 2014-10-07
-Author: Andrey Ziyatdinov, Helena Brunel
+Date: 2015-05-06
+Authors@R: c(
+    person("Andrey", "Ziyatdinov", email = "andrey.ziyatdinov@upc.edu", role = "cre"),
+    person("Helena", "Brunel", role = "aut"),
+    person("Angel", "Martinez-Perez", role = "aut"),
+    person("Alfonso", "Buil", role = "aut"),
+    person("Alexandre", "Perera", role = "cph"),
+    person("Jose Manuel", "Soria", role = "cph"))
 Maintainer: Andrey Ziyatdinov <andrey.ziyatdinov@upc.edu>
-Description: R package wrapper to SOLAR
+Description: 
+  SOLAR is the standard software program to perform linkage and association mappings 
+  of the quantitative trait loci (QTLs) in pedigrees of arbitrary size and complexity.
+  solarius allows the user to exploit the variance component methods implemented in SOLAR.
+  It automates such routine operations as formatting pedigree and phenotype data.
+  It also parses the model output and contains summary and plotting functions for exploration of the results.
+  In addition, solarius enables parallel computing of the linkage and association analyses,
+  that makes the calculation of genome-wide scans more efficient.
 License: GPL (>= 3)
+URL: https://github.com/ugcd/solarius
 LazyData: true
 Imports:
     methods,

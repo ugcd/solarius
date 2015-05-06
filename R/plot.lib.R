@@ -2,6 +2,22 @@
 # Pedigree plots
 #----------------------------------
 
+#' Plot the pedigree
+#'
+#' Plot the pedigree tree based on the ID-fields given in phenotypes.
+#' Plotting is based on \code{kinship2} package.
+#' 
+#' The ID fields are extracted from the data via \code{matchIdNames} function.
+#' The required fields are ID, FA, MO, SEX and FAMID.
+#'
+#' @param data A data.frame of phenotypes.
+#' @param ped An integer or a character value, that indicates the pedigree.
+#'
+#' @seealso \code{\link{matchIdNames}}
+#' @examples
+#' data(dat30)
+#' plotPed(dat30, 1)
+#'
 #' @export
 plotPed <- function(data, ped)
 {
@@ -52,6 +68,44 @@ plotPed <- function(data, ped)
 # Association plots
 #----------------------------------
 
+#' Plot the association results
+#'
+#' Two Manhattan and quantile-quantile (QQ) plots 
+#' are standard to explore the results from association studies.
+#'
+#' \code{plotManh} function produces the Manhattan plot based on \code{qqman} package.
+#' The two red and blue lines, default in the original \code{manhattan} function 
+#' of \code{qqman} package, are preserved.
+#' An additional black dashed line is added, that depicts the significance
+#' according to Bonferroni multiple-test correction with \code{alpha} argument.
+#'
+#' \code{plotQQ} function produces the QQ plot based on the same \code{qqman} package.
+#' 
+#' @name plotManh
+#' @rdname plotQQManh
+#'
+#' @param A An object of class \code{solarAssoc}.
+#' @param alpha A numeric value from 0 to 1, the p-value cut-off 
+#'    for Bonferroni multiple-test correction.
+#'    The default value is 0.05.
+#' @param main A character string, \code{main} argument (title) to a plot function.
+#'    If the argument is missing, the title contains information about the model formula and the number of SNPs used for plotting.
+#' @param ... additional argument to a plot function.
+#'
+#' @seealso \code{\link{solarAssocClass}}
+#'
+#' @examples
+#' \dontrun{
+#' ### asso
+#' assoc <- solarAssoc(trait ~ 1, phenodata, 
+#'  snpdata = genodata, snpmap = snpdata, kinship = kin)
+#'
+#' plotManh(assoc) # equivalent to plot(assoc)
+#'
+#' plotQQ(assoc) # equivalent to plot(assoc, "qq")
+#'
+#' }
+#'
 #' @export
 plotManh <- function(A, alpha = 0.05, main, ...)
 {
@@ -87,6 +141,12 @@ plotManh <- function(A, alpha = 0.05, main, ...)
   abline(h = -log10(alpha / num.snps), col = "black", lty = 2)
 }
 
+#' @name plotManh
+#' @rdname plotQQManh
+#'
+#' @param df An integer value, the degree of freedom.
+#'  The default value is 1.
+#'
 #' @export
 plotQQ <- function(A, df = 1, main, ...)
 {
@@ -128,35 +188,63 @@ plotQQ <- function(A, df = 1, main, ...)
 # Plot Kinship2
 #----------------------------------
 
-#' Function plotKinship2 
+#' Plot the double kinship matrix
 #'
-#' @export plotKinship2 
-plotKinship2 <- function(x, y = "image")
+#' The main function that calls \code{imageKinship2} or \code{histKinship2}
+#' depending on value of \code{y} argument.
+#'
+#' \code{imageKinship2} function calls \code{image} function from \code{Matrix} package.
+#'
+#' \code{histKinship2} function plots a histogram based on \code{ggplot2} package.
+#' 
+#' @name plotKinship2
+#' @rdname plotKinship2
+#'
+#' @param x A square matrix of double kinship coefficients.
+#' @param y A character, the type of the plot.
+#'    Possible values are \code{"image"} and \code{"hist"}. 
+#'    The default value is \code{"image"}.
+#'
+#' @examples
+#' # load `kin` kinship matrix from `dat50` data set
+#' data(dat50)
+#' kin2 <- 2* kin # double kinship matrix
+#'
+#' plotKinship2(kin2) # equivalent to `imageKinship2(kin2)`
+#'
+#' plotKinship2(kin2, "hist") # equivalent to `histKinship2(kin2)`
+#'
+#' @export
+plotKinship2 <- function(x, y = c("image", "hist"))
 {
+ y <- match.arg(y)
+ 
   switch(y,
     "image" = imageKinship2(x),
     "hist" = histKinship2(x),
-    stop("switch error in `plotKinship2`"))
+    stop())
 }
 
-#' Function imageKinship2 
+#' @name imageKinship2
+#' @rdname plotKinship2
 #'
 #' @export imageKinship2
-imageKinship2 <- function(kmat)
+imageKinship2 <- function(x)
 { 
   stopifnot(require(Matrix))
   
-  Matrix::image(Matrix::Matrix(kmat))
+  Matrix::image(Matrix::Matrix(x))
 }
 
-#' Function histKinship2 
+#' @name histKinship2
+#' @rdname plotKinship2
 #'
 #' @export histKinship2
-histKinship2 <- function(kmat)
+histKinship2 <- function(x)
 {
-  stopifnot(require(ggplot2))
+  #stopifnot(require(ggplot2))
   
-  df <- data.frame(kin = as.vector(kmat))
+  df <- data.frame(kin = as.vector(x))
   
   ggplot(df, aes(kin)) + geom_histogram() + 
     labs(x = "") +
@@ -167,11 +255,43 @@ histKinship2 <- function(kmat)
 # Plot polygenic model
 #----------------------
 
+#' Plot the residuals of a polygenic model
+#'
+#' Plot the residuals on scatter or quantile-quantile plots.
+#' 
+#' \code{plotRes} function makes a scatter plot of fitted values vs. residuals.
+#' Note that the residuals returned by SOLAR include both random effects,
+#' i.e. house-hold, genetic and residuals itself.
+#'
+#' \code{plotResQQ} function plots  quantile-quantile (QQ) plot of the residuals.
+#' 
+#' @name plotRes
+#' @rdname plotRes
+#'
+#' @param x An object of class \code{solarPolygenic}.
+#' @param labels A logical value for \code{plotRes} function, indicating if the labels of IDs 
+#'    (which residuals are outside the 3 * sd interval) are to be plotted.
+#' @param text.size An integer, the text size of labels.
+#' @param ... additional arguments.
+#'
+#' @seealso \code{\link{solarPolygenicClass}}
+#' @examples
+#'
+#' \dontrun{
+#' ### basic (univariate) polygenic model
+#' mod <- solarPolygenic(trait1 ~ age + sex, dat30) 
+#'
+#' plotRes(mod)
+#'
+#' plotResQQ(mod)
+#'
+#' }
+#'
 #' @export
-plotRes <- function(x, conf = 0.90, 
+plotRes <- function(x, 
   labels = FALSE, text.size = 4, ...)
 {
-  stopifnot(require(ggplot2))
+  #stopifnot(require(ggplot2))
   
   # var
   r <- residuals(x)
@@ -216,16 +336,24 @@ plotRes <- function(x, conf = 0.90,
 }
  
  
-# source: http://stackoverflow.com/a/27191036/551589
-# alternatives: 
-#  -- qqnorm(res); qqline(res)
-#  -- cars::qqPlot(res, id.method = "identify")
+#' @name plotRes
+#' @rdname plotRes
+#'
+#' @param conf A numeric value between 0 and 1, that represents the confidence boundary.
+#' @param labels A logical value for \code{plotResQQ} function, indicating if the samples (their IDs) outside the confidence intervals
+#'    are to be plotted.
+#'
 #' @export
 plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL, 
   conf = 0.90, 
   labels = FALSE, text.size = 4)
 {
-  stopifnot(require(ggplot2))
+  # source: http://stackoverflow.com/a/27191036/551589
+  # alternatives: 
+  #  -- qqnorm(res); qqline(res)
+  #  -- cars::qqPlot(res, id.method = "identify")
+
+  #stopifnot(require(ggplot2))
   
   ### var
   r <- residuals(x)

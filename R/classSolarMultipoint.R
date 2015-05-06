@@ -32,9 +32,9 @@ print.solarMultipoint <- function(x, ...)
 plot.solarMultipoint <- function(x, 
   pass = 1, ...)
 {
-  if(!require(ggplot2)) {
-    stop("`ggplot2` package is required for plotting")
-  }
+  #if(!require(ggplot2)) {
+  #  stop("`ggplot2` package is required for plotting")
+  #}
     
   ### check object `x`
   stopifnot(x$multipoint$num.passes >= pass)
