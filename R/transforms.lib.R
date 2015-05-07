@@ -17,19 +17,34 @@ availableTransforms <- function() c("none", "inormal", "log", "out")
 
 #' Apply transforms to a data set.
 #'
+#' By default, the name of a transformed trait is updated 
+#' to one with a prefixed given in \code{transform.prefix} argument
+#' (the default value is \code{"tr_"}).
+#' Such renaming is assumed to make the user aware that the trait is transformed.
+#'
+#' This function is internally called in \code{solarPolygenic}
+#' if \code{transforms} argument is specified.
+#' In this case of the polygenic analysis,
+#' the transform operation is invisible to the user.
+#' However, it is recommended to manually transform traits
+#' in other linkage and association analyses.
+#'
 #' @param transforms 
 #'    A named character vector of transforms,
 #'    where traits are given in the names of the vector.
 #' @param data
 #'    A matrix or a data.frame, where the column names represent the names of traits.
+#' @param transform.prefix
+#'    A character vector, that is a prefix to be added to the name of transformed trait.
+#'    The default value is \code{"tr_"}.
 #' @param ...
 #'    Additional parameters to be passed to \code{transformTrait} function called inside of \code{transformData}.
 #'    For example, it might be a parameter \code{log.base} for \code{\link{transformTrait}} function
 #'    in the case \code{transform} is equal to \code{"log"}.
 #' @return
-#'    a matrix or a data.frame of the transformed data.
+#'    A matrix or a data.frame of the transformed data.
 #'
-#' @seealso availableTransforms, transformTrait
+#' @seealso \code{\link{availableTransforms}}, \code{\link{transformTrait}}
 #' @export
 transformData <- function(transforms, data, transform.prefix = "tr_", ...)
 {
@@ -61,16 +76,27 @@ transformData <- function(transforms, data, transform.prefix = "tr_", ...)
 
 #' Transform a trait.
 #'
-#'@param x 
+#' @param x 
 #'    a numeric vector (of a trait).
-#'@param transform
+#' @param transform
 #'    a character vector, the name of transformation.
 #'    Possible values are returned by \code{\link{availableTransforms}} function.
-#'@param ...
+#' @param ...
 #'    additional parameters passed to internal \code{transform_trait_*} functions.
 #'    Possible parameters might be \code{log.base}, \code{log.intercept} (\code{"log"} transformation).
 #'
-#'@return A numeric vector, which contains the transformed values (of a trait).
+#' @return A numeric vector, which contains the transformed values (of a trait).
+#'
+#' @examples
+#' library(plyr)
+#' library(ggplot2)
+#'
+#' data(dat30)
+#' dat <- mutate(dat30,
+#'    inormal_trait1 = transformTrait(trait1, "inormal"))
+#' 
+#' ggplot(dat, aes(trait1)) + geom_histogram()
+#' ggplot(dat, aes(inormal_trait1)) + geom_histogram()
 #'
 #' @export
 transformTrait <- function(x, transform, ...)

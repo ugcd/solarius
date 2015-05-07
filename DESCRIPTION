@@ -4,7 +4,7 @@ Title: An R interface to SOLAR program
 Version: 0.2.1
 Date: 2015-05-06
 Authors@R: c(
-    person("Andrey", "Ziyatdinov", email = "andrey.ziyatdinov@upc.edu", role = "cre"),
+    person("Andrey", "Ziyatdinov", email = "andrey.ziyatdinov@upc.edu", role = c("cre", "aut")),
     person("Helena", "Brunel", role = "aut"),
     person("Angel", "Martinez-Perez", role = "aut"),
     person("Alfonso", "Buil", role = "aut"),

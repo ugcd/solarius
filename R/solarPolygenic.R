@@ -120,7 +120,8 @@
 #' mod <- mod <- solarPolygenic(trait1 ~ 1, dat30, transforms = "log")
 #'
 #' ### transforms for (bivariate) polygenic model
-#' mod <- solarPolygenic(trait1 + trait2 ~ 1, dat30, transforms = c(trait1 = "log", trait2 = "inormal"))
+#' mod <- solarPolygenic(trait1 + trait2 ~ 1, dat30, 
+#'    transforms = c(trait1 = "log", trait2 = "inormal"))
 #'
 #' ### SOLAR format of introducing covariates
 #' mod <- solarPolygenic(traits = "trait1", covlist = "age^1,2,3#sex", data =  dat30)

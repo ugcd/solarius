@@ -6,7 +6,8 @@
 #' Call SOLAR program from R
 #'
 #' The function calls SOLAR via \code{system} function,
-#' that invokes the OS command specified by the command argument.
+#' that invokes the OS command (which is \code{solar}) specified by the command argument.
+#' SOLAR is required to be installed in the OS.
 #' 
 #' This is the core function in the interface between R and SOLAR.
 #'
@@ -244,7 +245,7 @@ snpcovdata2solar <- function(mat, out, dir, nGTypes = FALSE)
   # compute `ID` and `nGTypes` columns
   snpnames <- paste("snp", snpnames, sep = "_")
   if(nGTypes) {
-    ngtypes <- apply(genocovdata, 1, function(x) sum(!is.na(x)))
+    ngtypes <- apply(mat, 1, function(x) sum(!is.na(x)))
   }
   
   # prepare `mat`
@@ -399,6 +400,7 @@ kf_match_pedindex <- function(kf, pf)
     N <- nrow(pf)
     
     # add `index` column
+    IBDID1 <- IBDID2 <- NULL # R CMD check: no visible binding
     kf <- mutate(kf,
       index = paste(IBDID1, IBDID2, sep = "."))
   
@@ -429,6 +431,7 @@ kf_match_pedindex <- function(kf, pf)
     N <- nrow(pf)
     
     # add `index` column
+    ID1 <- ID2 <- NULL # R CMD check: no visible binding
     kf <- mutate(kf,
       index = paste(ID1, ID2, sep = "."))
     stopifnot(!all(duplicated(kf$index)))

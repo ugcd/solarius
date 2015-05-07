@@ -142,17 +142,18 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
   }  
   
   ### annotate
+  cmd.annotate <- "AnnotateSNPList(snplist)"
   if(capture.output) {
     tmp.file <- tempfile("AnnotateSNPList-")
     capture.output({
       tab <- try({ 
-          AnnotateSNPList(snplist)
+        eval(parse(text = cmd.annotate))
       })}, 
       file = tmp.file)
     ret <- unlink(tmp.file)
   } else {
     tab <- try({ 
-      AnnotateSNPList(snplist)
+      eval(parse(text = cmd.annotate))
     }) 
   }
       

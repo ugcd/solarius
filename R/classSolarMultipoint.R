@@ -53,6 +53,7 @@ plot.solarMultipoint <- function(x,
   ymax <- max(max(lodf$LOD), 3)
   
   ### plot  
+  pos <- LOD <- chr <- NULL # R CMD check: no visible binding
   ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr, scales = "free_x") + 
     ylim(ymin, ymax) + labs(title = getFormula(x)) +
     theme_bw()

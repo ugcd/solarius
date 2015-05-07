@@ -12,6 +12,7 @@ procc_tprofile <- function(tprofile)
     
     df <- rename(df, c(.id = "unit"))
     
+    elapsed <- NULL # R CMD check: no visible binding    
     df <- within(df, {
       elapsed.diff <- c(elapsed[-1] - elapsed[-nrow(df)], elapsed[nrow(df)] - elapsed[1])
     })
@@ -79,6 +80,8 @@ read_pedindex <- function(pedindex.out, ids.unique = TRUE)
   cf <- read.fwf(pedindex.cde, skip = 1, widths = c(2, 22, 28, 2),
     stringsAsFactors = FALSE)
   names(cf) <- c("LEN", "FIELDNAME", "FIELD", "LETTER")
+  
+  FIELD <- NULL # R CMD check: no visible binding
   cf <- mutate(cf,
     FIELD = gsub(" ", "", FIELD))
   
@@ -112,6 +115,7 @@ read_phi2_gz <- function(phi2.gz)
   kf <- read.table(gzfile(phi2.gz), colClasses = c("character", "character", "numeric", "numeric"))
   names(kf) <- c("IBDID1", "IBDID2", "phi2", "delta7")
 
+  IBDID1 <- IBDID2 <- NULL # R CMD check: no visible binding
   kf <- mutate(kf,
     IBDID1 = gsub(" ", "", IBDID1),
     IBDID2 = gsub(" ", "", IBDID2))

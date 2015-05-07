@@ -1,10 +1,15 @@
-#' Phenotypes of dat30 data set adapted from multic R package
+#' dat30 data set adapted from multic R package
 #'
 #' 29 first families were selected from the complete data set of 12000 individuals.
-#'
+#' For a resulted subset of 174 individuals,
+#' a hundred of synthetic SNPs were randomly generated.
+#' Annotation information also was generated, 
+#' mainly in order to plot the association results with Manhattan plot.
+#' 
 #' Two simulated phenotypes possess a high genetic correlation.
 #'
-#' @format A data frame with 174 rows and 10 variables:
+#' @format 
+#' (Phenotypes) A data frame \code{dat30} with 174 rows and 10 variables:
 #' \describe{
 #'   \item{famid}{Family ID (29 unique ids).}
 #'   \item{id}{Individual ID.}
@@ -18,9 +23,21 @@
 #'   \item{age}{Age.}
 #' }
 #'
+#' (Genotypes as covariates) A matrix \code{genocovdat30} with 174 rows and 100 columns.
+#' Row names are IDs of individuals, column names are names of SNPs.
+#'
+#' (Annotation) A data frame \code{mapdat30} with 100 rows and 4 variables:
+#' \describe{
+#'   \item{SNP}{SNP name.}
+#'   \item{chr}{Chromosome.}
+#'   \item{pos}{Position in bp.}
+#'   \item{gene}{Gene.}
+#' }
+#'
 #' @source \url{http://cran.r-project.org/web/packages/multic/}
 #'
-#' @seealso \code{\link{genocovdat30}}, \code{\link{mapdat30}}
+#' @name dat30
+#' @rdname dat30
 #'
 #' @usage data(dat30)
 #' @examples
@@ -28,7 +45,7 @@
 #'
 #' str(dat30)
 #'
-#' plotPed(dat30, 2) # plot pedigree for family #2
+#' plotPed(dat30, 2) # plot the pedigree tree for family #2
 #'
 #' \dontrun{
 #' kin2 <- solarKinship2(dat30)
@@ -39,15 +56,9 @@
 #'
 "dat30"
 
-#' Genotypes simulated for dat30 data set adapted from multic R package
-#'
-#' A hundred of synthetic SNPs were randomly generated for dat30 data set.
-#' 
-#' @format A matrix with 174 rows and 100 columns.
-#'
-#' The row names are IDs of individuals, the column names are the names of SNPs.
-#'
-#' @seealso \code{\link{dat30}}, \code{\link{mapdat30}}
+
+#' @name genocovdat30
+#' @rdname dat30
 #'
 #' @usage data(dat30)
 #' @examples
@@ -59,20 +70,8 @@
 #'
 "genocovdat30"
 
-#' Annotation for simulated genotypes in dat30 data set adapted from multic R package
-#'
-#' A hundred of synthetic SNPs were randomly generated for dat30 data set.
-#' Annotation also was generated to be plot the association results with Manhattan plot.
-#' 
-#' @format A data frame with 100 rows and 4 variables:
-#' \describe{
-#'   \item{SNP}{SNP name.}
-#'   \item{chr}{Chromosome.}
-#'   \item{pos}{Position in bp.}
-#'   \item{gene}{Gene.}
-#' }
-#'
-#' @seealso \code{\link{dat30}}, \code{\link{genocovdat30}}
+#' @name mapdat30
+#' @rdname dat30
 #'
 #' @usage data(dat30)
 #' @examples

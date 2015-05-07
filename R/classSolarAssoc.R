@@ -69,6 +69,7 @@ plot.solarAssoc.old <- function(x,
   df$ord <- 1:nrow(df)
     
   ### multiple-test correction  
+  pSNP <- NULL # R CMD check: no visible binding
   df <- within(df, {
     qSNP <- switch(corr,
       "BF" = pSNP * nrow(df),
@@ -99,8 +100,8 @@ plot.solarAssoc.old <- function(x,
   {
     trans <- function(x) -log(x, base)
     inv <- function(x) base^(-x)
-    trans_new(paste0("reverselog-", format(base)), trans, inv, 
-      log_breaks(base = base), 
+    scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
+      scales::log_breaks(base = base), 
       domain = c(1e-100, Inf))
   }
   
@@ -147,6 +148,7 @@ summary.solarAssoc <- function(object, alpha = 0.05, ...)
   
   # signif. SNPs
   pSNP.thr <- alpha / num.snps
+  pSNP <- NULL # R CMD check: no visible binding
   snpf <- subset(object$snpf, pSNP < pSNP.thr)
   num.snps.signif <- length(which(object$snpf$pSNP<pSNP.thr))
   cat(" * Number of significal SNPs: ", num.snps.signif, 

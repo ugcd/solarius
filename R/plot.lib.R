@@ -43,6 +43,7 @@ plotPed <- function(data, ped)
   stopifnot(ped %in% peds)  
   
   ### create `df`
+  FAMID <- NULL # R CMD check: no visible binding
   df <- subset(data, FAMID == ped)
   
   ### filter `df`
@@ -76,7 +77,7 @@ plotPed <- function(data, ped)
 #' \code{plotManh} function produces the Manhattan plot based on \code{qqman} package.
 #' The two red and blue lines, default in the original \code{manhattan} function 
 #' of \code{qqman} package, are preserved.
-#' An additional black dashed line is added, that depicts the significance
+#' An additional black dashed line is added, that depicts the significance level
 #' according to Bonferroni multiple-test correction with \code{alpha} argument.
 #'
 #' \code{plotQQ} function produces the QQ plot based on the same \code{qqman} package.
@@ -96,7 +97,8 @@ plotPed <- function(data, ped)
 #'
 #' @examples
 #' \dontrun{
-#' ### asso
+#' data(dat50)
+#'
 #' assoc <- solarAssoc(trait ~ 1, phenodata, 
 #'  snpdata = genodata, snpmap = snpdata, kinship = kin)
 #'
@@ -122,6 +124,7 @@ plotManh <- function(A, alpha = 0.05, main, ...)
   stopifnot(num.snps > 0)
   
   df <- df[ind, ]
+  chr <- NULL # R CMD check: no visible binding
   df <- mutate(df,
     chr = as.integer(chr))
   ### plot parameters
@@ -136,7 +139,7 @@ plotManh <- function(A, alpha = 0.05, main, ...)
   }
   
   ### plot    
-  manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", 
+  qqman::manhattan(df, chr = "chr", bp = "pos", p = "pSNP", snp = "SNP", 
     main = main, ...)
   abline(h = -log10(alpha / num.snps), col = "black", lty = 2)
 }
@@ -181,7 +184,7 @@ plotQQ <- function(A, df = 1, main, ...)
   }
   
   # plot
-  qq(pvals, main = main, sub = sub, ...)
+  qqman::qq(pvals, main = main, sub = sub, ...)
 }
 
 #----------------------------------
@@ -246,6 +249,7 @@ histKinship2 <- function(x)
   
   df <- data.frame(kin = as.vector(x))
   
+  kin <- NULL # R CMD check: no visible binding
   ggplot(df, aes(kin)) + geom_histogram() + 
     labs(x = "") +
     theme_bw()
@@ -271,6 +275,8 @@ histKinship2 <- function(x)
 #' @param x An object of class \code{solarPolygenic}.
 #' @param labels A logical value for \code{plotRes} function, indicating if the labels of IDs 
 #'    (which residuals are outside the 3 * sd interval) are to be plotted.
+#'    A logical value for \code{plotResQQ} function, 
+#'    indicating if the samples (their IDs) outside the confidence intervals are to be plotted.
 #' @param text.size An integer, the text size of labels.
 #' @param ... additional arguments.
 #'
@@ -316,6 +322,7 @@ plotRes <- function(x,
     labs(title = "Residuals",  
       x = "Trait order", y = "Residuals")
   
+  label <- NULL # R CMD check: no visible binding
   if(labels) {
     p <- p + geom_text( aes(label = label), size = text.size) # hjust = 0, vjust = 0
   }
@@ -339,9 +346,13 @@ plotRes <- function(x,
 #' @name plotRes
 #' @rdname plotRes
 #'
-#' @param conf A numeric value between 0 and 1, that represents the confidence boundary.
-#' @param labels A logical value for \code{plotResQQ} function, indicating if the samples (their IDs) outside the confidence intervals
-#'    are to be plotted.
+#' @param conf 
+#'    A numeric value between 0 and 1, that represents the confidence boundary.
+#' @param distribution 
+#'    A character, name of distribution of the residuals.
+#'    The default value is \code{"norm"}.
+#' @param line.estimate
+#'    Function for estimation of QQ-line.
 #'
 #' @export
 plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL, 
@@ -354,6 +365,8 @@ plotResQQ <- function(x, distribution = "norm", ..., line.estimate = NULL,
   #  -- cars::qqPlot(res, id.method = "identify")
 
   #stopifnot(require(ggplot2))
+
+  z <- ord.r <- lower <- upper <- label <- NULL # R CMD check: no visible binding
   
   ### var
   r <- residuals(x)

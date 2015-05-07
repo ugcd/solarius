@@ -314,6 +314,8 @@ solarAssoc <- function(formula, data, dir,
   
   ### step 8: set keys
   tsolarAssoc$keyresults <- proc.time()
+  
+  SNP <- NULL # R CMD check: no visible binding
   if(class(out$snpf)[1] == "data.table") {
     setkey(out$snpf, SNP)
   }
