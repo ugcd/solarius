@@ -21,7 +21,7 @@ Description:
   that makes the calculation of genome-wide scans more efficient.
 License: GPL (>= 3)
 URL: https://github.com/ugcd/solarius
-LazyData: true
+LazyData: false
 Imports:
     methods,
     plyr (>= 1.8.1),

@@ -36,6 +36,16 @@ procc_tprofile <- function(tprofile)
 # Read/Write Files
 #----------------------------------
 
+#' Read SOLAR output files in a directory
+#'
+#' The function is used, for example, to read the files
+#' in the output directory of the polygenic model.
+#'
+#' @param dir
+#'    A character, path to the directory.
+#' @return
+#'    A list with file contents acquired by \code{readLines} function.
+#'
 #' @export
 solarReadFiles <- function(dir)
 {
@@ -300,7 +310,19 @@ check_var_names <- function(traits, covlist, dnames) {
   return(invisible())
 }
 
-#' Match ID column names.
+#' Match ID column names
+#'
+#' The function automates the process of renaming ID fields in data frame of phenotypes
+#' into a SOLAR format.
+#'
+#' @param fields
+#'    The name of fields or colulm names in data frame, which are candidates to be ID fields.
+#' @param sex.optional
+#'    Logical, indicating if through an error in the case SEX field is not found in input fields.
+#' @param skip.sex
+#'    Logical, indicating if the search for SEX filds is completely skipped.
+#' @return
+#'    A named character vector, that can be directly passed to \code{rename} function of \code{plyr} package.
 #'
 #' @example inst/examples/example-fields.R
 #' @export
@@ -415,6 +437,20 @@ matchIdNames <- function(fields, sex.optional = FALSE, skip.sex = FALSE)
   return(out)
 }
 
+#' Match map column names
+#'
+#' The function searches for fields that correspond to those 
+#' in SOLAR format of marker map file.
+#'
+#' @param fields
+#'    The name of fields or colulm names in data frame, which are candidates to be map fields.
+#' @return
+#'    A named character vector, that can be directly passed to \code{rename} function of \code{plyr} package.
+#'
+#' @examples
+#'  data(dat50)
+#'  matchMapNames(names(snpdata))
+#' @export
 matchMapNames <- function(fields)
 {
   # `fields`: fields in data set

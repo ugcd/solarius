@@ -17,6 +17,9 @@ availableTransforms <- function() c("none", "inormal", "log", "out")
 
 #' Apply transforms to a data set.
 #'
+#' The function looks for traits in colulms of input data frame,
+#' call \code{\link{transformTrait}} function per trait,
+#' and rename the traits.
 #' By default, the name of a transformed trait is updated 
 #' to one with a prefixed given in \code{transform.prefix} argument
 #' (the default value is \code{"tr_"}).
@@ -97,6 +100,8 @@ transformData <- function(transforms, data, transform.prefix = "tr_", ...)
 #' 
 #' ggplot(dat, aes(trait1)) + geom_histogram()
 #' ggplot(dat, aes(inormal_trait1)) + geom_histogram()
+#'
+#' @seealso \code{\link{availableTransforms}}, \code{\link{transformData}}
 #'
 #' @export
 transformTrait <- function(x, transform, ...)

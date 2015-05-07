@@ -2,11 +2,43 @@
 # Phenotype files
 #----------------------------------
 
+#' Read plain-text table files phen and ped
+#'
+#' The function reads the phenotype and pedigree data in SOLAR format,
+#' i.e. plain-text tables.
+#'
+#' @param phen.file
+#'    A character, path to phen file.
+#' @param sep.phen
+#'    A character, the field separator in phen file.
+#'    The default value is \code{","}.
+#' @param ped.file
+#'    (optional) A character, path to ped file.
+#' @param sep.ped
+#'    A character, the field separator in ped file.
+#'    The default value is \code{","}.
+#' @param header
+#'    Logical, indicating whether the file contains 
+#'    the names of the variables as its first line.
+#'    The default value is TRUE.
+#' @param stringsAsFactors
+#'    logical, indicating whether character vectors to be converted to factors.
+#'    The default value is FALSE.
+#' @param id.unique
+#'    logical, indicating whether the IDs of individuals must be unique.
+#'    The default value is TRUE.
+#' @param sex.optional
+#'    logical, indicating whether the SEX field must be presented.
+#'    The default value is TRUE if \code{ped.file} is specified,
+#'    and it is FALSE otherwise.
+#' @return
+#'    A data frame of phenotype data merged from two phen and ped files (merged by ID filed).
+#'
 #' @export
 readPhen <- function(phen.file, sep.phen = ",",
   ped.file, sep.ped = ",", 
   header = TRUE, stringsAsFactors = FALSE,
-  id.unique = TRUE, sex.optional)
+  id.unique = TRUE, sex.optional, ...)
 {
   stopifnot(!missing(phen.file)) 
   stopifnot(file.exists(phen.file))

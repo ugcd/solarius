@@ -73,8 +73,18 @@ residuals.solarPolygenic <- function(object, trait = FALSE, ...)
 # Other method
 #--------------------
 
+#' Get formula string from a solarPolygenic object
+#' 
+#' The function returns a character string with formula.
+#' The formula is derived based on \code{traits} and \code{covlist} slots of input object.
+#'
+#' @param x 
+#'    An object of \code{solarPolygenic} object.
+#' @return
+#'    A character string with formula.
+#' 
 #' @export
-getFormula <- function(x, ...)
+getFormulaStr <- function(x)
 {
   paste(
     paste(x$traits, collapse = "+"),
