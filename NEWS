@@ -1,3 +1,14 @@
+solarius 0.2.2
+==================
+
+* All three main analyses (polygenic, association and linkage) are implemented.
+* A number of vignettes are provided.
+    * http://ugcd.github.io/solarius/vignettes/tutorial.html
+    * http://ugcd.github.io/solarius/vignettes/minimal.html
+    * http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html
+* The first version for CRAN is prepared.
+* LazyLoad for data is disabled.
+
 solarius 0.1.1
 ==================
 
