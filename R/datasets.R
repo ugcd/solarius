@@ -39,7 +39,6 @@
 #' @name dat30
 #' @rdname dat30
 #'
-#' @usage data(dat30)
 #' @examples
 #' data(dat30)
 #'
@@ -60,9 +59,7 @@
 #' @name genocovdat30
 #' @rdname dat30
 #'
-#' @usage data(dat30)
 #' @examples
-#' data(dat30)
 #'
 #' str(genocovdat30)
 #'
@@ -73,9 +70,7 @@
 #' @name mapdat30
 #' @rdname dat30
 #'
-#' @usage data(dat30)
 #' @examples
-#' data(dat30)
 #'
 #' str(mapdat30)
 #'
@@ -84,15 +79,22 @@
 "mapdat30"
 
 
-#' Phenotypes of dat50 data set adapted from FFBSKAT R package
+#' dat50 data set adapted from FFBSKAT R package
 #'
-#' A mixture of unrelated and related individuals (a custom kinship matrix is given)
-#' were originally simulated to test methods of the variant-collapsing approach.
-#'
+#' A mixture of unrelated and related individuals 
+#' were originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
+#' 50 synthetic SNPs were generated for the association study.
+#' A custom kinship matrix is used to express the relationships among individuals.
 #' This data set is used here to test the ability of SOLAR 
 #' to work with a custom kinship matrix in both polygenic and association analyses.
 #'
-#' @format A data frame with 66 rows and 4 variables:
+#'
+#' The genotypes are coded in the format such as 1/1, 1/2 and 2/2.
+#'
+#' In addition to the original data set from FFBSKAT R package,
+#' a matrix of covariates was derived from the genotype data according to the additive model.
+#'
+#' @format (Phenotypes) A data frame \code{phenodata} with 66 rows and 4 variables:
 #' \describe{
 #'   \item{id}{Individual ID.}
 #'   \item{sex}{Individual gender (0 - male, 1 - female).}
@@ -100,11 +102,25 @@
 #'   \item{trait}{Simulated phenotype.}
 #' }
 #'
+#' (Kinship) A square matrix \code{kin} with 66 rows and 66 columns.
+#'
+#' (Genotypes) A matrix \code{genodata} with 66 rows and 50 columns.
+#'
+#' (Genotypes as covariates) A matrix \code{genocovdata} with 66 rows and 50 columns.
+#'
+#' (Annotation) A data frame \code{snpdata} with 100 rows and 4 variables:
+#' \describe{
+#'   \item{name}{SNP name.}
+#'   \item{chrom}{Chromosome.}
+#'   \item{position}{Position in bp.}
+#'   \item{gene}{Gene.}
+#' }
+#'
+#' @name phenodata
+#' @rdname dat50
+#'
 #' @source \url{http://mga.bionet.nsc.ru/soft/FFBSKAT/}
 #'
-#' @seealso \code{\link{kin}}, \code{\link{genodata}}, \code{\link{genocovdata}}, \code{\link{snpdata}}
-#'
-#' @usage data(dat50)
 #' @examples
 #' data(dat50)
 #'
@@ -112,32 +128,19 @@
 #'
 "phenodata"
 
-#' Kinship matrix for dat50 data set adapted from FFBSKAT R package
+#' @name kin
+#' @rdname dat50
 #'
-#' @format A square matrix with 66 rows and 66 columns.
-#'
-#' @seealso \code{\link{phenodata}}, \code{\link{genodata}}, \code{\link{genocovdata}}, \code{\link{snpdata}}
-#'
-#' @usage data(dat50)
 #' @examples
-#' data(dat50)
 #'
 #' plotKinship2(2*kin)
 #'
 "kin"
 
-#' Genotypes simulated for dat50 data set adapted from FFBSKAT R package
+#' @name genodata
+#' @rdname dat50
 #'
-#' 50 synthetic SNPs were generated.
-#' The genotypes are coded in the format such as 1/1, 1/2 and 2/2.
-#'
-#' @format A matrix with 66 rows and 50 columns.
-#'
-#' @seealso \code{\link{phenodata}}, \code{\link{kin}}, \code{\link{genocovdata}}, \code{\link{snpdata}}
-#'
-#' @usage data(dat50)
 #' @examples
-#' data(dat50)
 #'
 #' str(genodata)
 #'
@@ -146,18 +149,10 @@
 "genodata"
 
 
-#' Genotypes as covariates in dat50 data set adapted from FFBSKAT R package
+#' @name genocovdata
+#' @rdname dat50
 #'
-#' 50 synthetic SNPs were generated.
-#' A matrix of covariates was derived from the genotype data according to the additive model.
-#'
-#' @format A matrix with 66 rows and 50 columns.
-#'
-#' @seealso \code{\link{phenodata}}, \code{\link{kin}}, \code{\link{genodata}}, \code{\link{snpdata}}
-#'
-#' @usage data(dat50)
 #' @examples
-#' data(dat50)
 #'
 #' str(genocovdata)
 #'
@@ -169,21 +164,10 @@
 "genocovdata"
 
 
-#' Annotation for simulated genotypes in dat50 data set adapted from FFBSKAT R package
+#' @name snpdata
+#' @rdname dat50
 #'
-#' @format A data frame with 100 rows and 4 variables:
-#' \describe{
-#'   \item{name}{SNP name.}
-#'   \item{chrom}{Chromosome.}
-#'   \item{position}{Position in bp.}
-#'   \item{gene}{Gene.}
-#' }
-#'
-#' @seealso \code{\link{phenodata}}, \code{\link{kin}}, \code{\link{genodata}}, \code{\link{genocovdata}}
-#'
-#' @usage data(dat50)
 #' @examples
-#' data(dat50)
 #'
 #' str(snpdata)
 #'

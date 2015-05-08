@@ -293,7 +293,7 @@ solarAssoc <- function(formula, data, dir,
   if(out$assoc$assoc.informat == "snpdata") {
     ret <- snpdata2solar(snpdata, dir)
   } else if(out$assoc$assoc.informat == "snpcovdata") {
-    ret <- snpcovdata2solar(snpcovdata, out, dir)
+    ret <- snpcovdata2solar(snpcovdata, dir, out = out)
   }
   
   ### number of snps

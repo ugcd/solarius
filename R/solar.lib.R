@@ -53,14 +53,30 @@ solar <- function(cmd, dir, result = TRUE,
   }
 }
 
-#' Function df2solar
+#' Export phenotype and pedigree data into SOLAR files
 #'
-#' The function (1) puts the data set \code{df}
+#' The function exports phenotype and pedigree data from R to SOLAR.
+#'
+#' The function (1) puts the data \code{df}
 #' in SOLAR format, (2) separates it into
 #' two parts, pedigree and phenotypes,
 #' and then (3) expots both data sets in 
 #' the directory \code{dir}.
 #' 
+#' Pedigree or ID variables are detected by \code{matchIdNames} function.
+#'
+#' @param df
+#'    A data frame that containts both phenotype and pedigree data.
+#' @param dir
+#'    A character with path to a directory, where SOLAR files to be created.
+#' @param kinship
+#'    (optional) A kinship matrix to be exported.
+#' @param kin2.gz
+#'    A character with file name of SOLAR file to store the kinship matrix.
+#' @param sort.ped
+#'    Logical, indicating where pedigree IDs (FAM or FAMID) to be sorted.
+#'    The default value is TRUE.
+#'
 #' @export
 df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz", sort.ped = TRUE)
 {
@@ -127,12 +143,48 @@ df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz", sort.ped = TRUE)
   return(invisible())
 }
 
-#' Function snpdata2solar.
+#' Export snp genotypes, genotype covariates and amp to SOLAR
 #'
-#' The function (1) exports the data set of genotypes stored 
+#' A list of functions allows to pass SNPs data from R to SOLAR.
+#'
+#' \code{snpdata2solar} function (1) exports the data set of genotypes stored 
 #' in \code{mat} itto SOLAR files, (2) runs solar command `snp load solar.gen` 
 #' to check the data is loaded ok; (3) if two output files were not created,
-#' throws error.
+#' throws an error.
+#'
+#' \code{snpcovdata2solar} function emulates the `snp load` SOLAR command.
+#' Two output files are produced: `snp.genocov` and `snp.geno-list`.
+#' The steps are the following: (1) add prefix `snp_` to SNP names;
+#' (2) (optional) compute stats on # genotyped individuals (columns `nGTypes`);
+#' (3) write data and metadata into files.
+#'
+#' \code{snpmap2solar} function (1) separates data by chromosome; 
+#' (2) write the table into SOLAR map file;
+#' (3) check if the map file is OK by running SOLAR command \code{load map -basepair <filename>}
+#'
+#' @note  
+#' In association analysis (\code{soalrAssoc} function) 
+#' the step of loading SNP maps is skipped.
+#' It seems that SOLAR does not use this information when doing association.
+#' 
+#' @name snpdata2solar
+#' @rdname snp2solar
+#'
+#' @param mat
+#'    A matrix of genotypes or genotypes as covariates to be exported.
+#' @param dir
+#'    A character with path where SOLAR files to be created.
+#'
+#' @examples
+#' # Example of `snp.genocov` file:
+#' # id,nGTypes,snp_s1,snp_s2,...
+#' # 1,50,0,0,...
+#' # 2,50,0,0,...
+#'
+#' # Example of `snp.geno-list` file:
+#' # snp_s1
+#' # snp_s2
+#' # ...
 #'
 #' @export
 snpdata2solar <- function(mat, dir)
@@ -166,6 +218,72 @@ snpdata2solar <- function(mat, dir)
   return(invisible())
 }
 
+#' @name snpcovdata2solar
+#' @rdname snp2solar
+#'
+#' @param nGTypes
+#'    Logical, whether a column \code{nGTypes} to be added to snp.genocov file.
+#'    The default value is FALSE.
+#' @param out
+#'    (optional) A list, that contains the names for snp.genocov and snp.geno-list files.
+#'    This argument is internally used in \code{solarAssoc} function.
+#'
+#' @export
+snpcovdata2solar <- function(mat, dir, nGTypes = FALSE, out)
+{
+  # parse arguments
+  stopifnot(class(mat) == "matrix")
+
+  stopifnot(!is.null(rownames(mat)))
+  stopifnot(!is.null(colnames(mat)))
+  
+  stopifnot(file.exists(dir))
+
+  # slots in `out` argumnet
+  genocov.file <- "snp.genocov"
+  genolist.file <- "snp.geno-list"
+  if(!missing(out)) {
+    genocov.file <- out$assoc$genocov.files
+    stopifnot(length(genocov.file) == 1)
+
+    genolist.file <- out$assoc$genolist.file
+    stopifnot(length(genolist.file) == 1)
+  }  
+  
+  # extract variabels
+  ids <- rownames(mat)
+  snpnames <- colnames(mat)
+
+  # compute `ID` and `nGTypes` columns
+  snpnames <- paste("snp", snpnames, sep = "_")
+  if(nGTypes) {
+    ngtypes <- apply(mat, 1, function(x) sum(!is.na(x)))
+  }
+  
+  # prepare `mat`
+  colnames(mat) <- snpnames
+  if(nGTypes) {
+    mat <- cbind(ID = ids, nGTypes = ngtypes, mat)
+  } else {
+    mat <- cbind(ID = ids, mat)
+  }
+  
+  # write table
+  write.table(mat, file.path(dir, genocov.file),
+    row.names = FALSE, sep = ",", quote = FALSE, na = "")
+
+  write.table(snpnames, file.path(dir, genolist.file),
+    col.names = FALSE, row.names = FALSE, sep = ",", quote = FALSE, na = "")
+  
+  return(invisible())
+}
+
+#' @name snpmap2solar
+#' @rdname snp2solar
+#'
+#' @param map
+#'    A data frame with annotation (map) information for SNPs.
+#'
 #' @export
 snpmap2solar <- function(map, dir)
 {
@@ -202,77 +320,15 @@ snpmap2solar <- function(map, dir)
   return(invisible())
 }
 
-#' Function snpcovdata2solar.
-#'
-#' The function emulate the `snp load` SOLAR command.
-#' Two output files are produced: `snp.genocov` and `snp.geno-list`.
-#' The steps are the following: (1) add prefix `snp_` to SNP names;
-#' (2) (optiona) compute stats on # genotyped individuals (columns `nGTypes`);
-#' (3) write data and metadata into files.
-#'
-#' Example of `snp.genocov` file:
-#'   id,nGTypes,snp_s1,snp_s2,...
-#'   1,50,0,0,...
-#'   2,50,0,0,...
-#'
-#' Example of `snp.geno-list` file:
-#'  snp_s1
-#'  snp_s2
-#'  ...
-#'
-#' @export
-snpcovdata2solar <- function(mat, out, dir, nGTypes = FALSE)
-{
-  # parse arguments
-  stopifnot(class(mat) == "matrix")
-
-  stopifnot(!is.null(rownames(mat)))
-  stopifnot(!is.null(colnames(mat)))
-  
-  stopifnot(file.exists(dir))
-
-  # slots in `out` argumnet
-  genocov.files <- out$assoc$genocov.files
-  stopifnot(length(genocov.files) == 1)
-
-  genolist.file <- out$assoc$genolist.file
-  stopifnot(length(genolist.file) == 1)
-    
-  # extract variabels
-  ids <- rownames(mat)
-  snpnames <- colnames(mat)
-
-  # compute `ID` and `nGTypes` columns
-  snpnames <- paste("snp", snpnames, sep = "_")
-  if(nGTypes) {
-    ngtypes <- apply(mat, 1, function(x) sum(!is.na(x)))
-  }
-  
-  # prepare `mat`
-  colnames(mat) <- snpnames
-  if(nGTypes) {
-    mat <- cbind(ID = ids, nGTypes = ngtypes, mat)
-  } else {
-    mat <- cbind(ID = ids, mat)
-  }
-  
-  # write table
-  write.table(mat, file.path(dir, genocov.files),
-    row.names = FALSE, sep = ",", quote = FALSE, na = "")
-
-  write.table(snpnames, file.path(dir, genolist.file),
-    col.names = FALSE, row.names = FALSE, sep = ",", quote = FALSE, na = "")
-  
-  return(invisible())
-}
-
 #----------------------------------
 # Kinship functions
 #----------------------------------
 
-#' Function solarKinship2
+#' Compute empirical double kinship matrix by SOLAR
 #'
-#' The function (1) puts the data set \code{df}
+#' The function runs SOLAR to evaluate the double kinship matirx of the given data.
+#'
+#' The function (1) puts the data \code{df}
 #' in SOLAR format, (2) separates it into
 #' two parts, pedigree and phenotypes,
 #' and then (3) expots both data sets in 
@@ -283,6 +339,16 @@ snpcovdata2solar <- function(mat, out, dir, nGTypes = FALSE)
 #' 
 #' @note
 #' IDs in \code{df} are assumed to be not duplicated. 
+#'
+#' @param df
+#'    A data frame that containts both phenotype and pedigree data.
+#'    To be passed to \code{df2solar} function.
+#' @param dir
+#'    (optional) A character with path to a directory, where SOLAR files to be created.
+#'    If this argument is missing, a temporary folder is created and further removed, when the job is done.
+#'    To be passed to \code{df2solar} function.
+#' @param ...
+#'    Additional arguments to be passed to \code{df2solar}.
 #'
 #' @export
 solarKinship2 <- function(df, dir, ...)

@@ -38,7 +38,7 @@
 readPhen <- function(phen.file, sep.phen = ",",
   ped.file, sep.ped = ",", 
   header = TRUE, stringsAsFactors = FALSE,
-  id.unique = TRUE, sex.optional, ...)
+  id.unique = TRUE, sex.optional)
 {
   stopifnot(!missing(phen.file)) 
   stopifnot(file.exists(phen.file))

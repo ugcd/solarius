@@ -2,6 +2,18 @@
 #'
 #' @name solarMultipointClass
 #' @rdname solarMultipointClass
+#'
+#' @param x 
+#'    An object of class \code{solarMultipoint}.
+#' @param object
+#'    An object of class \code{solarMultipoint}.
+#' @param pass
+#'    Integer argument for \code{plot} method, 
+#'    indicating whether which pass in multi-passs linkage scan to be plotted.
+#'    The default value is 1.
+#' @param ...
+#'    Additional arguments.
+#'
 #' @exportClass solarMultipoint
 
 #--------------------

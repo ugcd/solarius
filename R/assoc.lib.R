@@ -95,11 +95,39 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 # Annotation functions
 #----------------------------------
 
+#' Annotate SNPs 
+#'
+#' The function annotates SNPs based on \code{NCBI2R} R package,
+#' in particular \code{AnnotateSNPList} function.
+#'
+#' See \url{https://ncbi2r.wordpress.com/} for more details.
+#'
+#' @param x 
+#'    An object of class \code{solarAssoc} or a character vector of SNPs.
+#' @param mode
+#'    A character with the mode of SNPs selection.
+#'    Possible values are \code{"significant"}, \code{"top"} and \code{"all"}.
+#'    The default value is \code{"significant"}.
+#' @param alpha
+#'    A numeric value from 0 to 1, the significance level after Bonferroni multiple-test correction.
+#'    Corresponds to \code{mode} equal to \code{"significant"}.
+#' @param num.top
+#'    An integer value, the number of top SNPs to be annotated.
+#'    Corresponds to \code{mode} equal to \code{"top"}.
+#'    The default value is 10.
+#' @param capture.output
+#'    Logical, indicates whether to capture the output from \code{AnnotateSNPList} function.
+#'    The default value is FALSE.
+#' @param ...
+#'    Additional arguments.
+#' @return
+#'    A data table with annotation results.
+#'
 #' @export
 annotateSNPs <- function(x, mode = c("significant", "top", "all"), 
   alpha = 0.05,
   num.top = 10, 
-  quiet = TRUE, capture.output = FALSE,
+  capture.output = FALSE,
   ...)
 {
   mode <- match.arg(mode)

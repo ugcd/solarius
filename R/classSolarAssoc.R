@@ -2,6 +2,22 @@
 #'
 #' @name solarAssocClass
 #' @rdname solarAssocClass
+#'
+#' @param x 
+#'    An object of class \code{solarAssoc}.
+#' @param object
+#'    An object of class \code{solarAssoc}.
+#' @param y
+#'    Character argument for \code{plot} method, 
+#'    indicating the type of plot.
+#'    The default value is \code{"manh"}.
+#' @param alpha
+#'    Numeric argument between 0 and 1 for \code{summary} method, 
+#'    indicating the significance level after Bonferroni multiple-test correction.
+#'    The default value is 0.05.
+#' @param ...
+#'    Additional arguments.
+#'
 #' @exportClass solarAssoc
 
 #--------------------
@@ -164,6 +180,20 @@ summary.solarAssoc <- function(object, alpha = 0.05, ...)
 # Other methods
 #--------------------
 
+#' Annotate SNPs in association study
+#'
+#' The function calls \code{\link{annotateSNPs}} function,
+#' which does the job.
+#'
+#' @seealso \code{\link{annotateSNPs}}
+#'
+#' @param x 
+#'    An object of class \code{solarAssoc} or a character vector of SNPs.
+#' @param ...
+#'    Additional arguments passed to \code{annotateSNPs}.
+#' @return
+#'    A data table with annotation results.
+#'
 #' @export
 annotate <- function(x, ...)
 {

@@ -2,6 +2,18 @@
 #'
 #' @name solarPolygenicClass
 #' @rdname solarPolygenicClass
+#'
+#' @param x 
+#'    An object of class \code{solarPolygenic}.
+#' @param object
+#'    An object of class \code{solarPolygenic}.
+#' @param trait
+#'    Logical argument for \code{residuals} method, 
+#'    indicating whether values of trait to be returned instead of residuals.
+#'    The default value is FALSE.
+#' @param ...
+#'    Additional arguments.
+#'
 #' @exportClass solarPolygenic
 
 #--------------------

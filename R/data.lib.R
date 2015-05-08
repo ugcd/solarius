@@ -61,7 +61,17 @@ loadMulticPhen <- function()
 }
 
 
-#' Function loadExamplesPhen.
+#' Load the example data (GAW10) from SOLAR.
+#'
+#' Function loads the example data distributed with SOLAR.
+#' See the SOLAR tutorial for description of the data set.
+#'
+#' @param dat.dir
+#'  (optional) A character with path to a directory, where SOLAR files to be exported.
+#'  If this argument is missing, a temporary directory is used.
+#' @return
+#'  A data frame returned by \code{readPhen} function called
+#'  with phen and ped files of the data set.
 #'
 #' @export
 loadExamplesPhen <- function(dat.dir)
