@@ -174,7 +174,7 @@ transform_trait_inormal <- function(x, mean = 0, sd = 1)
   of <- of[with(of, order(sample)), ]
   
   ### duplicated values
-  y <- NULL # due to R CMD check: no visible binding for global variable ‘y’
+  y <- NULL # due to R CMD check: no visible binding
   of <- ddply(of, .(x), mutate, 
     y = median(y, na.rm = TRUE))
 

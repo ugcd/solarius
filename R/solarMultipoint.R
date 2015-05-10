@@ -301,11 +301,10 @@ run_multipoint <- function(out, dir)
   trun_multipoint$solar <- proc.time()
   parallel <- (cores > 1)
   if(parallel) {
-    ret <- require(doMC)
-    if(!ret) {
-      stop("`doMC` package is required for parallel calculations")
-    }
-    doMC::registerDoMC(cores)
+ # load required R package doParallel
+    stopifnot(requireNamespace("doParallel", quietly = TRUE))
+    
+    doParallel::registerDoParallel(cores = cores)
   }
 
   if(cores == 1) {

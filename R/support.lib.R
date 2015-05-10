@@ -179,11 +179,10 @@ read_map_files <- function(files, cores = 1)
 {
   parallel <- (cores > 1)
   if(parallel) {
-    ret <- require(doMC)
-    if(!ret) {
-      stop("Error in `read_map_files`: `doMC` package is required for parallel calculations")
-    }
-    doMC::registerDoMC(cores)
+    # load required R package doParallel
+    stopifnot(requireNamespace("doParallel", quietly = TRUE))
+    
+    doParallel::registerDoParallel(cores = cores)
   }
   
   map.list <- llply(files, function(f) try({
@@ -217,7 +216,7 @@ kmat2phi2 <- function(kmat, dir, kin2.gz = "kin2.gz")
 
 kf2phi2 <- function(kf, dir, kin2.gz = "kin2.gz")
 {
-  stopifnot(require(gdata))
+  #stopifnot(requireNamespace("gdata", quietly = TRUE))
   
   pedindex.out <- file.path(dir, "pedindex.out")
   pf <- read_pedindex(pedindex.out)

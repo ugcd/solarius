@@ -72,7 +72,7 @@ plot.solarAssoc.old <- function(x,
   #if(!ret) {
   #  stop("`ggplot2` package is required for plotting")
   #}
-  ret <- require(scales)
+  ret <- requireNamespace("scales", quietly = TRUE)
   if(!ret) {
     stop("`scales` package is required for plotting")
   }

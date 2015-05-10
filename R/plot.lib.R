@@ -25,9 +25,17 @@ plotPed <- function(data, ped)
   stopifnot(!missing(data))
   stopifnot(class(data) == "data.frame")
   stopifnot(!missing(ped))
+
+  # load required R package kinship2
+  stopifnot(requireNamespace("kinship2", quietly = TRUE))
   
-  stopifnot(require(kinship2))
-  
+  ret <- NULL # R CMD check: no visible binding
+  cmd <- "ret <- require(kinship2)"
+  eval(parse(text = cmd))
+  if(!ret) {
+    stop("`kinship2` package is required for plotting pedigrees.")
+  }
+      
   renames <- matchIdNames(names(data))
   data <- rename(data, renames)
   stopifnot(all(c("ID", "FA", "MO", "SEX", "FAMID") %in% names(data)))
@@ -60,7 +68,7 @@ plotPed <- function(data, ped)
   
   # make `pedigree` object
   ped <- with(df, 
-    pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  
+    kinship2::pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  
 
   plot(ped[1])
 }
@@ -111,7 +119,7 @@ plotPed <- function(data, ped)
 #' @export
 plotManh <- function(A, alpha = 0.05, main, ...)
 {
-  stopifnot(require(qqman))
+  stopifnot(requireNamespace("qqman", quietly = TRUE))
   
   stopifnot(all(c("chr", "pSNP", "pos") %in% names(A$snpf)))
   
@@ -153,7 +161,7 @@ plotManh <- function(A, alpha = 0.05, main, ...)
 #' @export
 plotQQ <- function(A, df = 1, main, ...)
 {
-  stopifnot(require(qqman))
+  stopifnot(requireNamespace("qqman", quietly = TRUE))
   
   # get p-values
   stopifnot("pSNP" %in% names(A$snpf))
@@ -234,7 +242,7 @@ plotKinship2 <- function(x, y = c("image", "hist"))
 #' @export imageKinship2
 imageKinship2 <- function(x)
 { 
-  stopifnot(require(Matrix))
+  stopifnot(requireNamespace("Matrix", quietly = TRUE))
   
   Matrix::image(Matrix::Matrix(x))
 }
