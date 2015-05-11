@@ -1,12 +1,15 @@
 ## TODO
 
-* Parse the value of kurtosis (computed for residuals).
+* Create functions to export results from the polygenic analysis to CSV tables.
+    * covariates: Estimate, SE, p-value (including mean)
+    * h2r: random effects (all three h2r, c2 and e2), kurtosis, variance due to covariates, #individuals
+* Parse the value of kurtosis (computed for residuals), the number of individuals in an analysis.
 * Fix the polygenic analysis with `screen` argument.
 * Guess the chromosomes; check out on parallel computing
-* Update DESCRIPTION and R code to switch from Depends to Imports.
 
 ## Done 
 
+* Update DESCRIPTION and R code to switch from Depends to Imports.
 * Work on the residuals from the polygenic model. See documentation on 
   `polygenic` SOLAR comand (`-residinor` option).
 * Make `dat50` SNP data available in plink format.  
