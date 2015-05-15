@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>dat30. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>dat30 data set adapted from multic R package</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>dat30</div>
+<div>genocovdat30</div>
+<div>mapdat30</div></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>(Phenotypes) A data frame <code>dat30</code> with 174 rows and 10 variables:
+<dl>
+  <dt>famid</dt><dd>Family ID (29 unique ids).</dd></p>
+  
+      <p><dt>id</dt><dd>Individual ID.</dd></p>
+  
+      <p><dt>fa</dt><dd>Father ID.</dd></p>
+  
+      <p><dt>mo</dt><dd>Mother ID.</dd></p>
+  
+      <p><dt>sex</dt><dd>Individual gender (1 - male, 2 - female).</dd></p>
+  
+      <p><dt>affect</dt><dd>Affected status (1 - unaffected, 2 - affected).</dd></p>
+  
+      <p><dt>class</dt><dd>Class label.</dd></p>
+  
+      <p><dt>trait1</dt><dd>Simulated phenotype 1.</dd></p>
+  
+      <p><dt>trait2</dt><dd>Simulated phenotype 2.</dd></p>
+  
+      <p><dt>age</dt><dd>Age.</dd></p>
+  
+      <p></dl></p>
+  
+      <p>(Genotypes as covariates) A matrix <code>genocovdat30</code> with 174 rows and 100 columns.
+Row names are IDs of individuals, column names are names of SNPs.</p>
+  
+      <p>(Annotation) A data frame <code>mapdat30</code> with 100 rows and 4 variables:
+<dl>
+  <dt>SNP</dt><dd>SNP name.</dd></p>
+  
+      <p><dt>chr</dt><dd>Chromosome.</dd></p>
+  
+      <p><dt>pos</dt><dd>Position in bp.</dd></p>
+  
+      <p><dt>gene</dt><dd>Gene.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="dat30 data set adapted from multic R package">
+      <h2>dat30 data set adapted from multic R package</h2>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>29 first families were selected from the complete data set of 12000 individuals.
+For a resulted subset of 174 individuals,
+a hundred of synthetic SNPs were randomly generated.
+Annotation information also was generated,
+mainly in order to plot the association results with Manhattan plot.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Two simulated phenotypes possess a high genetic correlation.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>data(dat30)
+
+str(dat30)
+</div>
+<div class='output'>&#39;data.frame&#39;:	174 obs. of  10 variables:
+ $ famid : int  1 1 1 1 1 1 2 2 2 2 ...
+ $ id    : int  11 12 13 14 15 16 21 22 23 24 ...
+ $ fa    : int  0 0 11 11 11 11 0 0 21 21 ...
+ $ mo    : int  0 0 12 12 12 12 0 0 22 22 ...
+ $ sex   : int  1 2 1 2 1 1 1 2 2 1 ...
+ $ affect: int  2 2 2 2 2 2 2 2 2 2 ...
+ $ class : logi  NA NA NA NA NA NA ...
+ $ trait1: num  11.96 7.1 10.32 9.76 9.46 ...
+ $ trait2: num  13.58 5.37 6.4 8.98 9.21 ...
+ $ age   : int  50 25 35 49 51 45 37 29 39 41 ...
+</div>
+<div class='input'>
+plotPed(dat30, 2) # plot the pedigree tree for family #2
+</div>
+<strong class='message'>Loading required package: kinship2</strong>
+<strong class='message'>Loading required package: Matrix</strong>
+<strong class='message'>Loading required package: quadprog</strong>
+<p><img src='dat30-7.png' alt='' width='540' height='400' /></p>
+<div class='input'>
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# kin2 &lt;- solarKinship2(dat30)
+# plotKinship2(kin2)
+# plotKinship2(kin2[1:30, 1:30])
+# 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+str(genocovdat30)
+</div>
+<div class='output'> num [1:174, 1:100] 1.978 0.795 0.231 0.139 0.487 ...
+ - attr(*, &quot;dimnames&quot;)=List of 2
+  ..$ : chr [1:174] &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot; ...
+  ..$ : chr [1:100] &quot;snp_1&quot; &quot;snp_2&quot; &quot;snp_3&quot; &quot;snp_4&quot; ...
+</div>
+<div class='input'>
+genocovdat30[1:5, 1:5]
+</div>
+<div class='output'>       snp_1      snp_2     snp_3     snp_4     snp_5
+11 1.9778186 0.76066504 1.4619557 0.1212071 1.0959075
+12 0.7954909 1.42966254 1.3746092 0.5010122 0.1454984
+13 0.2313956 0.07411651 1.2020817 1.9940435 1.4228365
+14 0.1394974 0.99711827 0.7149236 0.6051847 0.4434309
+15 0.4874988 1.44298075 1.5332879 1.7050956 1.3768445
+</div>
+<div class='input'>str(mapdat30)
+</div>
+<div class='output'>&#39;data.frame&#39;:	100 obs. of  4 variables:
+ $ SNP : Factor w/ 100 levels &quot;snp_1&quot;,&quot;snp_10&quot;,..: 1 12 23 34 45 47 48 49 50 2 ...
+ $ chr : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ pos : num  2105324 2105467 2106094 2108138 2109262 ...
+ $ gene: Factor w/ 12 levels &quot;gene1&quot;,&quot;gene2&quot;,..: 1 1 1 1 1 1 1 1 1 2 ...
+</div>
+<div class='input'>
+head(mapdat30)
+</div>
+<div class='output'>    SNP chr     pos  gene
+1 snp_1   1 2105324 gene1
+2 snp_2   1 2105467 gene1
+3 snp_3   1 2106094 gene1
+4 snp_4   1 2108138 gene1
+5 snp_5   1 2109262 gene1
+6 snp_6   1 2110294 gene1
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>dat30</li><li>genocovdat30</li><li>mapdat30</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

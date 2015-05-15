@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>snpcovdata2solar. solarius 0.2.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Function snpcovdata2solar.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>snpcovdata2solar(mat, out, dir, nGTypes&nbsp;=&nbsp;FALSE)</div></pre>
+        
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function emulate the `snp load` SOLAR command.
+Two output files are produced: `snp.genocov` and `snp.geno-list`.
+The steps are the following: (1) add prefix `snp_` to SNP names;
+(2) (optiona) compute stats on # genotyped individuals (columns `nGTypes`);
+(3) write data and metadata into files.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>Example of `snp.genocov` file:
+  id,nGTypes,snp_s1,snp_s2,...
+  1,50,0,0,...
+  2,50,0,0,...</p>
+  
+      <p>Example of `snp.geno-list` file:
+ snp_s1
+ snp_s2
+ ...</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>snpcovdata2solar</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

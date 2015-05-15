@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>plotRes. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Plot the residuals of a polygenic model</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>plotRes(x, labels&nbsp;=&nbsp;FALSE, text.size&nbsp;=&nbsp;4, ...)</div>
+<div>plotResQQ(x, distribution&nbsp;=&nbsp;"norm", ..., line.estimate&nbsp;=&nbsp;NULL, conf&nbsp;=&nbsp;0.9, labels&nbsp;=&nbsp;FALSE, text.size&nbsp;=&nbsp;4)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>An object of class <code>solarPolygenic</code>.</dd>
+      <dt>labels</dt>
+      <dd>A logical value for <code>plotRes</code> function, indicating if the labels of IDs
+(which residuals are outside the 3 * sd interval) are to be plotted.
+A logical value for <code>plotResQQ</code> function,
+indicating if the samples (their IDs) outside the confidence intervals are to be plotted.</dd>
+      <dt>text.size</dt>
+      <dd>An integer, the text size of labels.</dd>
+      <dt>...</dt>
+      <dd>additional arguments.</dd>
+      <dt>distribution</dt>
+      <dd>A character, name of distribution of the residuals.
+The default value is <code>"norm"</code>.</dd>
+      <dt>line.estimate</dt>
+      <dd>Function for estimation of QQ-line.</dd>
+      <dt>conf</dt>
+      <dd>A numeric value between 0 and 1, that represents the confidence boundary.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Plot the residuals on scatter or quantile-quantile plots.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>plotRes</code> function makes a scatter plot of fitted values vs. residuals.
+Note that the residuals returned by SOLAR include both random effects,
+i.e. house-hold, genetic and residuals itself.</p>
+  
+      <p><code>plotResQQ</code> function plots  quantile-quantile (QQ) plot of the residuals.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# ### basic (univariate) polygenic model
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30)
+# 
+# plotRes(mod)
+# 
+# plotResQQ(mod)
+# 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>plotRes</li><li>plotResQQ</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

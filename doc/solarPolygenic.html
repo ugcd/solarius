@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>solarPolygenic. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Run polygenic analysis.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>solarPolygenic(formula, data, dir, kinship, traits, covlist&nbsp;=&nbsp;"1", covtest&nbsp;=&nbsp;FALSE, screen&nbsp;=&nbsp;FALSE, household&nbsp;=&nbsp;as.logical(NA), transforms&nbsp;=&nbsp;character(0), alpha&nbsp;=&nbsp;0.05, polygenic.settings&nbsp;=&nbsp;"", polygenic.options&nbsp;=&nbsp;"", verbose&nbsp;=&nbsp;0, ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>formula</dt>
+      <dd>an object of class <code>formula</code> or one that can be coerced to that class.
+It is a symbolic description of fixed effects (covariates) to be fitted.
+If the model does not have any covariates, then the formula looks like
+<code>trait ~ 1</code>, where <code>1</code> means the trait mean parameter.</dd>
+      <dt>data</dt>
+      <dd>A data frame containing the variables in the model,
+including ID fields needed to construct random effects: genetic and house-hold (both optional).
+Other classes such as list, environment or object coercible by <code>as.data.frame</code> to a data frame
+are not supported.</dd>
+      <dt>dir</dt>
+      <dd>an optional character string, the name of directory,
+where SOLAR performs the analysis.
+In this case, the analysis within related input/output files is
+conducted in the given folder instead of a temporary one
+(the default work flow).</dd>
+      <dt>kinship</dt>
+      <dd>A matrix of the kinship coefficients (custom kinship matrix).
+The IDs are required to be in row and column names.
+Currently, it does not work for unrelated individuals (SOLAR issue).</dd>
+      <dt>traits</dt>
+      <dd>a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.</dd>
+      <dt>covlist</dt>
+      <dd>a vector of characters to specify fixed effects (covariates) in the model.
+It is alternative to the formula interface.
+It could be convenient to indicate covariates in the SOLAR format,
+for example, <code>"age^1,2,3#sex"</code> that means <code>sex age agesex age^2 age^2sex age^3 age^3*sex</code>.
+The default value is <code>"1"</code>.</dd>
+      <dt>covtest</dt>
+      <dd>a logical value, indicating whether to test the significance of the fixed effects (covariates).
+Likelihood ratio test (LRT) is used by SOLAR.
+<code>polygenic</code> SOLAR command is called with a combination of <code>-screen -all</code> options.
+As a result, <code>cf</code> slot will have p-values in <code>pval</code> column.
+The default value is <code>FALSE</code>.</dd>
+      <dt>screen</dt>
+      <dd>a logical value, indicating whether to screen the fixed effects (covariates).
+<code>polygenic</code> SOLAR command is called with <code>-screen</code> option.
+As a result, only significant covariates will be maintained in the model.
+The default value is <code>FALSE</code>.</dd>
+      <dt>household</dt>
+      <dd>a logical value, saying to <strong>forcedly</strong> include or exclude the house-hold effect.
+The default value is <code>as.logical(NA)</code>, that means the following behavior in SOLAR.
+If <code>data</code> has <code>hhid</code> or similar column,
+then the house-hold effect is added to the model and tested by SOLAR.
+Otherwise, there is no any variable indicating the house-hold effect
+neither in <code>data</code> nor in the model.
+If <code>household</code> is <code>TRUE</code>, then <code>polygenic</code> SOLAR command is called
+with <code>-keephouse</code> option.
+If <code>household</code> is <code>FALSE</code>, then <code>house</code> SOLAR command
+is not called previously to calling <code>polygenic</code> SOLAR command
+(modeling of the house-hold effect is omitted).</dd>
+      <dt>transforms</dt>
+      <dd>a named vector of characters, indicating the transformations to be applied to traits.
+A list of available transforms is returned by function <code><a href='availableTransforms.html'>availableTransforms</a></code>.
+If the model is univariate, the name of transformation is not necessary and can be omitted.
+The default value is <code>character(0)</code>.</dd>
+      <dt>alpha</dt>
+      <dd>a number between 0 an 1, that is the value of
+<code>-prob</code> option of <code>polygenic</code> SOLAR command.
+That is the probability level for keeping covariates as significant.
+The default value in SOLAR is 0.1,
+but the default value here is <code>0.05</code>.
+This parameter makes the <code>polygenic</code> SOLAR call to be like <code>polygenic -prob 0.05</code>.</dd>
+      <dt>polygenic.settings</dt>
+      <dd>A vector of characters, that contains SOLAR commands to be executed just before calling <code>polygenic</code>.
+For example, the liability threshold model applied to a binary trait (the default behavior in SOLAR).
+This behavior is disabled by setting the given argument to <code>"option EnableDiscrete 0"</code>.
+The default value is <code>""</code>.</dd>
+      <dt>polygenic.options</dt>
+      <dd>A character of options to be passed to <code>polygenic</code> SOLAR command.
+For example, the comprehensive analysis of a bivariate model might be parametrized
+by setting this parameter to <code>"-testrhoe -testrhog -testrhoc -testrhop -rhopse"</code>.
+See SOLAR help page for <code>polygenic</code> command for more details
+(<a href = 'http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#polygenic'>http://solar.txbiomedgenetics.org/doc/91.appendix_1_text.html#polygenic</a>).
+The default value is <code>""</code>.</dd>
+      <dt>verbose</dt>
+      <dd>An non-negative integer of the verbose level.
+The default value is <code>0</code>.</dd>
+      <dt>...</dt>
+      <dd>additional parameters to be passed to other functions called inside of <code>solarPolygenic</code>.
+   For example, it might be a parameter <code>log.base</code> for <code><a href='transformTrait.html'>transformTrait</a></code> function
+   in the case <code>transform</code> is equal to <code>"log"</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+An object of <code>solarPolygenic</code> class. See <code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The polygenic analysis is conducted in the following sequence:
+export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function,
+form a SOLAR call with a list of settings and options,
+execute SOLAR by <code><a href='solar.html'>solar</a></code> function,
+parse output files and
+store results in an object of <code>solarPolygenic</code> class (see <code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>).</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>### load data and check out ID names
+data(dat30)
+matchIdNames(names(dat30))
+</div>
+<div class='output'>     id   famid      mo      fa     sex 
+   &quot;ID&quot; &quot;FAMID&quot;    &quot;MO&quot;    &quot;FA&quot;   &quot;SEX&quot; 
+</div>
+<div class='input'>
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# ### basic (univariate) polygenic model
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30)
+# 
+# ### (univariate) polygenic model with parameters
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+# mod$cf # look at test statistics for covariates
+# 
+# ### basic (bivariate) polygenic model
+# mod &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30)
+# mod$vcf # look at variance components
+# 
+# ### (bivariate) polygenic model with trait specific covariates
+# mod &lt;- solarPolygenic(trait1 + trait2 ~ age + sex(trait1), dat30)
+# 
+# ### (bivariate) polygenic model with a test of the genetic correlation
+# mod &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30, polygenic.options = &quot;-testrhog&quot;)
+# mod$lf # look at a p-value of the test
+# 
+# ### transforms for (univariate) polygenic model
+# mod &lt;- mod &lt;- solarPolygenic(trait1 ~ 1, dat30, transforms = &quot;log&quot;)
+# 
+# ### transforms for (bivariate) polygenic model
+# mod &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30,
+#    transforms = c(trait1 = &quot;log&quot;, trait2 = &quot;inormal&quot;))
+# 
+# ### SOLAR format of introducing covariates
+# mod &lt;- solarPolygenic(traits = &quot;trait1&quot;, covlist = &quot;age^1,2,3#sex&quot;, data =  dat30)
+# mod$cf # 8 covariate terms will be printed
+# 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>solarPolygenic</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

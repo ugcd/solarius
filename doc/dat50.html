@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>phenodata. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>dat50 data set adapted from FFBSKAT R package</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>phenodata</div>
+<div>kin</div>
+<div>genodata</div>
+<div>genocovdata</div>
+<div>snpdata</div></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>(Phenotypes) A data frame <code>phenodata</code> with 66 rows and 4 variables:
+<dl>
+  <dt>id</dt><dd>Individual ID.</dd></p>
+  
+      <p><dt>sex</dt><dd>Individual gender (0 - male, 1 - female).</dd></p>
+  
+      <p><dt>age</dt><dd>Age.</dd></p>
+  
+      <p><dt>trait</dt><dd>Simulated phenotype.</dd></p>
+  
+      <p></dl></p>
+  
+      <p>(Kinship) A square matrix <code>kin</code> with 66 rows and 66 columns.</p>
+  
+      <p>(Genotypes) A matrix <code>genodata</code> with 66 rows and 50 columns.</p>
+  
+      <p>(Genotypes as covariates) A matrix <code>genocovdata</code> with 66 rows and 50 columns.</p>
+  
+      <p>(Annotation) A data frame <code>snpdata</code> with 100 rows and 4 variables:
+<dl>
+  <dt>name</dt><dd>SNP name.</dd></p>
+  
+      <p><dt>chrom</dt><dd>Chromosome.</dd></p>
+  
+      <p><dt>position</dt><dd>Position in bp.</dd></p>
+  
+      <p><dt>gene</dt><dd>Gene.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="dat50 data set adapted from FFBSKAT R package">
+      <h2>dat50 data set adapted from FFBSKAT R package</h2>
+
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A mixture of unrelated and related individuals
+were originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
+50 synthetic SNPs were generated for the association study.
+A custom kinship matrix is used to express the relationships among individuals.
+This data set is used here to test the ability of SOLAR
+to work with a custom kinship matrix in both polygenic and association analyses.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The genotypes are coded in the format such as 1/1, 1/2 and 2/2.</p>
+  
+      <p>In addition to the original data set from FFBSKAT R package,
+a matrix of covariates was derived from the genotype data according to the additive model.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>data(dat50)
+
+str(phenodata)
+</div>
+<div class='output'>&#39;data.frame&#39;:	66 obs. of  4 variables:
+ $ id   : num  1 2 3 4 5 6 7 8 9 10 ...
+ $ sex  : int  0 1 0 0 0 1 0 1 1 0 ...
+ $ age  : int  80 77 56 44 75 79 75 82 77 76 ...
+ $ trait: num  -1.763 -1.423 -0.805 0.268 -1.334 ...
+</div>
+<div class='input'>plotKinship2(2*kin)
+</div>
+<p><img src='dat50-4.png' alt='' width='540' height='400' /></p>
+<div class='input'>str(genodata)
+</div>
+<div class='output'> chr [1:66, 1:50] &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; ...
+ - attr(*, &quot;dimnames&quot;)=List of 2
+  ..$ : chr [1:66] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+  ..$ : chr [1:50] &quot;s1&quot; &quot;s2&quot; &quot;s3&quot; &quot;s4&quot; ...
+</div>
+<div class='input'>
+genodata[1:5, 1:5]
+</div>
+<div class='output'>  s1    s2    s3    s4    s5   
+1 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
+2 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/1&quot;
+3 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;2/2&quot; &quot;1/1&quot;
+4 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot;
+5 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
+</div>
+<div class='input'>str(genocovdata)
+</div>
+<div class='output'> int [1:66, 1:50] 0 0 0 1 1 0 0 0 0 0 ...
+ - attr(*, &quot;dimnames&quot;)=List of 2
+  ..$ : chr [1:66] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+  ..$ : chr [1:50] &quot;s1&quot; &quot;s2&quot; &quot;s3&quot; &quot;s4&quot; ...
+</div>
+<div class='input'>
+genocovdata[1:5, 1:5]
+</div>
+<div class='output'>  s1 s2 s3 s4 s5
+1  0  0  0  0  0
+2  0  0  0  1  0
+3  0  0  0  2  0
+4  1  0  0  1  1
+5  1  0  0  0  0
+</div>
+<div class='input'>
+# compare with the genotypes
+genodata[1:5, 1:5]
+</div>
+<div class='output'>  s1    s2    s3    s4    s5   
+1 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
+2 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/1&quot;
+3 &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;2/2&quot; &quot;1/1&quot;
+4 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot;
+5 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
+</div>
+<div class='input'>str(snpdata)
+</div>
+<div class='output'>&#39;data.frame&#39;:	50 obs. of  4 variables:
+ $ name    : chr  &quot;s1&quot; &quot;s2&quot; &quot;s3&quot; &quot;s4&quot; ...
+ $ chrom   : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ position: num  2105324 2105467 2106094 2108138 2109262 ...
+ $ gene    : chr  &quot;gene1&quot; &quot;gene1&quot; &quot;gene1&quot; &quot;gene1&quot; ...
+</div>
+<div class='input'>
+head(snpdata)
+</div>
+<div class='output'>   name chrom position  gene
+2    s1     1  2105324 gene1
+6    s2     1  2105467 gene1
+10   s3     1  2106094 gene1
+11   s4     1  2108138 gene1
+15   s5     1  2109262 gene1
+20   s6     1  2110294 gene1
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>genocovdata</li><li>genodata</li><li>kin</li><li>phenodata</li><li>snpdata</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

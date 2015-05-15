@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>transformTrait. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Transform a trait.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>transformTrait(x, transform, ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>a numeric vector (of a trait).</dd>
+      <dt>transform</dt>
+      <dd>a character vector, the name of transformation.
+Possible values are returned by <code><a href='availableTransforms.html'>availableTransforms</a></code> function.</dd>
+      <dt>...</dt>
+      <dd>additional parameters passed to internal <code>transform_trait_*</code> functions.
+   Possible parameters might be <code>log.base</code>, <code>log.intercept</code> (<code>"log"</code> transformation).</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+A numeric vector, which contains the transformed values (of a trait).
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Transform a trait.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>library(plyr)
+library(ggplot2)
+</div>
+<strong class='message'>
+Attaching package: ‘ggplot2’
+</strong>
+<strong class='message'>The following object is masked from ‘package:solarius’:
+
+    annotate
+</strong>
+<div class='input'>
+data(dat30)
+dat &lt;- mutate(dat30,
+   inormal_trait1 = transformTrait(trait1, &quot;inormal&quot;))
+
+ggplot(dat, aes(trait1)) + geom_histogram()
+</div>
+<p><img src='transformTrait-5.png' alt='' width='540' height='400' /></p>
+<div class='input'>ggplot(dat, aes(inormal_trait1)) + geom_histogram()
+</div>
+<p><img src='transformTrait-7.png' alt='' width='540' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>transformTrait</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='availableTransforms.html'>availableTransforms</a></code>, <code><a href='transformData.html'>transformData</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

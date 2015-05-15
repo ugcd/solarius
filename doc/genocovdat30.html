@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>genocovdat30. solarius 0.2.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Genotypes simulated for dat30 data set adapted from multic R package</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>data(dat30)</div></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>A matrix with 174 rows and 100 columns.</p>
+  
+      <p>The row names are IDs of individuals, the column names are the names of SNPs.</p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A hundred of synthetic SNPs were randomly generated for dat30 data set.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>data(dat30)
+
+str(genocovdat30)
+</div>
+<div class='output'> num [1:174, 1:100] 1.978 0.795 0.231 0.139 0.487 ...
+ - attr(*, &quot;dimnames&quot;)=List of 2
+  ..$ : chr [1:174] &quot;11&quot; &quot;12&quot; &quot;13&quot; &quot;14&quot; ...
+  ..$ : chr [1:100] &quot;snp_1&quot; &quot;snp_2&quot; &quot;snp_3&quot; &quot;snp_4&quot; ...
+</div>
+<div class='input'>
+genocovdat30[1:5, 1:5]
+</div>
+<div class='output'>       snp_1      snp_2     snp_3     snp_4     snp_5
+11 1.9778186 0.76066504 1.4619557 0.1212071 1.0959075
+12 0.7954909 1.42966254 1.3746092 0.5010122 0.1454984
+13 0.2313956 0.07411651 1.2020817 1.9940435 1.4228365
+14 0.1394974 0.99711827 0.7149236 0.6051847 0.4434309
+15 0.4874988 1.44298075 1.5332879 1.7050956 1.3768445
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>genocovdat30</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='dat30.html'>dat30</a></code>, <code><a href='mapdat30.html'>mapdat30</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

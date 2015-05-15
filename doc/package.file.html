@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>package.file. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Alternative to system.file</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>package.file(...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>...</dt>
+      <dd>arguments to be passed to <code>system.file</code></dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+Path returned by <code>system.file</code>.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function worsk as <code>system.file</code>,
+but takes care when the package is a local folder.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The use case is when some data file or direcotry is needed to be loaded,
+and it is placed in <code>inst/</code> directory of the package.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>mibddir &lt;- package.file(&quot;extdata&quot;, &quot;solarOutput&quot;, &quot;solarMibds&quot;, package = &quot;solarius&quot;)
+mibddir
+</div>
+<div class='output'>[1] &quot;/home/andrey/git/ugcd/solarius/inst/extdata/solarOutput/solarMibds&quot;
+</div>
+<div class='input'>
+list.files(mibddir)
+</div>
+<div class='output'> [1] &quot;mibd.2.0.gz&quot; &quot;mibd.2.1.gz&quot; &quot;mibd.2.2.gz&quot; &quot;mibd.2.3.gz&quot; &quot;mibd.2.4.gz&quot;
+ [6] &quot;mibd.2.5.gz&quot; &quot;mibd.5.0.gz&quot; &quot;mibd.5.1.gz&quot; &quot;mibd.5.2.gz&quot; &quot;mibd.5.3.gz&quot;
+[11] &quot;mibd.5.4.gz&quot; &quot;mibd.5.5.gz&quot;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>package.file</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>transformData. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Apply transforms to a data set.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>transformData(transforms, data, transform.prefix&nbsp;=&nbsp;"tr_", ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>transforms</dt>
+      <dd>A named character vector of transforms,
+where traits are given in the names of the vector.</dd>
+      <dt>data</dt>
+      <dd>A matrix or a data.frame, where the column names represent the names of traits.</dd>
+      <dt>transform.prefix</dt>
+      <dd>A character vector, that is a prefix to be added to the name of transformed trait.
+The default value is <code>"tr_"</code>.</dd>
+      <dt>...</dt>
+      <dd>Additional parameters to be passed to <code>transformTrait</code> function called inside of <code>transformData</code>.
+For example, it might be a parameter <code>log.base</code> for <code><a href='transformTrait.html'>transformTrait</a></code> function
+in the case <code>transform</code> is equal to <code>"log"</code>.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+A matrix or a data.frame of the transformed data.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function looks for traits in colulms of input data frame,
+call <code><a href='transformTrait.html'>transformTrait</a></code> function per trait,
+and rename the traits.
+By default, the name of a transformed trait is updated
+to one with a prefixed given in <code>transform.prefix</code> argument
+(the default value is <code>"tr_"</code>).
+Such renaming is assumed to make the user aware that the trait is transformed.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>This function is internally called in <code>solarPolygenic</code>
+if <code>transforms</code> argument is specified.
+In this case of the polygenic analysis,
+the transform operation is invisible to the user.
+However, it is recommended to manually transform traits
+in other linkage and association analyses.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>transformData</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='availableTransforms.html'>availableTransforms</a></code>, <code><a href='transformTrait.html'>transformTrait</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>snpdata. solarius 0.2.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Annotation for simulated genotypes in dat50 data set adapted from FFBSKAT R package</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>data(dat50)</div></pre>
+        
+    <div class="Format">
+      <h2>Format</h2>
+
+      <p>A data frame with 100 rows and 4 variables:
+<dl>
+  <dt>name</dt><dd>SNP name.</dd></p>
+  
+      <p><dt>chrom</dt><dd>Chromosome.</dd></p>
+  
+      <p><dt>position</dt><dd>Position in bp.</dd></p>
+  
+      <p><dt>gene</dt><dd>Gene.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Annotation for simulated genotypes in dat50 data set adapted from FFBSKAT R package</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>data(dat50)
+
+str(snpdata)
+</div>
+<div class='output'>&#39;data.frame&#39;:	50 obs. of  4 variables:
+ $ name    : chr  &quot;s1&quot; &quot;s2&quot; &quot;s3&quot; &quot;s4&quot; ...
+ $ chrom   : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ position: num  2105324 2105467 2106094 2108138 2109262 ...
+ $ gene    : chr  &quot;gene1&quot; &quot;gene1&quot; &quot;gene1&quot; &quot;gene1&quot; ...
+</div>
+<div class='input'>
+head(snpdata)
+</div>
+<div class='output'>   name chrom position  gene
+2    s1     1  2105324 gene1
+6    s2     1  2105467 gene1
+10   s3     1  2106094 gene1
+11   s4     1  2108138 gene1
+15   s5     1  2109262 gene1
+20   s6     1  2110294 gene1
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>snpdata</li>
+    </ul>
+    <ul>
+      <li>datasets</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='phenodata.html'>phenodata</a></code>, <code><a href='kin.html'>kin</a></code>, <code><a href='genodata.html'>genodata</a></code>, <code><a href='genocovdata.html'>genocovdata</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

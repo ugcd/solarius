@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>plotKinship2. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Plot the double kinship matrix</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>plotKinship2(x, y&nbsp;=&nbsp;c("image", "hist"))</div>
+<div>imageKinship2(x)</div>
+<div>histKinship2(x)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>A square matrix of double kinship coefficients.</dd>
+      <dt>y</dt>
+      <dd>A character, the type of the plot.
+   Possible values are <code>"image"</code> and <code>"hist"</code>.
+   The default value is <code>"image"</code>.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The main function that calls <code>imageKinship2</code> or <code>histKinship2</code>
+depending on value of <code>y</code> argument.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>imageKinship2</code> function calls <code>image</code> function from <code>Matrix</code> package.</p>
+  
+      <p><code>histKinship2</code> function plots a histogram based on <code>ggplot2</code> package.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># load `kin` kinship matrix from `dat50` data set
+data(dat50)
+kin2 &lt;- 2* kin # double kinship matrix
+
+plotKinship2(kin2) # equivalent to `imageKinship2(kin2)`
+</div>
+<p><img src='plotKinship2-2.png' alt='' width='540' height='400' /></p>
+<div class='input'>
+plotKinship2(kin2, &quot;hist&quot;) # equivalent to `histKinship2(kin2)`
+</div>
+<p><img src='plotKinship2-4.png' alt='' width='540' height='400' /></p></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>histKinship2</li><li>imageKinship2</li><li>plotKinship2</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

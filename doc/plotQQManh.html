@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>plotManh. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Plot the association results</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>plotManh(A, alpha&nbsp;=&nbsp;0.05, main, ...)</div>
+<div>plotQQ(A, df&nbsp;=&nbsp;1, main, ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>A</dt>
+      <dd>An object of class <code>solarAssoc</code>.</dd>
+      <dt>alpha</dt>
+      <dd>A numeric value from 0 to 1, the p-value cut-off
+for Bonferroni multiple-test correction.
+The default value is 0.05.</dd>
+      <dt>main</dt>
+      <dd>A character string, <code>main</code> argument (title) to a plot function.
+If the argument is missing, the title contains information about the model formula and the number of SNPs used for plotting.</dd>
+      <dt>...</dt>
+      <dd>additional argument to a plot function.</dd>
+      <dt>df</dt>
+      <dd>An integer value, the degree of freedom.
+ The default value is 1.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Two Manhattan and quantile-quantile (QQ) plots
+are standard to explore the results from association studies.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>plotManh</code> function produces the Manhattan plot based on <code>qqman</code> package.
+The two red and blue lines, default in the original <code>manhattan</code> function
+of <code>qqman</code> package, are preserved.
+An additional black dashed line is added, that depicts the significance level
+according to Bonferroni multiple-test correction with <code>alpha</code> argument.</p>
+  
+      <p><code>plotQQ</code> function produces the QQ plot based on the same <code>qqman</code> package.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# data(dat50)
+# 
+# assoc &lt;- solarAssoc(trait ~ 1, phenodata,
+#  snpdata = genodata, snpmap = snpdata, kinship = kin)
+# 
+# plotManh(assoc) # equivalent to plot(assoc)
+# 
+# plotQQ(assoc) # equivalent to plot(assoc, &quot;qq&quot;)
+# 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>plotManh</li><li>plotQQ</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='solarAssocClass.html'>solarAssocClass</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

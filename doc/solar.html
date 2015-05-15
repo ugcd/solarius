@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>solar. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Call SOLAR program from R</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>solar(cmd, dir, result&nbsp;=&nbsp;TRUE, ignore.stdout&nbsp;=&nbsp;TRUE, ignore.stderr&nbsp;=&nbsp;FALSE, ...)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>cmd</dt>
+      <dd>A vector of characters, that contains the commands to be passed to SOLAR.</dd>
+      <dt>dir</dt>
+      <dd>A character, path to the directory, where SOLAR-related files (phenotypes, pedigree, markers)
+were previously created.</dd>
+      <dt>result</dt>
+      <dd>A logical, <code>intern</code> argument to be passed to <code>system</code> function.
+The default value is TRUE.</dd>
+      <dt>ignore.stdout</dt>
+      <dd>A logical, <code>ignore.stdout</code> argument to be passed to <code>system</code> function.
+The default value is FALSE.</dd>
+      <dt>ignore.stderr</dt>
+      <dd>A logical, <code>ignore.stderr</code> argument to be passed to <code>system</code> function.
+The default value is TRUE.</dd>
+      <dt>...</dt>
+      <dd>additional arguments (which are not used).</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function calls SOLAR via <code>system</code> function,
+that invokes the OS command (which is <code>solar</code>) specified by the command argument.
+SOLAR is required to be installed in the OS.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>This is the core function in the interface between R and SOLAR.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>solar</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

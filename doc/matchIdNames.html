@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>matchIdNames. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Match ID column names</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>matchIdNames(fields, sex.optional&nbsp;=&nbsp;FALSE, skip.sex&nbsp;=&nbsp;FALSE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>fields</dt>
+      <dd>The name of fields or colulm names in data frame, which are candidates to be ID fields.</dd>
+      <dt>sex.optional</dt>
+      <dd>Logical, indicating if through an error in the case SEX field is not found in input fields.</dd>
+      <dt>skip.sex</dt>
+      <dd>Logical, indicating if the search for SEX filds is completely skipped.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+A named character vector, that can be directly passed to <code>rename</code> function of <code>plyr</code> package.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function automates the process of renaming ID fields in data frame of phenotypes
+into a SOLAR format.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># @ http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#load
+#solar&gt; help file-pedigree                                                       
+#
+# The pedigree file consists of one record for each individual in the data
+# set.  Each record must include the following fields:
+#
+#    ego ID, father ID, mother ID, sex
+#
+# In addition, a family ID is required when ego IDs are not unique across
+# the entire data set.  If the data set contains genetically identical
+# individuals, an MZ-twin ID must be present (as described below).  If an
+# analysis of household effects is planned, a household ID can be included
+# (also described below).
+#
+# The default field names are ID, FA, MO, SEX, FAMID, MZTWIN, and HHID.
+#
+
+fields &lt;- c(&quot;id&quot;, &quot;ID&quot;, &quot;ids&quot;,
+  &quot;famid&quot;, &quot;FAMID&quot;, &quot;famidity&quot;,
+  &quot;mo&quot;, &quot;MO&quot;, &quot;mother&quot;, &quot;MOTHER&quot;, &quot;MOtrait&quot;, &quot;motherland&quot;,
+  &quot;fa&quot;, &quot;FA&quot;, &quot;father&quot;, &quot;FATHER&quot;, &quot;fatherland&quot;,
+  &quot;sex&quot;, &quot;SEX&quot;, &quot;sexo&quot;)
+
+### ID
+# pass: id, ID
+# filter: ids
+grep(&quot;^id$|^ID$&quot;, fields, value = TRUE)
+</div>
+<div class='output'>[1] &quot;id&quot; &quot;ID&quot;
+</div>
+<div class='input'>
+### FAMID
+grep(&quot;^famid$|^FAMID$&quot;, fields, value = TRUE)
+</div>
+<div class='output'>[1] &quot;famid&quot; &quot;FAMID&quot;
+</div>
+<div class='input'>
+### MO
+grep(&quot;^mo$|^MO$|^mother$|^MOTHER$&quot;, fields, value = TRUE)
+</div>
+<div class='output'>[1] &quot;mo&quot;     &quot;MO&quot;     &quot;mother&quot; &quot;MOTHER&quot;
+</div>
+<div class='input'>
+### FA
+grep(&quot;^fa$|^FA$|^father$|^FATHER$&quot;, fields, value = TRUE)
+</div>
+<div class='output'>[1] &quot;fa&quot;     &quot;FA&quot;     &quot;father&quot; &quot;FATHER&quot;
+</div>
+<div class='input'>
+### SEX
+grep(&quot;^sex$|^SEX$&quot;, fields, value = TRUE)
+</div>
+<div class='output'>[1] &quot;sex&quot; &quot;SEX&quot;
+</div>
+<div class='input'></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>matchIdNames</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>solarAssoc. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Run association analysis.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>solarAssoc(formula, data, dir, kinship, traits, covlist&nbsp;=&nbsp;"1", snpformat, snpdata, snpcovdata, snpmap, snplist, snpind, genocov.files, snplists.files, snpmap.files, assoc.outformat&nbsp;=&nbsp;c("df", "outfile", "outfile.gz"), assoc.outdir, cores&nbsp;=&nbsp;getOption("cores"), ..., verbose&nbsp;=&nbsp;0)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>formula</dt>
+      <dd>an object of class <code>formula</code> or one that can be coerced to that class.
+It is a symbolic description of fixed effects (covariates) to be fitted.</dd>
+      <dt>data</dt>
+      <dd>A data frame containing the variables in the model,
+including ID fields needed to construct random effects: genetic and house-hold (both optional).
+Other classes such as list, environment or object coercible by <code>as.data.frame</code> to a data frame
+are not supported.</dd>
+      <dt>dir</dt>
+      <dd>an optional character string, the name of directory,
+where SOLAR performs the analysis.
+In this case, the analysis within related input/output files is
+conducted in the given folder instead of a temporary one
+(the default work flow).</dd>
+      <dt>kinship</dt>
+      <dd>A matrix of the kinship coefficients (custom kinship matrix).
+The IDs are required to be in row and column names.</dd>
+      <dt>traits</dt>
+      <dd>a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.</dd>
+      <dt>covlist</dt>
+      <dd>a vector of characters to specify fixed effects (covariates) in the model.
+It is alternative to the formula interface.
+The default value is <code>"1"</code>.</dd>
+      <dt>snpformat</dt>
+      <dd>a character, the format of SNP data passsed by <code>snpdata</code> argument.
+Currently, this argument is not used.</dd>
+      <dt>snpdata</dt>
+      <dd>A matrix of SNP data.
+SNPs are given in the columns, and individuals correspond to the rows.
+The IDs of individuals are required to be in row and column names.</dd>
+      <dt>snpcovdata</dt>
+      <dd>A matrix of SNP data, which are converted to covariates (numeric format).
+SNPs are given in the columns, and individuals correspond to the rows.
+The IDs of individuals are required to be in row and column names.</dd>
+      <dt>snpmap</dt>
+      <dd>A data.frame of annotation for SNPs.</dd>
+      <dt>snplist</dt>
+      <dd>a vector of characters, the names of SNPs to be used in the analysis.
+This argument may be used when a subset of SNPs is of the interest.</dd>
+      <dt>snpind</dt>
+      <dd>a vector of positive integers, the indices of SNPs to be used in the analysis.
+This argument may be used when a subset of SNPs is of the interest.</dd>
+      <dt>genocov.files</dt>
+      <dd>A vector of characters, the file paths to <code>genocov</code> SOLAR files.</dd>
+      <dt>snplists.files</dt>
+      <dd>A vector of characters, the file paths to <code>snplists</code> SOLAR files.</dd>
+      <dt>snpmap.files</dt>
+      <dd>A vector of characters (optional), the file paths to <code>snpmap</code> SOLAR files.</dd>
+      <dt>assoc.outformat</dt>
+      <dd>A character, the output format.
+Possible values are <code>"df"</code>, <code>"outfile"</code> and <code>"outfile.gz"</code>.
+Currently, the only supported output format is <code>"df"</code>.
+That means the table of results is stored in <code>snpf</code> slot of a returned object.</dd>
+      <dt>assoc.outdir</dt>
+      <dd>a character, the path to the output directory.
+Currently, this argument is not used.</dd>
+      <dt>cores</dt>
+      <dd>A positive integer, the number of cores for parallel computing.
+The default value is taken from <code>getOption("cores")</code>.
+If the default value is <code>NULL</code> then the number of cores is <code>1</code>.</dd>
+      <dt>...</dt>
+      <dd>Arguments to be passed to  <code><a href='solarPolygenic.html'>solarPolygenic</a></code> function.
+For example, one of such arguments may be <code>polygenic.settings = "option EnableDiscrete 0"</code>.
+Arguments of <code>solarMultipoint</code>,
+which are also passed to <code><a href='solarPolygenic.html'>solarPolygenic</a></code>,
+include <code>formula</code>, <code>data</code>, <code>dir</code>,
+<code>kinship</code>, <code>traits</code> and <code>covlist</code>.</dd>
+      <dt>verbose</dt>
+      <dd>An non-negative integer of the verbose level.
+   The default value is <code>0</code>.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The association analysis is conducted in the following sequence:
+parse input files of SNP markers,
+export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function,
+run the polygenic analysis in a directory,
+run the association analysis on the top of the polygenic analysis,
+parse output files and
+store results in an object of <code>solarAssoc</code> class (see <code><a href='solarAssocClass.html'>solarAssocClass</a></code>).</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>### load data
+data(dat50)
+dim(phenodata)
+</div>
+<div class='output'>[1] 66  4
+</div>
+<div class='input'>dim(kin)
+</div>
+<div class='output'>[1] 66 66
+</div>
+<div class='input'>dim(genodata)
+</div>
+<div class='output'>[1] 66 50
+</div>
+<div class='input'>
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# ### basic (univariate) association model with a custom kinship
+# mod &lt;- solarAssoc(trait~age+sex, phenodata,
+#   kinship = kin, snpdata = genodata)
+# mod$snpf # table of results for 50 SNPs
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>solarAssoc</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

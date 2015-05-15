@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>snpdata2solar. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Export snp genotypes, genotype covariates and amp to SOLAR</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>snpdata2solar(mat, dir)</div>
+<div>snpcovdata2solar(mat, dir, nGTypes&nbsp;=&nbsp;FALSE, out)</div>
+<div>snpmap2solar(map, dir)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>mat</dt>
+      <dd>A matrix of genotypes or genotypes as covariates to be exported.</dd>
+      <dt>dir</dt>
+      <dd>A character with path where SOLAR files to be created.</dd>
+      <dt>nGTypes</dt>
+      <dd>Logical, whether a column <code>nGTypes</code> to be added to snp.genocov file.
+The default value is FALSE.</dd>
+      <dt>out</dt>
+      <dd>(optional) A list, that contains the names for snp.genocov and snp.geno-list files.
+   This argument is internally used in <code>solarAssoc</code> function.</dd>
+      <dt>map</dt>
+      <dd>A data frame with annotation (map) information for SNPs.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>A list of functions allows to pass SNPs data from R to SOLAR.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>snpdata2solar</code> function (1) exports the data set of genotypes stored
+in <code>mat</code> itto SOLAR files, (2) runs solar command `snp load solar.gen`
+to check the data is loaded ok; (3) if two output files were not created,
+throws an error.</p>
+  
+      <p><code>snpcovdata2solar</code> function emulates the `snp load` SOLAR command.
+Two output files are produced: `snp.genocov` and `snp.geno-list`.
+The steps are the following: (1) add prefix `snp_` to SNP names;
+(2) (optional) compute stats on # genotyped individuals (columns `nGTypes`);
+(3) write data and metadata into files.</p>
+  
+      <p><code>snpmap2solar</code> function (1) separates data by chromosome;
+(2) write the table into SOLAR map file;
+(3) check if the map file is OK by running SOLAR command <code>load map -basepair <filename></code></p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>In association analysis (<code>soalrAssoc</code> function)
+the step of loading SNP maps is skipped.
+It seems that SOLAR does not use this information when doing association.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Example of `snp.genocov` file:
+# id,nGTypes,snp_s1,snp_s2,...
+# 1,50,0,0,...
+# 2,50,0,0,...
+
+# Example of `snp.geno-list` file:
+# snp_s1
+# snp_s2
+# ...
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>snpcovdata2solar</li><li>snpdata2solar</li><li>snpmap2solar</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

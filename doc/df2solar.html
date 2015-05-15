@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>df2solar. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Export phenotype and pedigree data into SOLAR files</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>df2solar(df, dir, kinship, kin2.gz&nbsp;=&nbsp;"kin2.gz", sort.ped&nbsp;=&nbsp;TRUE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>df</dt>
+      <dd>A data frame that containts both phenotype and pedigree data.</dd>
+      <dt>dir</dt>
+      <dd>A character with path to a directory, where SOLAR files to be created.</dd>
+      <dt>kinship</dt>
+      <dd>(optional) A kinship matrix to be exported.</dd>
+      <dt>kin2.gz</dt>
+      <dd>A character with file name of SOLAR file to store the kinship matrix.</dd>
+      <dt>sort.ped</dt>
+      <dd>Logical, indicating where pedigree IDs (FAM or FAMID) to be sorted.
+   The default value is TRUE.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function exports phenotype and pedigree data from R to SOLAR.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The function (1) puts the data <code>df</code>
+in SOLAR format, (2) separates it into
+two parts, pedigree and phenotypes,
+and then (3) expots both data sets in
+the directory <code>dir</code>.</p>
+  
+      <p>Pedigree or ID variables are detected by <code>matchIdNames</code> function.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>df2solar</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

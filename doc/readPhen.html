@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>readPhen. solarius 0.2.3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">solarius 0.2.3</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Read plain-text table files phen and ped</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>readPhen(phen.file, sep.phen&nbsp;=&nbsp;",", ped.file, sep.ped&nbsp;=&nbsp;",", header&nbsp;=&nbsp;TRUE, stringsAsFactors&nbsp;=&nbsp;FALSE, id.unique&nbsp;=&nbsp;TRUE, sex.optional)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>phen.file</dt>
+      <dd>A character, path to phen file.</dd>
+      <dt>sep.phen</dt>
+      <dd>A character, the field separator in phen file.
+The default value is <code>","</code>.</dd>
+      <dt>ped.file</dt>
+      <dd>(optional) A character, path to ped file.</dd>
+      <dt>sep.ped</dt>
+      <dd>A character, the field separator in ped file.
+The default value is <code>","</code>.</dd>
+      <dt>header</dt>
+      <dd>Logical, indicating whether the file contains
+the names of the variables as its first line.
+The default value is TRUE.</dd>
+      <dt>stringsAsFactors</dt>
+      <dd>logical, indicating whether character vectors to be converted to factors.
+The default value is FALSE.</dd>
+      <dt>id.unique</dt>
+      <dd>logical, indicating whether the IDs of individuals must be unique.
+The default value is TRUE.</dd>
+      <dt>sex.optional</dt>
+      <dd>logical, indicating whether the SEX field must be presented.
+The default value is TRUE if <code>ped.file</code> is specified,
+and it is FALSE otherwise.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+A data frame of phenotype data merged from two phen and ped files (merged by ID filed).
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>The function reads the phenotype and pedigree data in SOLAR format,
+i.e. plain-text tables.</p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>readPhen</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
