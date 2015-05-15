@@ -3,6 +3,7 @@
 R package wrapper to SOLAR
 
 * Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/).
+* Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/)
 * Vignettes 
   * R code [vignettes/](vignettes/)
   * hmlt output:
