@@ -16,10 +16,8 @@ bibliography: ref.bib
 ---
 
 ```{r chunk_opt, echo = FALSE}
-opts_chunk$set(eval = TRUE)
+#opts_chunk$set(eval = FALSE)
 #opts_chunk$set(fig.path = "figures-tutorial/")
-```
-
 ```
 
 # Introduction
@@ -512,11 +510,18 @@ solar>
 
 ### `solarius` installation
 
+`solarius` package is available in the CRAN repository for R packages 
+[http://cran.r-project.org/web/packages/solarius/](http://cran.r-project.org/web/packages/solarius/),
+so it can be install by calling the usual R function `install.packages`.
+
+```
+install.packages(solarius)
+```
+
 The code repository of `solarius` package is hosted in the public GitHub repository 
 of the UGCD group [https://github.com/ugcd/solarius](https://github.com/ugcd/solarius).
-`solarius` package is not yet in the CRAN repository for R packages [http://cran.r-project.org/](http://cran.r-project.org/),
-so it can not be install by calling the usual R function `install.packages`.
-Instead, the R package `devtools` allows to install any package hosted in the GitHub web page [https://github.com](https://github.com).
+The R package `devtools` allows to install 
+the development version of the package hosted at GitHub.
 The installation commands are the following.
 
 ```
@@ -531,6 +536,7 @@ and its structure can be seen in the code repository web site [https://github.co
 
 * [R](https://github.com/ugcd/solarius/tree/master/R) directory contains `*.R` files with functions, classes and methods.
 * [data](https://github.com/ugcd/solarius/tree/master/data) directory has data sets distributed with the package and stored in `*.RData` files.
+* `man` directory includes documentation organized in `Rd` files (**R** **d**ocumentation files).
 * [inst](https://github.com/ugcd/solarius/tree/master/inst) directory includes directories,
   where some extra data in any format can be stored for the R package.
   Sub-directories in `inst` directory will be copied to the installation directory of the package 
@@ -540,6 +546,41 @@ and its structure can be seen in the code repository web site [https://github.co
     for data sets of the package.
     * [inst/tests](https://github.com/ugcd/solarius/tree/master/inst/tests) has `*.R` scripts for testing units
     during development of the package (R package `testthat`). 
+* [vignettes](https://github.com/ugcd/solarius/tree/master/vignettes) directory includes vignettes,
+  which are known as a long-form documentation for an R package. 
+  Typically, vignettes has a form of a technical report or an academic paper,
+  that describes the problem that your package is designed to solve.
+  Files with `Rmd` extension are the source files of the vignettes.
+
+## Documentation
+
+The source files of documentation are stored in `man` directory as `Rd` files.
+R package `staticdocs` converts this documentation into html pages.
+The documentation for `solarius` is published on [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/).
+
+In the R environment the help for a function of the package, for example `solarPolygenic` function,
+can be obtained by the standard `?solarPolygenic` R comand.
+The content of the documentation for `solarPolygenic` function is the same as 
+on [http://ugcd.github.io/solarius/doc/solarPolygenic.html](http://ugcd.github.io/solarius/doc/solarPolygenic.html).
+
+## Vignettes
+
+The vignetts are created by `rmarkdown` R package and published as html pages on the web.
+
+* [http://ugcd.github.io/solarius/vignettes/tutorial.html](http://ugcd.github.io/solarius/vignettes/tutorial.html):
+  The vignette presents a tutotial of the package.
+* [http://ugcd.github.io/solarius/vignettes/minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html):
+  The vignette gives a minial example of the package. It includes three analyses, polygenic, association and linkage,
+  applied to `dat30` data set.
+* [http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html):
+  The vignette reports results on the real family-based data set GAIT1.
+  The traits under study are the FXI levels in blood, the BMI and the Thrombosis affection.
+  Although the original calculus were conducted with `SOLAR`,
+  the code presented in the vignette is based on `solarius`.
+  The produced results are the same as those reported in the published articles.
+  
+
+## Load `solarius`
 
 To start using `solarius` package, the user needs to load the package with `library` function.
 
@@ -553,13 +594,52 @@ load_all("../")
 library(solarius)
 ```
 
+The version of `solarius` loaded here is:
+
+```{r ver_solarius}
+packageVersion("solarius")
+```
+
 Other R packages will be needed for the tutorial.
 
 ```{r inc_other}
 library(plyr)
 ```
 
+## Minimal example
 
+The following code shows how the main functions 
+(`solarPolygenic`, `solarMultipoint` and `solarAssoc`)
+of the package work.
+
+```{r minimal, cache = TRUE}
+# load library
+library(solarius)
+
+# load data set
+data(dat30)
+
+# univariate polygenic model
+mod1 <- solarPolygenic(trait1 ~ 1, dat30)
+
+# bivariate polygenic model
+mod2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30,
+  polygenic.options = '-testrhoe -testrhog')
+
+# specify directory with IBD matrices and run linkage model
+mibddir <- system.file('extdata', 'solarOutput',
+  'solarMibdsCsv', package = 'solarius') 
+link <- solarMultipoint(trait1 ~ 1, dat30,
+  mibddir = mibddir, chr = 5)
+
+# run association model in parallel
+assoc <- solarAssoc(trait1 ~ 1, dat30, cores = 2,
+  snpcovdata = genocovdat30, snpmap = mapdat30)
+```  
+
+The user can think of this block of code as a quick start in using `solarius`.
+The material given further will provide 
+more details and all necesseary information on the usage of `solarius`.
 
 ## Data sets
 
@@ -569,7 +649,8 @@ which are used for reproducible demonstrations of how functions of the package w
 There are three data sets available in `solarius`:
 
 * An adapted version of the simulated data from the R package `multic` [@Andrade2006] (polygenic and linkage models);
-* An adapted version of the simulated data `dat50` from the R package [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) (polygenic model with custom kinship matrix and association model);
+    * A smaller subset of these data is given in `dat30` data set (polygenic, linkage and association models);
+* An adapted version of the simulated data `dat50` from the R package [FFBSKAT](http://mga.bionet.nsc.ru/soft/FFBSKAT/) (polygenic model and association model, both with custom kinship matrix);
 * GAW10 data distributed within `SOLAR` (polygenic and linkage models).
 
 The simulated data set (in `SOLAR` format) from `multic` R package 
@@ -589,6 +670,14 @@ A smaller subset of the simulated data from `multic` package is provided in `dat
 (`dat30.RData` file in [data](https://github.com/ugcd/solarius/tree/master/data) directory).
 This smaller data set contains only 174 individuals in 29 families.
 
+* The phenotypes (`dat30` data frame) are the same as in the complete data described above.
+* A hundred of synthetic SNPs (`genocovdat30` matrix) 
+were randomly generated to run the association analysis on these data
+(see the script [inst/scripts/generate-genocovdat30.R](https://github.com/ugcd/solarius/blob/master/inst/scripts/generate-genocovdat30.R)). 
+* Annotation information (mapdat30 data frame) also was generated, mainly in order to plot the association results with Manhattan plot.
+
+Documentation of `dat30` data set is available on the page [dat30](http://ugcd.github.io/solarius/doc/dat30.html).
+
 The simulated data from the R package `FFBSKAT` are stored in `dat50` data set
 (`dat50.RData` file in [data](https://github.com/ugcd/solarius/tree/master/data) directory).
 This data set is adapted from `example.data` data set in the R package `FFBSKAT`. 
@@ -604,6 +693,8 @@ The following variables are included.
    gene name `gene` and position in bp `position`.
 * `kin`: A kinship matrix for 66 individuals.
 
+Documentation of `dat50` data set is available on the page [dat50](http://ugcd.github.io/solarius/doc/dat50.html).
+
 The simulated data from the workshop GAW10 are described elsewhere
 [@SOLARDOC, Chapter 3 [Tutorial](http://helix.nih.gov/Documentation/solar-6.6.2-doc/03.chapter.html)].
 
@@ -618,8 +709,10 @@ A quick view to the data tables might be performed by means of `str` function.
 ```{r dat30, cache = TRUE}
 data(dat30)
 str(dat30)
+str(genocovdat30)
+str(mapdat30)
 ```
-
+ 
 ```{r dat50, cache = TRUE}
 data(dat50)
 str(phenodata)
@@ -985,16 +1078,35 @@ plot(A5, "qq")
 Parallelization of the association analysis is an easy task with `solarius`.
 The user only needs to specify how many cores are to be used for the computation.
 
-```{r assoc_par, cache = TRUE}
+```{r A6, cache = TRUE}
 A6 <- solarAssoc(trait ~ 1, phenodata, snpdata = genodata, kinship = kin, cores = 2)
 ```
 
 The gain in CPU time is not obvious,
 as the number of SNPs (50) is too small.
 
-```{r A_cpu}
+```{r A16}
 A1$assoc$tprofile$cputime.sec
 A6$assoc$tprofile$cputime.sec
+```
+
+`dat30` data set contains 100 SNPs (`genocovdat30` matrix).
+The same test on speed up by parallel computing looks as following.
+
+```{r A7, cache = TRUE}
+A7 <- solarAssoc(trait1 ~ 1, dat30, 
+  snpcovdata = genocovdat30, snpmap = mapdat30)
+```
+
+```{r A8, cache = TRUE}
+A8 <- solarAssoc(trait1 ~ 1, dat30, 
+  snpcovdata = genocovdat30, snpmap = mapdat30,
+  cores = 2)
+```
+
+```{r A_78}
+A7$assoc$tprofile$cputime.sec
+A8$assoc$tprofile$cputime.sec
 ```
 
 ## Linkage model
@@ -1103,5 +1215,10 @@ A list of references given on the official web page of `SOLAR`
 * An examination of LOD adjustment is given in: [@Blangero2000], [@Blangero2001];
 * Additional references include: [@Blangero1997], [@Williams2004], [@Williams1999b].
 
+# R session info
+
+```{r session_info}
+sessionInfo()
+```
 
 # References

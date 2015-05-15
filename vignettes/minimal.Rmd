@@ -15,8 +15,8 @@ output:
 ---
 
 ```{r chunk_opt, echo = FALSE}
-opts_chunk$set(eval = TRUE)
-opts_chunk$set(fig.path = "figures-minimal/")
+#opts_chunk$set(eval = TRUE)
+#opts_chunk$set(fig.path = "figures-minimal/")
 ```
 
 # All code in one block
@@ -25,7 +25,7 @@ opts_chunk$set(fig.path = "figures-minimal/")
 # load library
 library(solarius)
 
-# load data set for running polygenic and linkage models
+# load data set
 data(dat30)
 
 # univariate polygenic model
@@ -41,7 +41,7 @@ mibddir <- system.file('extdata', 'solarOutput',
 link <- solarMultipoint(trait1 ~ 1, dat30,
   mibddir = mibddir, chr = 5)
 
-# load data set and run association model in parallel
+# run association model in parallel
 assoc <- solarAssoc(trait1 ~ 1, dat30, cores = 2,
   snpcovdata = genocovdat30, snpmap = mapdat30)
 ```  
@@ -195,4 +195,9 @@ tab
 
 In this case `annotate` function takes a vector of characters as its first argument.
 
+# R session info
+
+```{r session_info}
+sessionInfo()
+```
 
