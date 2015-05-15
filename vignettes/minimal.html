@@ -10,7 +10,7 @@
 
 <meta name="author" content="Andrey Ziyatdinov" />
 
-<meta name="date" content="2015-05-04" />
+<meta name="date" content="2015-05-15" />
 
 <title>Minimal example for solarius R package</title>
 
@@ -64,7 +64,7 @@ img {
 <div id="header">
 <h1 class="title">Minimal example for <code>solarius</code> R package</h1>
 <h4 class="author"><em>Andrey Ziyatdinov</em></h4>
-<h4 class="date"><em>2015-05-04</em></h4>
+<h4 class="date"><em>2015-05-15</em></h4>
 </div>
 
 <div id="TOC">
@@ -75,6 +75,7 @@ img {
 <li><a href="#polygenic-model-bivariate"><span class="toc-section-number">4</span> Polygenic model (bivariate)</a></li>
 <li><a href="#linkage-model"><span class="toc-section-number">5</span> Linkage model</a></li>
 <li><a href="#asssociation-model"><span class="toc-section-number">6</span> Asssociation model</a></li>
+<li><a href="#r-session-info"><span class="toc-section-number">7</span> R session info</a></li>
 </ul>
 </div>
 
@@ -83,7 +84,7 @@ img {
 <pre class="r"><code># load library
 library(solarius)
 
-# load data set for running polygenic and linkage models
+# load data set
 data(dat30)
 
 # univariate polygenic model
@@ -99,9 +100,13 @@ mibddir &lt;- system.file('extdata', 'solarOutput',
 link &lt;- solarMultipoint(trait1 ~ 1, dat30,
   mibddir = mibddir, chr = 5)
 
-# load data set and run association model in parallel
+# run association model in parallel
 assoc &lt;- solarAssoc(trait1 ~ 1, dat30, cores = 2,
   snpcovdata = genocovdat30, snpmap = mapdat30)</code></pre>
+<pre><code>## Loading required package: foreach
+## foreach: simple, scalable parallel programming from Revolution Analytics
+## Use Revolution R for scalability, fault tolerance and more.
+## http://www.revolutionanalytics.com</code></pre>
 </div>
 <div id="results" class="section level1">
 <h1><span class="header-section-number">2</span> Results</h1>
@@ -211,12 +216,12 @@ assoc &lt;- solarAssoc(trait1 ~ 1, dat30, cores = 2,
 ## 6        rhoe 0.4120487 0.19693793  2.092277</code></pre>
 <p>The information about the test statistic and p-values are given in <code>lf</code> (<strong>l</strong>ikelihood <strong>f</strong>rame) slot.</p>
 <pre class="r"><code>mod2$lf</code></pre>
-<pre><code>##       model    loglik       Chi deg              pval
-## 1  sporadic -384.5535        NA  NA                NA
-## 2 polygenic -363.8273        NA  NA                NA
-## 3     rhoe0 -364.9032  2.151806   1 0.142402300000000
-## 4     rhog0 -381.7010 35.747400   1 0.000000002246316
-## 5     rhog1        NA  0.651412   1 0.209804100000000</code></pre>
+<pre><code>##       model    loglik       Chi deg         pval
+## 1  sporadic -384.5535        NA  NA           NA
+## 2 polygenic -363.8273        NA  NA           NA
+## 3     rhoe0 -364.9032  2.151806   1 1.424023e-01
+## 4     rhog0 -381.7010 35.747400   1 2.246316e-09
+## 5     rhog1        NA  0.651412   1 2.098041e-01</code></pre>
 </div>
 <div id="linkage-model" class="section level1">
 <h1><span class="header-section-number">5</span> Linkage model</h1>
@@ -257,8 +262,8 @@ assoc &lt;- solarAssoc(trait1 ~ 1, dat30, cores = 2,
 ##  * Number of SNPs: 100 
 ##  * Input format: snpcovdata 
 ##  * Number of significal SNPs: 1 (Bonferroni correction with alpha 0.05)
-##       SNP NAv      chi     pSNP     bSNP   bSNPse   Varexp  est_maf
-## 1: snp_86 174 15.30657 0.000091 0.917024 0.234391 0.049701 0.524075
+##       SNP NAv      chi    pSNP     bSNP   bSNPse   Varexp  est_maf
+## 1: snp_86 174 15.30657 9.1e-05 0.917024 0.234391 0.049701 0.524075
 ##     est_mac dosage_sd      pos chr
 ## 1: 182.3781  0.582544 22883925   1</code></pre>
 <p>Table of the results is stored in <code>snpf</code> (<strong>SNP</strong> <strong>f</strong>rame) slot.</p>
@@ -311,6 +316,37 @@ tab</code></pre>
 ## 2        FXI
 ## 3        FXI</code></pre>
 <p>In this case <code>annotate</code> function takes a vector of characters as its first argument.</p>
+</div>
+<div id="r-session-info" class="section level1">
+<h1><span class="header-section-number">7</span> R session info</h1>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.1.2 (2014-10-31)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] NCBI2R_1.4.7    foreach_1.4.2   solarius_0.2.3  rmarkdown_0.5.1
+## [5] knitr_1.9       devtools_1.7.0 
+## 
+## loaded via a namespace (and not attached):
+##  [1] chron_2.3-45     codetools_0.2-10 colorspace_1.2-4 compiler_3.1.2  
+##  [5] data.table_1.9.4 digest_0.6.8     doParallel_1.0.8 evaluate_0.5.5  
+##  [9] formatR_1.0      ggplot2_1.0.0    grid_3.1.2       gtable_0.1.2    
+## [13] htmltools_0.2.6  iterators_1.0.7  labeling_0.3     magrittr_1.5    
+## [17] MASS_7.3-39      munsell_0.4.2    parallel_3.1.2   plyr_1.8.1      
+## [21] proto_0.3-10     qqman_0.1.2      Rcpp_0.11.5      reshape2_1.4.1  
+## [25] scales_0.2.4     stringi_0.4-1    stringr_1.0.0    tools_3.1.2     
+## [29] yaml_2.1.13</code></pre>
 </div>
 
 
