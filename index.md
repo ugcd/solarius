@@ -10,7 +10,7 @@ Institute of Biomedical Research of Hospital de la Santa Creu i Sant Pau, Barcel
 The package provides an interface to [SOLAR](http://www.txbiomed.org/departments/genetics/genetics-detail?r=37):
 *Sequential Oligogenic Linkage Analysis Routines* program,
 which in turn has been designed
-in the Department of [Genetics](http://www.txbiomed.org/departments/genetics) of Texas Biomedical Research Institute.
+in the [Department of Genetics](http://www.txbiomed.org/departments/genetics) of Texas Biomedical Research Institute.
 
 The idea of `solarius` is simple. Do calculus in `SOLAR` at back-end. Make user interface in `R` at front-end. That is.
 <s>Too little science here.</s>
