@@ -40,8 +40,7 @@ readPhen <- function(phen.file, sep.phen = ",",
   header = TRUE, stringsAsFactors = FALSE,
   id.unique = TRUE, sex.optional)
 {
-  stopifnot(!missing(phen.file)) 
-  stopifnot(file.exists(phen.file))
+  stopifnot(!missing(phen.file) | !missing(ped.file)) 
   
   if(missing(sex.optional)) {
     sex.optional <- ifelse(missing(ped.file), FALSE, TRUE)
@@ -53,24 +52,26 @@ readPhen <- function(phen.file, sep.phen = ",",
   stopifnot(id.unique)
   
   ### read `phen` file
-  sep <- sep.phen
-  dat1 <- read.table(phen.file, nrows = 1,
-    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
-  new.names <- matchIdNames(names(dat1), sex.optional = sex.optional)
-  old.names <- names(new.names)
+  if(!missing(phen.file)) {
+    sep <- sep.phen
+    phen1 <- read.table(phen.file, nrows = 1,
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+    new.names <- matchIdNames(names(phen1), sex.optional = sex.optional)
+    old.names <- names(new.names)
   
-  ind <- which(names(dat1) %in% old.names)
-  colClasses <- rep(as.character(NA), ncol(dat1))
-  colClasses[ind] <- "character"
+    ind <- which(names(phen1) %in% old.names)
+    colClasses <- rep(as.character(NA), ncol(phen1))
+    colClasses[ind] <- "character"
   
-  dat <- read.table(phen.file, colClasses = colClasses,
-    sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+    phen <- read.table(phen.file, colClasses = colClasses,
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
   
-  dat <- rename(dat, new.names)
+    phen <- rename(phen, new.names)
   
-  if(id.unique) {
-    stopifnot(!any(duplicated(dat$ID)))
-  }  
+    if(id.unique) {
+      stopifnot(!any(duplicated(phen$ID)))
+    }  
+  }
   
   ### read `ped` if necessary
   if(!missing(ped.file)) {
@@ -84,22 +85,31 @@ readPhen <- function(phen.file, sep.phen = ",",
     ped <- rename(ped, new.names)
 
     if(id.unique) {
-      stopifnot(!any(duplicated(dat$ID)))
+      stopifnot(!any(duplicated(ped$ID)))
     }  
     
-    # merge `dat` & `ped`
-    stopifnot("ID" %in% new.names)
-    new.names2 <- new.names[!new.names %in% c("ID")]
+    if(!missing(phen.file)) {
+      # merge `phen` & `ped`
+      stopifnot("ID" %in% new.names)
+      new.names2 <- new.names[!new.names %in% c("ID")]
     
-    ind <- which(names(dat) %in% new.names2)
-    if(length(ind)) {
-      dat <- dat[, -ind]
-    }
+      ind <- which(names(phen) %in% new.names2)
+      if(length(ind)) {
+        phen <- phen[, -ind]
+      }
       
-    dat <- base::merge(dat, ped, by = "ID", all = TRUE)      
+      dat <- base::merge(phen, ped, by = "ID", all = TRUE)      
+    }
   }
   
-  return(dat)
+  ### return
+  if(missing(ped.file)) {
+    return(phen)
+  } else if(missing(phen.file)) {
+    return(ped)
+  } else {
+    return(dat)
+  }
 }
 
 #----------------------------------
