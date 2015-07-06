@@ -59,6 +59,64 @@ solar_multipoint <- function(dir, out, out.dir, out.chr)
 # mibd functions
 #----------------------------------
 
+#' @export
+solarMIBD <- function(mibddir, verbose = 0, chr)
+{
+  ### inc
+  stopifnot(requireNamespace("Matrix", quietly = TRUE))
+  
+  ### arg
+  stopifnot(file.exists(mibddir))
+  
+  ### var
+  files <- list.files(mibddir, full.names = TRUE)
+  
+  ### pass 1: chr, cM
+  out <- llply(files, function(f) {
+    fname <- basename(f)
+    
+    parts <- strsplit(fname, "\\.")[[1]]
+    stopifnot(length(parts) >= 4)
+    
+    nparts <- length(parts)
+    chr <- as.integer(parts[nparts - 2])
+    cM <- as.integer(parts[nparts - 1])
+
+    if(verbose > 1) cat(" * solarMIBD: file name ", fname, ", chr ", chr, ", cM ", cM, "\n", sep = "")
+    
+    stopifnot(!is.na(chr))
+    stopifnot(!is.na(cM))
+    stopifnot(chr > 0)
+    stopifnot(chr < 23)    
+    
+    list(file = f, chr = chr, cM = cM)
+  })
+  
+  ### pass 2: fitler by chr
+  if(!missing(chr)) {
+    chr.par <- chr
+    
+    ind <- laply(out, function(x) x$chr %in% chr.par)
+    
+    out <- out[ind]
+    stopifnot(length(out) > 0)
+  }
+  
+  ### pass 3: read MIBD matrices
+  out <- llply(out, function(x) {
+   if(verbose > 0) cat(" * solarMIBD: reading", x$file, "\n")
+   
+    mf <- read_mibd_csv_gz(x$file)
+    mat <- mf2mat(mf)
+    mat <- Matrix::Matrix(mat)
+    
+    c(x, list(mibd = mat))
+  })
+  
+  ### return
+  return(out)  
+}
+
 get_info_mibd <- function(mibddir)
 {
   stopifnot(file.exists(mibddir))
@@ -142,6 +200,42 @@ read_mibd_gz <- function(mibd.gz)
   return(mf)
 }
 
+read_mibd_csv_gz <- function(mibd.gz)
+{
+  mf <- read.table(gzfile(mibd.gz), sep = ",", header = TRUE,
+    colClasses = c("character", "character", "numeric", "numeric"))
+  names(mf) <- c("ID1", "ID2", "matrix1", "matrix2")
+#
+#    ID1   ID2 matrix1 matrix2
+#1 01101 01101     1.0       1
+#2 01102 01102     1.0       1
+#3 01202 01101     0.5       0
+#
+  stopifnot(ncol(mf) == 4)
+   
+  return(mf)
+}
+
+mf2mat <- function(mf)
+{
+  stopifnot(class(mf) == "data.frame")
+  stopifnot(all(c("ID1", "ID2", "matrix1") %in% names(mf)))
+  
+  ids <- unique(c(mf$ID1, mf$ID2))
+  N <- length(ids)
+  
+  mat <- matrix(0, nrow = N, ncol = N)
+  rownames(mat) <- ids
+  colnames(mat) <- ids
+  
+  for(i in 1:nrow(mf)) {
+    mat[mf$ID1[i], mf$ID2[i]] <- mf$matrix1[i]
+    mat[mf$ID2[i], mf$ID1[i]] <- mf$matrix1[i]
+  }
+  
+  return(mat)
+}
+  
 #----------------------------------
 # Read LOD functions
 #----------------------------------

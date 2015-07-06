@@ -53,7 +53,7 @@
 #'
 #' }
 #'
-"dat30"
+NULL
 
 
 #' @name genocovdat30
@@ -65,7 +65,7 @@
 #'
 #' genocovdat30[1:5, 1:5]
 #'
-"genocovdat30"
+NULL
 
 #' @name mapdat30
 #' @rdname dat30
@@ -76,7 +76,7 @@
 #'
 #' head(mapdat30)
 #'
-"mapdat30"
+NULL
 
 
 #' dat50 data set adapted from FFBSKAT R package
@@ -126,7 +126,7 @@
 #'
 #' str(phenodata)
 #'
-"phenodata"
+NULL
 
 #' @name kin
 #' @rdname dat50
@@ -135,7 +135,7 @@
 #'
 #' plotKinship2(2*kin)
 #'
-"kin"
+NULL
 
 #' @name genodata
 #' @rdname dat50
@@ -146,7 +146,7 @@
 #'
 #' genodata[1:5, 1:5]
 #'
-"genodata"
+NULL
 
 
 #' @name genocovdata
@@ -161,7 +161,7 @@
 #' # compare with the genotypes
 #' genodata[1:5, 1:5]
 #'
-"genocovdata"
+NULL
 
 
 #' @name snpdata
@@ -173,6 +173,6 @@
 #'
 #' head(snpdata)
 #'
-"snpdata"
+NULL
 
 
