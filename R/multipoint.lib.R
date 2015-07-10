@@ -60,7 +60,7 @@ solar_multipoint <- function(dir, out, out.dir, out.chr)
 #----------------------------------
 
 #' @export
-solarMIBD <- function(mibddir, verbose = 0, chr)
+solarMIBD <- function(mibddir, verbose = 0, chr, nmibd)
 {
   ### inc
   stopifnot(requireNamespace("Matrix", quietly = TRUE))
@@ -102,7 +102,14 @@ solarMIBD <- function(mibddir, verbose = 0, chr)
     stopifnot(length(out) > 0)
   }
   
-  ### pass 3: read MIBD matrices
+  ### pass 3.1: filter by `nmibd`
+  if(!missing(nmibd)) {
+    stopifnot(length(out) >= nmibd)
+    
+    out <- out[1:nmibd]
+  }
+  
+  ### pass 3.2: read MIBD matrices
   out <- llply(out, function(x) {
    if(verbose > 0) cat(" * solarMIBD: reading", x$file, "\n")
    
