@@ -60,13 +60,24 @@ solar_multipoint <- function(dir, out, out.dir, out.chr)
 #----------------------------------
 
 #' @export
-solarMIBD <- function(mibddir, verbose = 0, chr, nmibd)
+solarMIBD <- function(mibddir, verbose = 0, chr, nmibd, cores = 1)
 {
   ### inc
   stopifnot(requireNamespace("Matrix", quietly = TRUE))
   
   ### arg
   stopifnot(file.exists(mibddir))
+  
+  ### parallel
+  parallel <- (cores > 1)
+
+  if(parallel) {
+    ret <- require(doMC)
+    if(!ret) {
+      stop("`doMC` package is required for parallel calculations")
+    }
+    doMC::registerDoMC(cores)
+  }
   
   ### var
   files <- list.files(mibddir, full.names = TRUE)
@@ -118,7 +129,7 @@ solarMIBD <- function(mibddir, verbose = 0, chr, nmibd)
     mat <- Matrix::Matrix(mat)
     
     c(x, list(mibd = mat))
-  })
+  }, .parallel = parallel)
   
   ### return
   return(out)  
