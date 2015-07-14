@@ -327,7 +327,9 @@ run_multipoint <- function(out, dir)
   }))
   
   # -- try to union `lodf`
-  num.passes <- results.list[[1]]$num.passes
+  num.passes <- try({
+    results.list[[1]]$num.passes
+  })
   
   lodf <- results.list 
   ret <- try({
