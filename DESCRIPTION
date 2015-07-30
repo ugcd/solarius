@@ -55,3 +55,4 @@ Collate:
     'solarMultipoint.R'
     'multipoint.lib.R'
     'transforms.lib.R'
+    'solarMultivar.R'
