@@ -221,7 +221,7 @@ solarMultivar <- function(formula, data, traits, covlist = "1",
   rownames(correlation) <- data2[, tid.var]
   colnames(correlation) <- data2[, tid.var]  
   
-  correlation <- Matrix(correlation)
+  correlation <- Matrix::Matrix(correlation)
   
   ### Step 5: formula
   formula <- paste("trait ~ tnum",
