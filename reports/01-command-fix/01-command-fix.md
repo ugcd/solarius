@@ -16,12 +16,14 @@ library(solarius)
 ```r
 dir1 <- "solar1"
 dir2 <- "solar2"
+dir3 <- "solar3"
 ```
 
 
 ```r
 dir.create(dir1, showWarnings = FALSE)
 dir.create(dir2, showWarnings = FALSE)
+dir.create(dir3, showWarnings = FALSE)
 ```
 
 
@@ -160,4 +162,107 @@ grep("h2r", readLines("solar2/trait1/constrained.mod"), value = TRUE)[1]
 
 ```
 ## [1] "parameter      h2r = 0.8861313186413069 Lower 0           Upper 1         "
+```
+
+## Example 3
+
+Compute two models:
+
+* `trait1.trait2/null0`: no covariates, free variance components
+* `constrained.mod`: `age` covariate, constrained free variance components
+
+
+```r
+dat <- loadMulticPhen()
+
+data(dat30)
+dat <- dat30
+
+df2solar(dat, dir3)
+
+cmd0 <- c("load pedigree dat.ped", "load phenotypes dat.phe",
+  "trait trait1 trait2", "covariate age",
+  "polygenic", 
+  "quit")
+
+t0 <- system.time(ret0 <- solar(cmd0, dir3))
+
+cmd1 <- c("load model trait1.trait2/null0",
+  "covariate sex sex",
+  "polymod", "maximize", "save model trait1.trait2/constrained1",
+  "quit")
+
+t1 <- system.time(ret1 <- solar(cmd1, dir3))
+
+cmd2 <- c("load model trait1.trait2/null0",
+  "covariate age sex",
+  "constraint delete_all",
+  "fix h2r(trait1)", "fix h2r(trait2)",
+  "fix e2(trait1)", "fix e2(trait2)",  
+  "fix rhoe", "fix rhog",
+  "maximize", "save model trait1.trait2/constrained2",
+  "quit")
+
+t2 <- system.time(ret2 <- solar(cmd2, dir3))
+
+cmd3 <- c("load model trait1.trait2/null0",
+  "covariate age sex",
+  "constraint delete_all",
+  "fix h2r(trait1)", "fix h2r(trait2)",
+  "fix e2(trait1)", "fix e2(trait2)",  
+  "fix rhoe", "fix rhog",
+  "fix mean(trait1)", "fix mean(trait2)",  
+  "fix sd(trait1)", "fix sd(trait2)",  
+  "fix bage(trait1)", "fix bage(trait2)",  
+  "maximize", "save model trait1.trait2/constrained3",
+  "quit")
+
+t3 <- system.time(ret3 <- solar(cmd3, dir3))
+
+cmd4 <- c("load model trait1.trait2/null0",
+  "covariate age sex",
+  "constraint delete_all",
+  "fix h2r(trait1)", "fix h2r(trait2)",
+  "fix e2(trait1)", "fix e2(trait2)",  
+  "fix rhoe", "fix rhog",
+  "fix mean(trait1)", "fix mean(trait2)",  
+  "fix sd(trait1)", "fix sd(trait2)",  
+  "fix bage(trait1)", "fix bage(trait2)",  
+  "option MaxIter 0", "option StandErr 0",
+  #"option MaxStep 0", "option MaxCliffs 0",
+  "maximize", "save model trait1.trait2/constrained4",
+  "quit")
+
+t4 <- system.time(ret4 <- solar(cmd4, dir3))
+```
+
+
+```r
+c(t0[3], t1[3], t2[3], t3[3], t4[3])
+```
+
+```
+## elapsed elapsed elapsed elapsed elapsed 
+##   2.619   2.596   1.373   0.762   0.112
+```
+
+
+```r
+round(c(t0[3], t1[3], t2[3], t3[3], t4[3]) / t3[3], 2)
+```
+
+```
+## elapsed elapsed elapsed elapsed elapsed 
+##    3.44    3.41    1.80    1.00    0.15
+```
+
+
+
+```r
+round(c(t0[3], t1[3], t2[3], t3[3], t4[3]) / t4[3], 2)
+```
+
+```
+## elapsed elapsed elapsed elapsed elapsed 
+##   23.38   23.18   12.26    6.80    1.00
 ```
