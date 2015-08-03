@@ -241,6 +241,8 @@ paste0("proc poly_assoc2 {model} {\
 \
   # write to file\
 	set f [open \"out.poly.assoc\" \"w\"]\
+	set f_loglik [open \"out.poly.assoc.loglik\" \"w\"]\
+	\
 	foreach snp [list ", paste(snps, collapse = " "), "] {\
 	  # extra variable\
 	  define ${snp}_2 = $snp\
@@ -292,10 +294,12 @@ paste0("proc poly_assoc2 {model} {\
 	  }\
 	  \
 	  # put\
-	  #puts $f \"$snp $loglike_0 $loglik_1 $loglike_2\"\
+	  puts $f_loglik \"$snp $loglike_0 $loglike_1 $loglike_2\"\
 	  puts $f \"$snp $pval_full $pval_common $pval_interaction\"\
 	}\
+	\
 	close $f\
+	close $f_loglik\
 }\
 ")
 }
