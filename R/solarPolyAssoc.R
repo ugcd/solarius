@@ -35,10 +35,12 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   
   ### step 2: process `snpcovdata`
   if(length(snplist)) {
-    snpcovdata <- snpcovdata[, snplist]
+    stopifnot(all(snplist %in% colnames(snpcovdata)))
+    snpcovdata <- snpcovdata[, snplist, drop = FALSE]
   }
   if(length(snpind)) {
-    snpcovdata <- snpcovdata[, snpind]
+    stopifnot(all(snpind <= ncol(snpcovdata)))
+    snpcovdata <- snpcovdata[, snpind, drop = FALSE]
   }
   
   snps <- colnames(snpcovdata)
@@ -164,17 +166,18 @@ get_proc_poly_assoc2 <- function(snps, cov2, df2)
 {
 paste0("proc poly_assoc2 {model} {\
 \
-  # model 0\
-	load model $model\
-	set loglike_0 [loglike]\
-\
   # write to file\
 	set f [open \"out.poly.assoc\" \"w\"]\
 	foreach snp [list ", paste(snps, collapse = " "), "] {\
 	  # extra variable\
 	  define ${snp}_2 = $snp\
 	  \
+    # model 0\
+	  load model $model\
+	  set loglike_0 [loglike]\
+    \
 	  # model 1\
+	  load model $model\
 	  set pval_common \"NA\"\
 	  \
 	  covariate $snp\
@@ -183,10 +186,15 @@ paste0("proc poly_assoc2 {model} {\
   	  set loglike_1 [loglike]\
 	    \
 	    set D [expr 2 * ($loglike_1 - $loglike_0)]\
-	    set pval_common [chi -number $D 1]\
+	    if {$D < 0} {\
+	      set pval_common 1\
+	    } else {\
+  	    set pval_common [chi -number $D 1]\
+  	  }\
 	  }\
 	  \
 	  # model 2\
+	  load model $model\
 	  set pval_interaction \"NA\"\
 	  set pval_full \"NA\"\
 	  \
@@ -196,10 +204,18 @@ paste0("proc poly_assoc2 {model} {\
   	  set loglike_2 [loglike]\
 	    \
 	    set D [expr 2 * ($loglike_2 - $loglike_1)]\
-	    set pval_interaction [chi -number $D 1]\
+	    if {$D < 0} {\
+	      set pval_interaction 1\
+	    } else {\
+  	    set pval_interaction [chi -number $D 1]\
+  	  }\
       \
 	    set D [expr 2 * ($loglike_2 - $loglike_0)]\
-	    set pval_full [chi -number $D ", df2, "]\
+	    if {$D < 0} {\
+	      set pval_full 1\
+	    } else {\
+  	    set pval_full [chi -number $D ", df2, "]\
+  	  }\
 	  }\
 	  \
 	  # put\
