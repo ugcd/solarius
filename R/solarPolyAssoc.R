@@ -6,6 +6,8 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   # input data to association 
   snpcovdata, snplist, snpind,
   assoc.options = "",
+  # misc
+  cores = getOption("cores"),
   ...,
   verbose = 0) 
 {
@@ -30,7 +32,12 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   if(missing(snpind)) {
     snpind <- integer()
   }
-  
+
+  # cores
+  if(is.null(cores)) {  
+    cores <- 1
+  }
+    
   is.tmpdir <- missing(dir)
   
   ### step 2: process `snpcovdata`
@@ -88,8 +95,53 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
 
   ### step 5: run assoc  
   tsolarPolyAssoc$runassoc <- proc.time()
+
+  parallel <- (cores > 1)
+  if(parallel) {
+    stopifnot(requireNamespace("doParallel", quietly = TRUE))
+    
+    doParallel::registerDoParallel(cores = cores)
+  }
   
+  if(!parallel) {
+    snpf <- run_poly_assoc_bivar(out, dir, out$assoc$snps)
+  } else {
+    num.snps <- out$assoc$num.snps
+    
+    snpf <- llply(1:num.snps, function(i) {
+      if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", num.snps, "snp...\n")
+
+      # copy `dir`      
+      files.dir <- list.files(dir, include.dirs = TRUE, full.names = TRUE)
+      dir.assoc <- tempfile(pattern = paste0("solarPolyAssoc-", i, "-"))
+      
+      stopifnot(dir.create(dir.assoc, showWarnings = FALSE, recursive = TRUE))
+      stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
+  
+      # run
+      snpf <- run_poly_assoc_bivar(out, dir.assoc, snps[i])
+      
+      # clean
+      unlink(dir.assoc, recursive = TRUE)
+      
+      return(snpf)
+    }, .parallel = parallel)
+    
+    ret <- try({
+      rbindlist(snpf)
+    })
+
+    if(class(ret)[1] != "try-error") {
+      snpf <- ret
+    }
+  }
+
+  out$snpf <- snpf
+  
+#-------------
+if(FALSE) {
   model.path <- paste0(paste(out$traits, collapse = "."), "/", tools::file_path_sans_ext(out$solar$model.filename))
+  
   if(FALSE) {
     cmd.proc_def <- c(get_proc_poly_assoc(snps))
     cmd.proc_call <- c(paste0("poly_assoc ", "\"", model.path, "\""))
@@ -118,8 +170,12 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
       setnames(tab, c("SNP", "pSNP", "pSNPc", "pSNPi"))
     }
   })
-  out$snpf <- snpf
   
+  out$snpf <- snpf
+} 
+
+#-------------
+
   if(is.tmpdir) {
     unlink(dir, recursive = TRUE)
     if(verbose > 1) cat("  -- solarPolyAssoc: temporary directory `", dir, "` unlinked\n")
@@ -137,6 +193,23 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   return(out)
 }
 
+run_poly_assoc_bivar <- function(out, dir, snps)
+{
+  model.path <- paste0(paste(out$traits, collapse = "."), "/", tools::file_path_sans_ext(out$solar$model.filename))
+  
+  cmd.proc_def <- c(get_proc_poly_assoc2(snps, paste0("${snp}_2(", out$traits[2], ")"), 2))
+  cmd.proc_call <- c(paste0("poly_assoc2 ", "\"", model.path, "\""))
+  
+  cmd <- c(cmd.proc_def, cmd.proc_call)
+  ret <- solar(cmd, dir, result = TRUE)
+
+  snpf <- try({
+    tab <- fread(file.path(dir, "out.poly.assoc"), sep = " ", header = FALSE)
+    if(ncol(tab) == 4) {
+      setnames(tab, c("SNP", "pSNP", "pSNPc", "pSNPi"))
+    }
+  })
+}
 
 get_proc_poly_assoc <- function(snps)
 {
