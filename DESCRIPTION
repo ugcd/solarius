@@ -28,7 +28,8 @@ Imports:
     plyr (>= 1.8.1),
     ggplot2,
     data.table
-Suggests: 
+Suggests:
+    tools, 
     kinship2,
     scales,
     Matrix,
@@ -49,6 +50,7 @@ Collate:
     'plot.lib.R'
     'polygenic.lib.R'
     'solarAssoc.R'
+    'solarPolyAssoc.R'    
     'solarPolygenic.R'
     'files.lib.R'
     'classSolarMultipoint.R'

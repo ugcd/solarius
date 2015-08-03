@@ -54,6 +54,9 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
     
     tab.file <- file.path(out.path, out.file)
   }
+  
+  ### SOLAR options/settings
+  assoc.options <- out$assoc$assoc.options
       
   ### make `cmd`
   # local variables
@@ -72,7 +75,8 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
     # mga option `-files snp.genocov` is not passed, as that provokes pheno-dulicates 
     # (SOLAR's strange things)
     paste("mga ", "-files ", paste(genocov.files, collapse = " "), 
-      " -snplists ", paste(snplists.files, collapse = " "), " -out ", out.file, sep = ""))
+      " -snplists ", paste(snplists.files, collapse = " "), " -out ", out.file, 
+      " ", paste(assoc.options, collapse = " "), sep = ""))
 
   ### run solar    
   ret <- solar(cmd, dir.assoc, result = FALSE) 

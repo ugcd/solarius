@@ -1,0 +1,95 @@
+---
+title: "Association with multiple traits in SOLAR"
+author: "Andrey Ziyatdinov"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+    keep_md: true
+---
+
+# References
+
+* http://helix.nih.gov/Documentation/solar-6.6.2-doc/09.chapter.html, Section 9.2.1.2 Multivariate Mu 
+
+# Parameters
+
+```{r par}
+dir <- "solar"
+```
+
+# Include
+
+```{r inc}
+library(devtools)
+```
+
+## Load
+
+```{r load}
+load_all("~/git/ugcd/solarius/")
+```
+
+# Data
+
+```{r dat}
+data(dat30, package = "solarius")
+```
+
+# Polygenic 
+
+## Model 1
+
+```{r model_1}
+mod1 <- solarPolygenic(trait1 + trait2 ~ age, dat30, dir = dir)
+```
+
+## Model 2
+
+```{r model_2}
+cmd1 <- c("load model trait1.trait2/null0",
+  "define age_i = age",
+  "mu = mu + {t2*(<bage_i(trait2)>*age_i)}",
+  "maximize",
+  "save model trait1.trait2/custom1")
+
+ret1 <- solar(cmd1, dir)
+
+cmd2 <- c(
+  "load model trait1.trait2/spor",
+  "set loglik_0 [loglike]",
+  "puts \"loglik_0 = $loglik_0\"",
+  "load model trait1.trait2/null0",
+  "set loglik_1 [loglike]",
+  "puts \"loglik_1 = $loglik_1\"",
+  "define age_i = age",
+  "covariate sex age_i(trait2)",
+  "polymod", 
+  "maximize",
+  "set loglik_2 [loglike]",
+  "puts \"loglik_2 = $loglik_2\"",
+  "save model trait1.trait2/custom2") 
+
+ret2 <- solar(cmd2, dir)  
+```  
+
+```{r loglik}
+grep("loglik_", ret2, value = TRUE)
+```
+
+# Association
+
+## Assoc 1  
+
+```{r assoc_1}
+assoc1 <- solarAssoc(trait1 + trait2 ~ age, dat30, snpcovdata = genocovdat30[, 1:2], 
+  dir = dir, 
+  assoc.options = "-saveall")
+```
+
+`SOLAR` command:
+
+```{r}
+assoc1$assoc$solar$cmd
+```

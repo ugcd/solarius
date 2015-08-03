@@ -102,6 +102,8 @@ solarAssoc <- function(formula, data, dir,
   genocov.files, snplists.files, snpmap.files,
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
+  # SOLAR options/settings
+  assoc.options = "",
   # misc
   cores = getOption("cores"),
   ...,
@@ -278,7 +280,9 @@ solarAssoc <- function(formula, data, dir,
     assoc.outformat = assoc.outformat,
     assoc.snplistformat = assoc.snplistformat,
     assoc.mapformat = assoc.mapformat,
-    tprofile = list(tproc = list()))
+    tprofile = list(tproc = list()),
+    # SOLAR options/settings
+    assoc.options = assoc.options)
 
   ### step 4: add genotype data to `dir`
   #snpdata <- format_snpdata(snpdata, snpformat)
