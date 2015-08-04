@@ -153,7 +153,7 @@ grep("h2r", readLines("solar2/trait1/null0.mod"), value = TRUE)[1]
 ```
 
 ```
-## [1] "parameter      h2r = 0.8861313186413069 Lower 0           Upper 1         "
+## [1] "parameter      h2r = 0.8861313186409259 Lower 0           Upper 1         "
 ```
 
 ```r
@@ -161,7 +161,7 @@ grep("h2r", readLines("solar2/trait1/constrained.mod"), value = TRUE)[1]
 ```
 
 ```
-## [1] "parameter      h2r = 0.8861313186413069 Lower 0           Upper 1         "
+## [1] "parameter      h2r = 0.8861313186409259 Lower 0           Upper 1         "
 ```
 
 ## Example 3
@@ -188,7 +188,7 @@ cmd0 <- c("load pedigree dat.ped", "load phenotypes dat.phe",
 t0 <- system.time(ret0 <- solar(cmd0, dir3))
 
 cmd1 <- c("load model trait1.trait2/null0",
-  "covariate sex sex",
+  "covariate age sex",
   "polymod", "maximize", "save model trait1.trait2/constrained1",
   "quit")
 
@@ -200,6 +200,8 @@ cmd2 <- c("load model trait1.trait2/null0",
   "fix h2r(trait1)", "fix h2r(trait2)",
   "fix e2(trait1)", "fix e2(trait2)",  
   "fix rhoe", "fix rhog",
+  "fix sd(trait1)", "fix sd(trait2)",
+  "option StandErr 0",
   "maximize", "save model trait1.trait2/constrained2",
   "quit")
 
@@ -214,6 +216,7 @@ cmd3 <- c("load model trait1.trait2/null0",
   "fix mean(trait1)", "fix mean(trait2)",  
   "fix sd(trait1)", "fix sd(trait2)",  
   "fix bage(trait1)", "fix bage(trait2)",  
+  "option StandErr 0",
   "maximize", "save model trait1.trait2/constrained3",
   "quit")
 
@@ -228,7 +231,7 @@ cmd4 <- c("load model trait1.trait2/null0",
   "fix mean(trait1)", "fix mean(trait2)",  
   "fix sd(trait1)", "fix sd(trait2)",  
   "fix bage(trait1)", "fix bage(trait2)",  
-  "option MaxIter 0", "option StandErr 0",
+  "option MaxIter 1", "option StandErr 0",
   #"option MaxStep 0", "option MaxCliffs 0",
   "maximize", "save model trait1.trait2/constrained4",
   "quit")
@@ -243,7 +246,7 @@ c(t0[3], t1[3], t2[3], t3[3], t4[3])
 
 ```
 ## elapsed elapsed elapsed elapsed elapsed 
-##   2.619   2.596   1.373   0.762   0.112
+##   3.334   3.301   0.740   0.393   0.150
 ```
 
 
@@ -253,7 +256,7 @@ round(c(t0[3], t1[3], t2[3], t3[3], t4[3]) / t3[3], 2)
 
 ```
 ## elapsed elapsed elapsed elapsed elapsed 
-##    3.44    3.41    1.80    1.00    0.15
+##    8.48    8.40    1.88    1.00    0.38
 ```
 
 
@@ -264,5 +267,5 @@ round(c(t0[3], t1[3], t2[3], t3[3], t4[3]) / t4[3], 2)
 
 ```
 ## elapsed elapsed elapsed elapsed elapsed 
-##   23.38   23.18   12.26    6.80    1.00
+##   22.23   22.01    4.93    2.62    1.00
 ```

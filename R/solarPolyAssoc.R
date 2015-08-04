@@ -5,7 +5,8 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   traits, covlist = "1",
   # input data to association 
   snpcovdata, snplist, snpind,
-  assoc.options = "",
+  assoc.options = "", assoc.settings = "", 
+  assoc.fix = FALSE, assoc.se = TRUE,
   # misc
   cores = getOption("cores"),
   ...,
@@ -31,6 +32,10 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   }
   if(missing(snpind)) {
     snpind <- integer()
+  }
+
+  if(!assoc.se) {
+    assoc.settings <- c(assoc.settings, "option StandErr 0")
   }
 
   # cores
@@ -88,7 +93,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
     snplist = snplist, snpind = snpind,
     assoc.informat = "snpcovdata", assoc.outformat = "df",
     # SOLAR options/settings
-    assoc.options = assoc.options)
+    assoc.options = assoc.options, assoc.settings = assoc.settings, assoc.fix = assoc.fix)
 
   ### Step 4.1: add assoc.-specific slots to `out`
   tsolarPolyAssoc$preassoc <- proc.time()
@@ -189,48 +194,85 @@ if(FALSE) {
     procc_tprofile(out$assoc$tprofile)
   }, silent = TRUE)
   
-  oldClass(out) <- c("solarAssoc", oldClass(out), "solarPolyAssoc")
+  oldClass(out) <- c("solarPolyAssoc", "solarAssoc", oldClass(out))
   return(out)
 }
 
 run_poly_assoc_bivar <- function(out, dir, snps)
 {
   model.path <- paste0(paste(out$traits, collapse = "."), "/", tools::file_path_sans_ext(out$solar$model.filename))
+  assoc.fix <- out$assoc$assoc.fix
+  assoc.settings <- out$assoc$assoc.settings
   
-  cmd.proc_def <- c(get_proc_poly_assoc2(snps, paste0("${snp}_2(", out$traits[2], ")"), 2))
-  cmd.proc_call <- c(paste0("poly_assoc2 ", "\"", model.path, "\""))
+  cmd.proc_def <- c(get_proc_poly_assoc(snps, df = 2, assoc.fix = assoc.fix, assoc.settings = assoc.settings))
+  cmd.proc_call <- c(paste0("poly_assoc ", "\"", model.path, "\""))
   
   cmd <- c(cmd.proc_def, cmd.proc_call)
   ret <- solar(cmd, dir, result = TRUE)
 
   snpf <- try({
     tab <- fread(file.path(dir, "out.poly.assoc"), sep = " ", header = FALSE)
-    if(ncol(tab) == 4) {
-      setnames(tab, c("SNP", "pSNP", "pSNPc", "pSNPi"))
+    if(ncol(tab) == 3) {
+      setnames(tab, c("SNP", "chi", "pSNP"))
     }
   })
 }
 
-get_proc_poly_assoc <- function(snps)
+get_proc_poly_assoc <- function(snps, df = 1, assoc.fix = FALSE, assoc.settings = "")
 {
 paste0("proc poly_assoc {model} {\
 \
-  # model 0\
-	load model $model\
-	set loglike_0 [loglike]\
-\
   # write to file\
 	set f [open \"out.poly.assoc\" \"w\"]\
+	set f_loglik [open \"out.poly.assoc.loglik\" \"w\"]\
+	\
 	foreach snp [list ", paste(snps, collapse = " "), "] {\
+    # model 0\
+	  load model $model\
+	  set loglike_0 [loglike]\
+    \
 	  # model 1\
-	  covariate $snp\
-	  polymod\
-	  maximize\
-	  set loglik_1 [loglike]\
+	  load model $model\
+	  set pval_full \"NA\"\
 	  \
-	  puts $f \"$snp $loglike_0 $loglik_1\"\
+	  covariate $snp\
+	  ",
+	  ifelse(assoc.fix,
+	    "constraint delete_all\
+	    \
+	    set traits [trait]\
+	    for {set i 0} {$i < 2} {incr i} {\
+        set ti [lindex $traits $i]\
+        fix \"h2r(${ti})\"\
+        fix \"e2(${ti})\"\
+        fix \"sd(${ti})\"\
+      }\
+      fix rhoe\
+      fix rhog\
+	    ",
+	    "\
+	    "),
+	  assoc.settings,
+	  "\
+	  if {![catch {maximize -q}]} {\
+      #save model snp\
+  	  set loglike_1 [loglike]\
+      \
+	    set D [expr 2 * ($loglike_1 - $loglike_0)]\
+	    if {$D < 0} {\
+	      set pval_full 1\
+	    } else {\
+  	    set pval_full [chi -number $D ", df, "]\
+  	  }\
+	  }\
+	  \
+	  # put\
+	  puts $f_loglik \"$snp $loglike_0 $loglike_1\"\
+	  puts $f \"$snp $D $pval_full\"\
 	}\
+	\
 	close $f\
+	close $f_loglik\
 }\
 ")
 }
@@ -256,7 +298,6 @@ paste0("proc poly_assoc2 {model} {\
 	  set pval_common \"NA\"\
 	  \
 	  covariate $snp\
-	  polymod\
 	  if {![catch {maximize -q}]} {\
   	  set loglike_1 [loglike]\
 	    \
@@ -274,7 +315,6 @@ paste0("proc poly_assoc2 {model} {\
 	  set pval_full \"NA\"\
 	  \
 	  covariate $snp ", cov2, "\
-	  polymod\
 	  if {![catch {maximize -q}]} {\
   	  set loglike_2 [loglike]\
 	    \
@@ -302,4 +342,43 @@ paste0("proc poly_assoc2 {model} {\
 	close $f_loglik\
 }\
 ")
+}
+
+#--------------------
+# Class solarPolyAssoc
+#--------------------
+
+#' S3 class solarPolyAssoc.
+#'
+#' @name solarPolyAssoc
+#' @rdname solarPolyAssoc
+#'
+#' @exportClass solarPolyAssoc
+
+
+#' @rdname solarPolyAssocClass
+#' @export
+print.solarPolyAssoc <- function(x, ...)
+{
+  cat("\nCall: ")
+  print(x$assoc$call)
+  
+  cat("\n Input SNP data:\n")
+  switch(x$assoc$assoc.informat,
+    "snpcovdata" = cat("  *  ", x$assoc$num.snps, " SNP covariates passed by `snpcovdata` argument\n", sep = ""),
+    stop("switch error")
+  )
+  
+  cat("\n Output results of association:\n")
+  if(x$assoc$assoc.outformat == "df") {
+    cat("\n  *  Table of association results (first 5 out of ", nrow(x$snpf), " rows):\n", sep = "")
+    print(head(x$snpf, 5))
+  }
+  
+  t1 <- with(x$assoc$tprofile$tprocf$tsolarPolyAssoc, elapsed.diff[unit == "runassoc"])
+  t2 <- x$assoc$tprofile$cputime.sec
+  cat("\n CPU time on ", x$assoc$cores, " core(s):\n", 
+    " -- ", format(.POSIXct(t1, tz = "GMT"), "%H:%M:%S"), " -- association\n", 
+    " -- ", format(.POSIXct(t2, tz = "GMT"), "%H:%M:%S"), " -- in total\n", 
+    sep = "")
 }

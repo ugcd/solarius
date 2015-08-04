@@ -129,7 +129,7 @@ cmd0 <- c("load pedigree dat.ped", "load phenotypes dat.phe",
 t0 <- system.time(ret0 <- solar(cmd0, dir3))
 
 cmd1 <- c("load model trait1.trait2/null0",
-  "covariate sex sex",
+  "covariate age sex",
   "polymod", "maximize", "save model trait1.trait2/constrained1",
   "quit")
 
@@ -141,6 +141,8 @@ cmd2 <- c("load model trait1.trait2/null0",
   "fix h2r(trait1)", "fix h2r(trait2)",
   "fix e2(trait1)", "fix e2(trait2)",  
   "fix rhoe", "fix rhog",
+  "fix sd(trait1)", "fix sd(trait2)",
+  "option StandErr 0",
   "maximize", "save model trait1.trait2/constrained2",
   "quit")
 
@@ -155,6 +157,7 @@ cmd3 <- c("load model trait1.trait2/null0",
   "fix mean(trait1)", "fix mean(trait2)",  
   "fix sd(trait1)", "fix sd(trait2)",  
   "fix bage(trait1)", "fix bage(trait2)",  
+  "option StandErr 0",
   "maximize", "save model trait1.trait2/constrained3",
   "quit")
 
@@ -169,7 +172,7 @@ cmd4 <- c("load model trait1.trait2/null0",
   "fix mean(trait1)", "fix mean(trait2)",  
   "fix sd(trait1)", "fix sd(trait2)",  
   "fix bage(trait1)", "fix bage(trait2)",  
-  "option MaxIter 0", "option StandErr 0",
+  "option MaxIter 1", "option StandErr 0",
   #"option MaxStep 0", "option MaxCliffs 0",
   "maximize", "save model trait1.trait2/constrained4",
   "quit")
