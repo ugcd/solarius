@@ -87,7 +87,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
     kinship, traits, covlist, ..., verbose = verbose)
 
   out$assoc <- list(call = mc,
-    cores = 1,
+    cores = cores,
     snps = snps, num.snps = num.snps,
     # input par
     snplist = snplist, snpind = snpind,
@@ -103,9 +103,9 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
 
   parallel <- (cores > 1)
   if(parallel) {
-    stopifnot(requireNamespace("doParallel", quietly = TRUE))
+    stopifnot(requireNamespace("doMC", quietly = TRUE))
     
-    doParallel::registerDoParallel(cores = cores)
+    doMC::registerDoMC(cores = cores)
   }
   
   if(!parallel) {
