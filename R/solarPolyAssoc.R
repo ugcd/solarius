@@ -113,8 +113,19 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   } else {
     num.snps <- out$assoc$num.snps
     
-    snpf <- llply(1:num.snps, function(i) {
-      if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", num.snps, "snp...\n")
+    num.gr <- 4 * cores 
+    gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
+
+    snpf <- llply(1:nlevels(gr), function(i) {
+      if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", nlevels(gr), "group of snps...\n")
+
+      # snps of a group `i`
+      gr.i <- levels(gr)[i]
+      snps.i <- snps[gr %in% gr.i]
+      
+      if(length(snps.i) == 0) {
+        return(NULL)
+      }
 
       # copy `dir`      
       files.dir <- list.files(dir, include.dirs = TRUE, full.names = TRUE)
@@ -122,15 +133,34 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
       
       stopifnot(dir.create(dir.assoc, showWarnings = FALSE, recursive = TRUE))
       stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
-  
+      
       # run
-      snpf <- run_poly_assoc(out, dir.assoc, snps[i])
+      snpf <- run_poly_assoc(out, dir.assoc, snps.i)
       
       # clean
       unlink(dir.assoc, recursive = TRUE)
       
       return(snpf)
     }, .parallel = parallel)
+
+    #snpf <- llply(1:num.snps, function(i) {
+    #  if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", num.snps, "snp...\n")
+    #
+    #  # copy `dir`      
+    #  files.dir <- list.files(dir, include.dirs = TRUE, full.names = TRUE)
+    #  dir.assoc <- tempfile(pattern = paste0("solarPolyAssoc-", i, "-"))
+    #  
+    #  stopifnot(dir.create(dir.assoc, showWarnings = FALSE, recursive = TRUE))
+    #  stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
+    # 
+    #  # run
+    #  snpf <- run_poly_assoc(out, dir.assoc, snps[i])
+    #  
+    #  # clean
+    #  unlink(dir.assoc, recursive = TRUE)
+    #  
+    #  return(snpf)
+    #}, .parallel = parallel)
     
     ret <- try({
       rbindlist(snpf)
