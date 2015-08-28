@@ -113,12 +113,10 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   } else {
     num.snps <- out$assoc$num.snps
     
-    num.gr <- 4 * cores 
+    num.gr <- 10 * cores 
     gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
 
     snpf <- llply(1:nlevels(gr), function(i) {
-      if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", nlevels(gr), "group of snps...\n")
-
       # snps of a group `i`
       gr.i <- levels(gr)[i]
       snps.i <- snps[gr %in% gr.i]
@@ -126,6 +124,8 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
       if(length(snps.i) == 0) {
         return(NULL)
       }
+
+      if(out$verbose) cat(" * solarPolyAssoc: ", i, "/", nlevels(gr), "batch...\n")
 
       # copy `dir`      
       files.dir <- list.files(dir, include.dirs = TRUE, full.names = TRUE)
