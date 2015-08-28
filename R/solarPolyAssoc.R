@@ -6,7 +6,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   # input data to association 
   snpcovdata, snplist, snpind,
   assoc.options = "", assoc.settings = "", 
-  assoc.fix = FALSE, assoc.se = TRUE,
+  assoc.df = 1, assoc.fix = FALSE, assoc.se = TRUE,
   # misc
   cores = getOption("cores"),
   ...,
@@ -93,7 +93,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
     snplist = snplist, snpind = snpind,
     assoc.informat = "snpcovdata", assoc.outformat = "df",
     # SOLAR options/settings
-    assoc.options = assoc.options, assoc.settings = assoc.settings, assoc.fix = assoc.fix)
+    assoc.options = assoc.options, assoc.settings = assoc.settings, assoc.fix = assoc.fix, assoc.df = assoc.df)
 
   ### Step 4.1: add assoc.-specific slots to `out`
   tsolarPolyAssoc$preassoc <- proc.time()
@@ -109,7 +109,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
   }
   
   if(!parallel) {
-    snpf <- run_poly_assoc_bivar(out, dir, out$assoc$snps)
+    snpf <- run_poly_assoc(out, dir, out$assoc$snps)
   } else {
     num.snps <- out$assoc$num.snps
     
@@ -124,7 +124,7 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
       stopifnot(file.copy(from = files.dir, to = dir.assoc, recursive = TRUE))
   
       # run
-      snpf <- run_poly_assoc_bivar(out, dir.assoc, snps[i])
+      snpf <- run_poly_assoc(out, dir.assoc, snps[i])
       
       # clean
       unlink(dir.assoc, recursive = TRUE)
@@ -198,13 +198,14 @@ if(FALSE) {
   return(out)
 }
 
-run_poly_assoc_bivar <- function(out, dir, snps)
+run_poly_assoc <- function(out, dir, snps)
 {
   model.path <- paste0(paste(out$traits, collapse = "."), "/", tools::file_path_sans_ext(out$solar$model.filename))
   assoc.fix <- out$assoc$assoc.fix
+  assoc.df <- out$assoc$assoc.df
   assoc.settings <- out$assoc$assoc.settings
   
-  cmd.proc_def <- c(get_proc_poly_assoc(snps, df = 2, assoc.fix = assoc.fix, assoc.settings = assoc.settings))
+  cmd.proc_def <- c(get_proc_poly_assoc(snps, df = assoc.df, assoc.fix = assoc.fix, assoc.settings = assoc.settings))
   cmd.proc_call <- c(paste0("poly_assoc ", "\"", model.path, "\""))
   
   cmd <- c(cmd.proc_def, cmd.proc_call)
