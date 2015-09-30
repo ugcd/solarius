@@ -40,6 +40,11 @@ plotPed <- function(data, ped)
   data <- rename(data, renames)
   stopifnot(all(c("ID", "FA", "MO", "SEX", "FAMID") %in% names(data)))
   
+  if(sum(with(data, is.na(FAMID)))) {
+    warning("plotPed: rows with FAMID == NA are filtered out.")
+    data <- subset(data, !is.na(FAMID))
+  }
+  
   peds <- unique(data$FAMID)
   
   # filter by `ped`
@@ -52,7 +57,12 @@ plotPed <- function(data, ped)
   
   ### create `df`
   FAMID <- NULL # R CMD check: no visible binding
+
   df <- subset(data, FAMID == ped)
+  if(nrow(df) == 0) {
+    warning("plotPed: no families found with the given value of `ped`.")
+    return(invisible()) 
+  }
   
   ### filter `df`
   ids <- df$ID
@@ -65,7 +75,15 @@ plotPed <- function(data, ped)
     FA[ind] <- ""
     MO[ind] <- ""
   })
-  
+
+  # fix for `SEX
+  df <- within(df, {
+    if(class(SEX) == "character" & all(c("1", "2") %in% SEX)) { 
+      SEX <- as.integer(SEX)
+      SEX[is.na(SEX)] <- 3
+    }
+  })
+
   # make `pedigree` object
   ped <- with(df, 
     kinship2::pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  

@@ -106,8 +106,8 @@ df2solar <- function(df, dir, kinship, kin2.gz = "kin2.gz", sort.ped = TRUE)
   
   # write tables
   if(sort.ped) {
-    if("FAM" %in% ped) {
-      ord <- with(ped, order(as.integer(FAM), as.integer(ID)))
+    if("FAMID" %in% ped.cols) {
+      ord <- with(ped, order(as.integer(FAMID), as.integer(ID)))
     } else {
       ord <- with(ped, order(as.integer(ID)))
     }
