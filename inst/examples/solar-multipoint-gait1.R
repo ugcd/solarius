@@ -13,6 +13,11 @@ dat <- gait1.phen(transform = "tr1", traits = traits[1], id.ibd = TRUE)
 ### linkage 
 mibddir <- gait1.mibddir()
 
+### expclude FAMIDs
+fams <- c("02", "17", "18")
+
+dat <- subset(dat, !(FAMID %in% fams))
+
 ### export data
 df2solar(dat, dir) 
 
@@ -26,7 +31,7 @@ ret <- solar(cmd, dir)
 ### run solar 2
 cmd <- c("load model tr1_FVII/null0.mod",
   paste("mibddir", mibddir), 
-  "chromosome 1", "interval 5", 
+  "chromosome 22", "interval 50", 
   "multipoint -overwrite")
 
 ret <- solar(cmd, dir)
