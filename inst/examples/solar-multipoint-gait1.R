@@ -8,15 +8,18 @@ dir <- "solar"
 traits0 <- gait1.traits.cascade()
 traits <- paste0("tr1_", traits0)
 
-dat <- gait1.phen(transform = "tr1", traits = traits[1], id.ibd = TRUE)
+dat <- gait1.phen(transform = "tr1", traits = traits[1])
+
+ids <- gait1.id.ibd()
+dat <- mutate(dat, 
+  MIBD = ifelse(ID %in% ids, 1, NA))
 
 ### linkage 
 mibddir <- gait1.mibddir()
 
 ### expclude FAMIDs
 fams <- c("02", "17", "18")
-
-dat <- subset(dat, !(FAMID %in% fams))
+#dat <- subset(dat, !(FAMID %in% fams))
 
 ### export data
 df2solar(dat, dir) 
@@ -25,8 +28,10 @@ df2solar(dat, dir)
 cmd <- c(
   "pedigree load dat.ped", 
   "phen load dat.phe",
-  "model new", "trait tr1_FVII", "polygenic")
+  "model new", "trait tr1_FVII", "covariate MIBD()", "polygenic")
 ret <- solar(cmd, dir)
+
+stop()
 
 ### run solar 2
 cmd <- c("load model tr1_FVII/null0.mod",
