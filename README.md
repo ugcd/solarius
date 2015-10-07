@@ -1,8 +1,9 @@
 ## solarius
 
+_Note_: Manuscript "solarius: an R interface to SOLAR for variance component analysis in pedigrees" is under revision in _Bioinformatics_ journal.
+
 R package wrapper to SOLAR
 
-* Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/).
 * Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/)
 * Vignettes 
   * R code [vignettes/](vignettes/)
@@ -10,7 +11,7 @@ R package wrapper to SOLAR
      1. [tutorial.html](http://ugcd.github.io/solarius/vignettes/tutorial.html)
      2. [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html)
      3. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
-     
+* Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/) (under construction)     
 
 
 ### Install package
