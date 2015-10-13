@@ -37,7 +37,9 @@ Suggests:
     doParallel,
     iterators,
     parallel,
-    qqman
+    qqman,
+    grid,
+    gridExtra
 Collate:
     'package.R'
     'datasets.R'    

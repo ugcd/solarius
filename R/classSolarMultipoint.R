@@ -87,3 +87,49 @@ summary.solarMultipoint <- function(object, ...)
   cat("  -- chr:", object$lodf$chr[ind], "\n")
   cat("  -- position:", object$lodf$pos[ind], "cM\n")
 }
+
+
+##' @export
+tabplot <- function(object,...) UseMethod("tabplot") 
+
+#' @rdname solarMultipointClass
+#' @method tabplot solarMultipoint
+#' @export
+tabplot.solarMultipoint <- function(object, LOD.thr = 1, ...)
+{
+  stopifnot(require("gridExtra"))
+  stopifnot(require("grid"))  
+  
+  # `sf`
+  sf <- ddply(object$lodf, "chr", summarize, 
+    pos = pos[which.max(LOD)],
+    LOD.max = max(LOD))
+  
+  sf <- subset(sf, LOD.max > LOD.thr)
+  
+  if(nrow(sf) > 0) {
+    ord <- with(sf, order(-LOD.max))
+    sf <- sf[ord, ]
+    
+    rownames(sf) <- 1:nrow(sf)  
+      
+    N <- min(15, nrow(sf))
+    sf <- sf[1:N, ]      
+      
+    sf <- mutate(sf,
+      LOD.max = round(LOD.max, 2))
+    
+    grid::grid.newpage()
+    gridExtra::grid.table(sf)
+  } else {
+    if(plot.null) {
+      p <- qplot(1:10, 1:10, geom = "blank") + 
+        theme_bw() +
+        theme(line = element_blank(),
+          text = element_blank())
+      print(p)
+    }
+  }    
+  
+  return(invisible())  
+}
