@@ -95,7 +95,7 @@ tabplot <- function(object,...) UseMethod("tabplot")
 #' @rdname solarMultipointClass
 #' @method tabplot solarMultipoint
 #' @export
-tabplot.solarMultipoint <- function(object, LOD.thr = 1, ...)
+tabplot.solarMultipoint <- function(object, LOD.thr = 1.5, plot.null = TRUE, ...)
 {
   stopifnot(require("gridExtra"))
   stopifnot(require("grid"))  
