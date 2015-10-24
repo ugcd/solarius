@@ -1,5 +1,6 @@
 ## TODO
 
+* Repalce `NCBI2R` package by https://github.com/rOpenSci/rsnps
 * Create functions to export results from the polygenic analysis to CSV tables.
     * covariates: Estimate, SE, p-value (including mean)
     * h2r: random effects (all three h2r, c2 and e2), kurtosis, variance due to covariates, #individuals
