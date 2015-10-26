@@ -1,0 +1,63 @@
+---
+title: "Explore how SOLAR computes the variance explained by covariates"
+author: "Andrey Ziyatdinov"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: united
+    toc: true
+    keep_md: true
+---
+
+```{r options, echo = F}
+opts_chunk$set(fig.path = "figures/", comment = NA, results = 'asis', tidy = F, message = F, warning = F, echo = T)
+```
+
+```{r inc}
+library(plyr)
+library(ggplot2)
+library(gridExtra)
+
+library(pander)
+```
+
+```{r inc2}
+library(devtools)
+load_all("~/git/ugcd/solarius")
+```
+
+```{r settings}
+theme_set(theme_light())
+panderOptions('table.split.table', Inf)
+```
+
+# About
+
+## SOLAR model parameters
+
+SOLAR [documentation](http://www.biostat.wustl.edu/genetics/geneticssoft/manuals/solar210/09.chapter.html), Section 9.5, paragraph 1.
+
+> Note: pvar in the standard univariate mu is simply the square of parameter sd, so if pvar is used, there must be an sd parameter.
+
+# Data
+
+```{r dat30}
+data(dat30)
+```
+
+# Polygenic model
+
+```{r mod}
+mod <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+```
+
+## Model parameters
+
+```{r model_par}
+sd1 <- as.numeric(strsplit(grep("sd", mod$solar$files$model$spor.mod, value = TRUE)[1], "sd = |Lower")[[1]][2])
+sd2 <- as.numeric(strsplit(grep("sd", mod$solar$files$model$poly.mod, value = TRUE)[1], "sd = |Lower")[[1]][2])
+
+var1 <- sd1^2
+var2 <- sd2^2
+```
+
