@@ -60,3 +60,4 @@ Collate:
     'multipoint.lib.R'
     'transforms.lib.R'
     'solarMultivar.R'
+    'solarBayesAvg.R'
