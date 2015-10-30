@@ -119,11 +119,15 @@ print.solarBaeysAvgPolygenic <- function(x, ...)
   cat("\nCall: ")
   print(x$call)
   
-  cat("\nFile bayesavg_cov.out:\n")
-  l_ply(x$solar$bayesavg$files$bayesavg_cov.out, function(x) cat(x, "\n"))
-
   cat("\nFinal list of covariates: ")
   cat(paste(x$covlist.bayesavg, collapse = ", "), "\n")
 
 }
 
+#' @rdname solarBaeysAvgPolygenicClass
+#' @export
+summary.solarBaeysAvgPolygenic <- function(x, ...)
+{
+  cat("\nFile bayesavg_cov.out:\n")
+  l_ply(x$solar$bayesavg$files$bayesavg_cov.out, function(x) cat(x, "\n"))
+}
