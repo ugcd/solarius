@@ -197,7 +197,7 @@ solarAssoc <- function(formula, data, dir,
     stop("ifelse error in processing `snplistformat`"))))
   if(assoc.informat == "genocov.files") {
     if(assoc.snplistformat != "default") {
-      stop("Error in `solarAssoc`: `snplist`/`snpind` is not allowd for `genocov.files` input format.")
+      stop("Error in `solarAssoc`: `snplist`/`snpind` is not allowed for `genocov.files` input format.")
     }
   }
 
@@ -344,7 +344,7 @@ solarAssoc <- function(formula, data, dir,
   } else if(out$assoc$assoc.mapformat %in% c("snpmap.file", "snpmap.files")) {
     # read map
     tsolarAssoc$map <- proc.time()
-    snpmap <- read_map_files(out$assoc$snpmap.files, cores = out$assoc$cores)
+    snpmap <- read_map_files(out$assoc$snpmap.files, cores = out$assoc$cores, remove.prefix = TRUE)
     
     renames <- matchMapNames(names(snpmap))
     snpmap <- rename(snpmap, renames)

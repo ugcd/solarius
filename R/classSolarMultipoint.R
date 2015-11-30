@@ -42,7 +42,8 @@ print.solarMultipoint <- function(x, ...)
 #' @rdname solarMultipointClass
 #' @export
 plot.solarMultipoint <- function(x, 
-  pass = 1, ...)
+  pass = 1, main, xlab,
+  faceting = TRUE, ...)
 {
   #if(!require(ggplot2)) {
   #  stop("`ggplot2` package is required for plotting")
@@ -64,11 +65,25 @@ plot.solarMultipoint <- function(x,
   ymin <- min(min(lodf$LOD), 0)
   ymax <- max(max(lodf$LOD), 3)
   
+  if(missing(main)) {
+    main <- getFormulaStr(x)
+  }
+
+  if(missing(xlab)) {
+    xlab <- "position (cM)"
+  }
+  
   ### plot  
   pos <- LOD <- chr <- NULL # R CMD check: no visible binding
-  ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr, scales = "free_x") + 
-    ylim(ymin, ymax) + labs(title = getFormulaStr(x)) +
-    theme_bw()
+  if(faceting) {
+    p <- ggplot(lodf, aes(pos, LOD)) + geom_line() + facet_wrap(~ chr, scales = "free_x")
+  } else {
+    p <- ggplot(lodf, aes(pos, LOD)) + geom_line()
+  }
+
+  p <- p + ylim(ymin, ymax) + labs(title = main, x = xlab) + theme_bw()
+  
+  return(p)
 }
 
 #' @rdname solarMultipointClass

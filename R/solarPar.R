@@ -4,6 +4,23 @@
 #------------------------------
 
 #' @export
+solarPar <- function(mod, par)
+{
+  switch(class(mod)[1],
+    "solarPolygenic" = switch(par,  
+      "rhog" = ifelse(is.null(mod$vcf), as.numeric(NA), with(mod$vcf, Estimate[varcomp == "rhog"])),
+      "rhog.se" = ifelse(is.null(mod$vcf), as.numeric(NA), with(mod$vcf, SE[varcomp == "rhog"])),
+      "rhog.pval" = ifelse(is.null(mod$lf), as.numeric(NA), with(mod$lf, pval[model == "rhog0"])),
+      "rhop" = solarParRhoP(mod),
+      "rhop.se" = solarParRhoPSE(mod),
+      "rhop.pval" = solarParRhoPP(mod),
+      stop(paste0("switch for `par` value ", par, ", class solarPolygenic"))),
+    "try-error" = as.numeric(NA),
+    stop("switch for model class")
+  )
+}
+
+#' @export
 solarParIndividuals <- function(mod) extract_out_globals(mod, "SOLAR_Individuals")
 
 #' @export
@@ -19,16 +36,16 @@ solarParCovlistP <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_P")
 solarParCovlistChi <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_Chi")
 
 #' @export
-solarParRhoP <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_RhoP")
+solarParRhoP <- function(mod) extract_out_globals(mod, "SOLAR_RhoP")
 
 #' @export
-solarParRhoPSE <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_RhoP_SE")
+solarParRhoPSE <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_SE")
 
 #' @export
-solarParRhoPP <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_RhoP_P")
+solarParRhoPP <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_P")
 
 #' @export
-solarParRhoPOK <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_RhoP_OK")
+solarParRhoPOK <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_OK")
 
 
 #------------------------------
@@ -83,7 +100,11 @@ explainedVarProp <- function(mod)
 extract_out_globals <- function(mod, pat)
 {
   lines <- mod$solar$files$model$out.globals
-
+  
+  if(is.null(lines)) {
+    return(as.numeric(NA))
+  }
+  
   str <- gsub(pat, "", grep(pat, lines, value = TRUE))
   vals <- strsplit(str, " ")[[1]]
   vals <- vals[vals != ""]
@@ -92,10 +113,10 @@ extract_out_globals <- function(mod, pat)
 
   if(length(vals) == 0) {
     vals <- as.numeric(NA)
-  } else {
+  } else if (grepl("Covlist", pat)) {
     stopifnot(length(vals) == length(mod$covlist))
     names(vals) <- mod$covlist
-  }
+  } 
   
   return(vals)
 }

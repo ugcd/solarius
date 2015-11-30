@@ -144,19 +144,27 @@ read_phi2_gz <- function(phi2.gz)
   return(kf)
 }
 
-read_map <- function(file)
+read_map <- function(file, remove.prefix = FALSE)
 {
   ### read `chr` in the first line
-  # - filter out patters like `c1.1.500`
-  chr <- readLines(file, n = 1)
+  chr.line <- readLines(file, n = 1)
   
-  chr <- strsplit(chr, "\\.")[[1]][1] # now it is like `c1`
+  # case 1: patters like `c1.1.500`
+  chr <- strsplit(chr.line, "\\.")[[1]][1] # now it is like `c1`
   
   chr <- gsub("chrom", "", chr)
   chr <- gsub("chr", "", chr)
   chr <- gsub("c", "", chr)
   
   chr <- as.integer(chr)
+
+  # case 2: patters like `c.22.1`
+  if(is.na(chr)) { 
+    chr <- strsplit(chr.line, "\\.")[[1]][2] # now it is like `1`
+  
+    chr <- as.integer(chr)
+  }
+    
   stopifnot(!is.na(chr))
     
   ### read 2 columns: snp name & position in bp
@@ -167,7 +175,12 @@ read_map <- function(file)
   
     stopifnot(ncol(tab) == 2)
     colnames(tab) <- c("SNP", "pos")
-  
+    
+    # manually remove `snp_` prefix in `SNP` column
+    if(remove.prefix) {
+      tab[, SNP := gsub("^snp_", "", SNP)]
+    }
+          
     ### add `chr` column
     tab <- data.table(tab, chr = as.character(chr))
   }, silent = TRUE))
@@ -175,7 +188,7 @@ read_map <- function(file)
   return(tab)
 }
 
-read_map_files <- function(files, cores = 1)
+read_map_files <- function(files, cores = 1, ...)
 {
   parallel <- (cores > 1)
   if(parallel) {
@@ -186,7 +199,7 @@ read_map_files <- function(files, cores = 1)
   }
   
   map.list <- llply(files, function(f) try({
-    read_map(f)}), .parallel = parallel)
+    read_map(f, ...)}), .parallel = parallel)
   
   # -- try to union `snpf` slots in `snpf.list`
   ret <- try({
