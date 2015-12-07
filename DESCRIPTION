@@ -61,4 +61,5 @@ Collate:
     'transforms.lib.R'
     'solarMultivar.R'
     'solarBayesAvg.R'
-    'solarPar.R'    
+    'solarPar.R'
+    'modelPar.R'

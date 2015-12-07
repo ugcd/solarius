@@ -50,9 +50,15 @@ print.solarAssoc <- function(x, ...)
   }
   #cat("  *  assoc.outformat: ", x$assoc$assoc.outformat, "\n", sep = "")
   
-  t <- x$assoc$tprofile$cputime.sec
-  cat("\n CPU time on ", x$assoc$cores, " core(s): ", 
-    format(.POSIXct(t, tz = "GMT"), "%H:%M:%S"), "\n", sep = "")
+  batches.str <- ""
+  nb <- modelParNumBatches(x)
+  if(nb > 1) {
+    batches.str <- paste0(", ", nb, " batches")
+  }
+  cat("\n CPU time on ", modelParCores(x), " core(s)",
+    batches.str,
+    ": ", 
+    modelParCPUtime(x, "POSIX"), "\n", sep = "")
 }
 
 #' @rdname solarAssocClass
