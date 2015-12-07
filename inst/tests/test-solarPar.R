@@ -38,7 +38,7 @@ test_that("function explainedVarProp", {
   tab0 <- explainedVarProp(mod0)
   
   mod1 <- solarPolygenic(trait1 ~ age + age^2 + sex, dat30)
-  tab1 <- explainedVarProp(mod)
+  tab1 <- explainedVarProp(mod1)
 
   mod2 <- solarPolygenic(trait1 ~ age + age^2 + sex, dat30, covtest = TRUE)
   tab2 <- explainedVarProp(mod2)

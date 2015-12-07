@@ -82,7 +82,7 @@ NULL
 #' dat50 data set adapted from FFBSKAT R package
 #'
 #' A mixture of unrelated and related individuals 
-#' were originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
+#' was originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
 #' 50 synthetic SNPs were generated for the association study.
 #' A custom kinship matrix is used to express the relationships among individuals.
 #' This data set is used here to test the ability of SOLAR 

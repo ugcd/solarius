@@ -105,7 +105,7 @@ solarAssoc <- function(formula, data, dir,
   # SOLAR options/settings
   assoc.options = "",
   # misc
-  cores = getOption("cores"),
+  cores = getOption("cores"), batch.size = 1000,
   ...,
   verbose = 0) 
 {
@@ -265,7 +265,7 @@ solarAssoc <- function(formula, data, dir,
   }
   
   out$assoc <- list(call = mc, #snpformat = snpformat,
-    cores = cores,
+    cores = cores, batch.size = batch.size,
     # input par
     snplist = snplist, snpind = snpind,
     # input/output files
@@ -382,6 +382,7 @@ solarAssoc <- function(formula, data, dir,
 prepare_assoc_files <- function(out, dir)
 {  
   stopifnot(!is.null(out$assoc$cores))
+  stopifnot(!is.null(out$assoc$batch.size))
   stopifnot(!is.null(out$assoc$genocov.files))
   stopifnot(!is.null(out$assoc$out.dirs))
   stopifnot(!is.null(out$assoc$out.files))
@@ -390,7 +391,8 @@ prepare_assoc_files <- function(out, dir)
   assoc.informat <- out$assoc$assoc.informat
   
   cores <- out$assoc$cores
-
+  batch.size <- out$assoc$batch.size
+  
   genocov.files <- out$assoc$genocov.files
   snplists.files0 <- out$assoc$snplists.files
   genolist.file0 <- out$assoc$genolist.file
@@ -457,8 +459,12 @@ prepare_assoc_files <- function(out, dir)
         snps <- unlist(llply(snplists.files0, function(x) readLines(x)))
       }
       num.snps <- length(snps)
-
-      num.gr <- cores 
+      
+      bsize <- min(batch.size, ceiling(num.snps / cores))
+      
+      num.gr <- ceiling(num.snps / bsize)
+      
+      # cut
       gr <- cut(1:num.snps, breaks = seq(1, num.snps, length.out = num.gr + 1), include.lowest = TRUE)
 
       snplists.files <- rep(as.character(NA), num.gr)

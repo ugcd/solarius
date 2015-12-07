@@ -1,6 +1,11 @@
 # @ http://www.gwaspi.org/?page_id=145
 
+### inc
+library(plyr)
+
 ### par
+coding <- FALSE
+
 file.ped <- "dat50.ped"
 file.map <- "dat50.map"
 
@@ -30,7 +35,12 @@ pdat <- data.frame(FAMID = 0, ID = phenodata$id, PA = 0, MO = 0,
 gdat <- matrix(character(), nrow = nrow(genodata), ncol = 2 * ncol(genodata) + 1)
 for(i in 1:ncol(genodata)) {
   ind <- seq(2 * i, by = 1, length = 2) - 1
-  gdat[, ind] <- laply(strsplit(genodata[, i], "/"), function(x) x)  
+  gval <- laply(strsplit(genodata[, i], "/"), function(x) x)  
+  if(coding) { 
+    gval[gval == "1"] <- "A"
+    gval[gval == "2"] <- "C"  
+  }
+  gdat[, ind] <- gval
 }
 
 gdat[, ncol(gdat)] <- rownames(genodata) # IDs
@@ -56,5 +66,14 @@ write.table(mdat, file.map,
   sep = " ", quote = FALSE, na = "")
   
 ### run plink
-ret <- system("plink --noweb --file dat50", intern = TRUE)  
+ret1 <- system("plink --noweb --file dat50", intern = TRUE)  
+
+# transpose
+ret2 <- system("plink --noweb --file dat50 --recode --transpose", intern = TRUE)  
+
+# recode
+ret3 <- system("plink --noweb --file dat50  --recodeA", intern = TRUE)  
+
+
+
 
