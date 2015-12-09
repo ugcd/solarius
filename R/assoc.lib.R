@@ -119,9 +119,6 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 #'    An integer value, the number of top SNPs to be annotated.
 #'    Corresponds to \code{mode} equal to \code{"top"}.
 #'    The default value is 10.
-#' @param capture.output
-#'    Logical, indicates whether to capture the output from \code{AnnotateSNPList} function.
-#'    The default value is FALSE.
 #' @param ...
 #'    Additional arguments.
 #' @return
@@ -129,6 +126,80 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 #'
 #' @export
 annotateSNPs <- function(x, mode = c("significant", "top", "all"), 
+  alpha = 0.05,
+  num.top = 10, 
+  query.size = 500,
+  verbose = 0,
+  ...)
+{
+  ### args
+  mode <- match.arg(mode)
+
+  ### inc
+  stopifnot(requireNamespace("rsnps", quietly = TRUE))
+  
+  ### get list of SNPs
+  if(class(x)[1] == "solarAssoc") {
+    num.snps <- nrow(x$snpf)
+    if(mode == "significant") { 
+      SNP <- pSNP <- NULL # # due to R CMD check: no visible binding 
+      snplist <- subset(x$snpf, pSNP <= (alpha/num.snps))[, SNP]
+    
+      if(length(snplist) == 0) {  
+        warning("There are no significant SNPs.")
+        return(invisible())
+      }
+    } else if(mode == "top") {
+      num.top <- min(num.top, num.snps)
+      
+      ord <- order(x$snpf$pSNP)
+      ord <- ord[seq(1, num.top)]
+      
+      snplist <- x$snpf[ord, SNP]
+    } else if(mode == "all") {
+      snplist <- x$snpf[, SNP]
+    } else {
+      stop("`mode` is unknown.")
+    }
+    
+    snplist <- as.character(snplist)
+  } else if (class(x)[1] == "character") {
+    snplist <- x
+  } else {
+     stop("Class of `x` is unknown.")
+  }  
+  
+  ### annotate
+  # fitler out not-rs SNPs
+  snplist <- grep("^rs", snplist, value = TRUE)
+  
+  # break down `snplist` into batches of size 500, if it necessary
+  if(length(snplist) > query.size) {
+    out <- list()
+    
+    ind <- seq(1, length(snplist)) # [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+    num.queries <- ceiling(length(snplist) / query.size) 
+    jnd <- cut(ind, num.queries, labels = FALSE) #  [1] 1 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 3
+    for(i in seq(1, num.queries)) {
+      if(verbose) cat(" * query", i, "/", num.queries, "\n")
+  
+      out[[i]] <- try(NCBI_snp_query(snplist[ind[jnd == i]]))
+    }
+    knd <- (laply(out, class) == "data.frame")
+    out <- out[knd]
+
+    annot <- ldply(out, rbind)
+  } else {
+    annot <- NCBI_snp_query(snplist)
+  }
+  # > annot  
+  #      Query Chromosome    Marker Class Gene Alleles Major Minor   MAF        BP
+  #1 rs2731672          5 rs2731672   snp  F12     A/G     A     G 0.484 177415472
+  
+  return(annot)
+}
+
+annotateSNPs.NCBI2R <- function(x, mode = c("significant", "top", "all"), 
   alpha = 0.05,
   num.top = 10, 
   capture.output = FALSE,

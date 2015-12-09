@@ -100,6 +100,7 @@ solarAssoc <- function(formula, data, dir,
   snpformat, snpdata, snpcovdata, snpmap,
   snplist, snpind,
   genocov.files, snplists.files, snpmap.files,
+  mga.files,
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
   # SOLAR options/settings
@@ -121,17 +122,46 @@ solarAssoc <- function(formula, data, dir,
   # missing parameters
   #if(missing(snpformat)) snpformat <- "012"
   
+  missing.genocov.files <- missing(genocov.files)
+  missing.snplists.files <- missing(snplists.files)
+  missing.snpmap.files <- missing(snpmap.files)
+  missing.mga.files <- missing(mga.files)
+
+  # process `mga.files` 
+  if(!missing.mga.files & !missing.genocov.files) {
+    stop("Error in `solarAssoc`: input SNP data must be given by either `mga.files` or `genocov.files` argument.")
+  }
+  
+  if(!missing.mga.files) {
+    stopifnot(class(mga.files) == "list")
+    
+    if(length(mga.files) < 2) {
+      stop("Error in `solarAssoc`: `mga.files` must have 2 elements at least (genocov.files & snplists.files).")
+    }
+    # assign
+    missing.genocov.files <- FALSE
+    genocov.files <- mga.files[[1]]
+    
+    missing.snplists.files <- FALSE
+    snplists.files <- mga.files[[2]]
+    
+    if(length(mga.files) > 2) {
+      missing.snpmap.files <- FALSE
+      snpmap.files <- mga.files[[3]]
+    }
+  }
+
   # check for input data argument
-  if(missing(snpdata) & missing(snpcovdata) & missing(genocov.files)) {
-    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata`/`snpcovdata` or `genocov.files` arguments.")
+  if(missing(snpdata) & missing(snpcovdata) & missing.genocov.files) {
+    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata`/`snpcovdata` or `genocov.files` argument.")
   }
 
   if(!missing(snpdata) & !missing(snpcovdata)) {
-    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata` or `snpcovdata` or `genocov.files` arguments.")
+    stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata` or `snpcovdata` or `genocov.files` argument.")
   }
 
-  if(!missing(genocov.files)) {
-    if(missing(snplists.files)) {
+  if(!missing.genocov.files) {
+    if(missing.snplists.files) {
       stop("Error in `solarAssoc`: both genocov.files & snplists.files must be specified.")
     }
     if(length(genocov.files) > 1) {
@@ -146,7 +176,7 @@ solarAssoc <- function(formula, data, dir,
     }
   }
 
-  assoc.informat <- ifelse(!missing(genocov.files), "genocov.file",
+  assoc.informat <- ifelse(!missing.genocov.files, "genocov.file",
     ifelse(!missing(snpdata), "snpdata",
     ifelse(!missing(snpcovdata), "snpcovdata",
     stop("ifelse error in processing `assoc.informat`"))))
@@ -157,10 +187,10 @@ solarAssoc <- function(formula, data, dir,
   }
 
   # check map files
-  if(!missing(snpmap) & !missing(snpmap.files)) {
+  if(!missing(snpmap) & !missing.snpmap.files) {
     stop("Error in `solarAssoc`: input SNP maps must be given by either `snpmap` or `snpmap.files` arguments.")
   }
-  if(!missing(genocov.files) & !missing(snpmap.files)) {
+  if(!missing.genocov.files & !missing.snpmap.files) {
     if(length(genocov.files) > 1) {
       if(length(genocov.files) != length(snpmap.files)) {
         stop("Error in `solarAssoc`: if several `genocov.files` (", length(genocov.files), 
@@ -169,9 +199,9 @@ solarAssoc <- function(formula, data, dir,
     }
   }  
   
-  assoc.mapformat <- ifelse(!missing(snpmap.files), "snpmap.file",
+  assoc.mapformat <- ifelse(!missing.snpmap.files, "snpmap.file",
     ifelse(!missing(snpmap), "snpmap", "default"))
-  if(!missing(genocov.files) & !missing(snpmap.files)) {
+  if(!missing.genocov.files & !missing.snpmap.files) {
     if(length(genocov.files) > 1) {
       if(assoc.mapformat == "snpmap.file") {
         stopifnot(length(genocov.files) == length(snpmap.files))
@@ -243,7 +273,7 @@ solarAssoc <- function(formula, data, dir,
   
   ### step 3.1: add assoc.-specific slots to `out`
   tsolarAssoc$preassoc <- proc.time()
-  if(missing(genocov.files)) {
+  if(missing.genocov.files) {
     genocov.files.local <- TRUE
     genocov.files <- "snp.genocov"
   } else {
@@ -251,14 +281,14 @@ solarAssoc <- function(formula, data, dir,
     genocov.files <- normalizePath(genocov.files)
   }
   
-  if(missing(snplists.files)) {
+  if(missing.snplists.files) {
     snplists.files.local <- TRUE
     snplists.files <- "snp.geno-list"
   } else {
     snplists.files.local <- FALSE
     snplists.files <- normalizePath(snplists.files)
   }
-  if(missing(snpmap.files)) {
+  if(missing.snpmap.files) {
     snpmap.files <- character(0)
   } else {
     snpmap.files <- normalizePath(snpmap.files)

@@ -195,13 +195,49 @@ summary.solarAssoc <- function(object, alpha = 0.05, ...)
 #'
 #' @param x 
 #'    An object of class \code{solarAssoc} or a character vector of SNPs.
+#' @param mode
+#'    A character with the mode of SNPs selection.
+#'    Possible values are \code{"significant"}, \code{"top"} and \code{"all"}.
+#'    The default value is \code{"significant"}.
+#' @param alpha
+#'    A numeric value from 0 to 1, the significance level after Bonferroni multiple-test correction.
+#'    Corresponds to \code{mode} equal to \code{"significant"}.
+#' @param num.top
+#'    An integer value, the number of top SNPs to be annotated.
+#'    Corresponds to \code{mode} equal to \code{"top"}.
+#'    The default value is 10.
 #' @param ...
 #'    Additional arguments passed to \code{annotateSNPs}.
 #' @return
 #'    A data table with annotation results.
 #'
 #' @export
-annotate <- function(x, ...)
+annotate <- function(x, mode = c("significant", "top", "all"), 
+  alpha = 0.05,
+  num.top = 10, ...)
 {
-  annotateSNPs(x, ...)
+  annot <- annotateSNPs(x, mode = mode, alpha = alpha, num.top = num.top, ...)
+#      Query Chromosome    Marker Class Gene Alleles Major Minor   MAF        BP
+#1 rs2731672          5 rs2731672   snp  F12     A/G     A     G 0.484 177415472
+
+  ### Case 1: annotate the association results in `x`
+  ### merge
+  #annot <- data.table(annot)
+  #setnames(annot, "Query", "SNP")
+
+  #setkey(A$snpf, SNP)
+  #setkey(annot, SNP)
+
+  #A$snpf <- merge(A$snpf, annot, all.x = TRUE)
+
+  ### Case 2: annotate the selected SNPs
+  annot <- data.table(annot)
+  setnames(annot, "Query", "SNP")
+
+  setkey(A$snpf, SNP)
+  setkey(annot, SNP)
+
+  annot <- merge(x$snpf, annot, all.x = FALSE, all.y = TRUE) # names of `x$snpf` go first
+
+  return(annot)  
 }

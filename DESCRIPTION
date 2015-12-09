@@ -23,6 +23,7 @@ Description:
 License: GPL (>= 3)
 URL: https://github.com/ugcd/solarius
 LazyData: false
+OS_type: unix
 Imports:
     methods,
     plyr (>= 1.8.1),
@@ -38,6 +39,7 @@ Suggests:
     iterators,
     parallel,
     qqman,
+    rsnps,
     grid,
     gridExtra
 Collate:
