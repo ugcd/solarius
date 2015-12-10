@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>snpdata2solar. solarius 0.2.3</title>
+<title>snpdata2solar. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -55,7 +67,7 @@
 The default value is FALSE.</dd>
       <dt>out</dt>
       <dd>(optional) A list, that contains the names for snp.genocov and snp.geno-list files.
-   This argument is internally used in <code>solarAssoc</code> function.</dd>
+This argument is internally used in <code>solarAssoc</code> function.</dd>
       <dt>map</dt>
       <dd>A data frame with annotation (map) information for SNPs.</dd>
     </dl>
@@ -70,8 +82,8 @@ The default value is FALSE.</dd>
     <div class="Details">
       <h2>Details</h2>
 
-      <p><code>snpdata2solar</code> function (1) exports the data set of genotypes stored
-in <code>mat</code> itto SOLAR files, (2) runs solar command `snp load solar.gen`
+      <p><code>snpdata2solar</code> function (1) exports the data set of genotypes stored 
+in <code>mat</code> itto SOLAR files, (2) runs solar command `snp load solar.gen` 
 to check the data is loaded ok; (3) if two output files were not created,
 throws an error.</p>
   
@@ -81,7 +93,7 @@ The steps are the following: (1) add prefix `snp_` to SNP names;
 (2) (optional) compute stats on # genotyped individuals (columns `nGTypes`);
 (3) write data and metadata into files.</p>
   
-      <p><code>snpmap2solar</code> function (1) separates data by chromosome;
+      <p><code>snpmap2solar</code> function (1) separates data by chromosome; 
 (2) write the table into SOLAR map file;
 (3) check if the map file is OK by running SOLAR command <code>load map -basepair <filename></code></p>
   
@@ -90,7 +102,7 @@ The steps are the following: (1) add prefix `snp_` to SNP names;
     <div class="Note">
       <h2>Note</h2>
 
-      <p>In association analysis (<code>soalrAssoc</code> function)
+      <p>In association analysis (<code>soalrAssoc</code> function) 
 the step of loading SNP maps is skipped.
 It seems that SOLAR does not use this information when doing association.</p>
   
@@ -106,6 +118,7 @@ It seems that SOLAR does not use this information when doing association.</p>
 # snp_s1
 # snp_s2
 # ...
+
 </div></pre>
   </div>
   <div class="span4">

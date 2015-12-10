@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>phenodata. solarius 0.2.3</title>
+<title>phenodata. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -39,12 +51,6 @@
 
 <div class="row">
   <div class="span8">
-    <h2>Usage</h2>
-    <pre><div>phenodata</div>
-<div>kin</div>
-<div>genodata</div>
-<div>genocovdata</div>
-<div>snpdata</div></pre>
         
     <div class="Format">
       <h2>Format</h2>
@@ -81,19 +87,21 @@
   
     </div>
 
-    <div class="dat50 data set adapted from FFBSKAT R package">
-      <h2>dat50 data set adapted from FFBSKAT R package</h2>
+    <div class="Source">
+      <h2>Source</h2>
 
+      <p><a href = 'http://mga.bionet.nsc.ru/soft/FFBSKAT/'>http://mga.bionet.nsc.ru/soft/FFBSKAT/</a></p>
+  
     </div>
 
     <div class="Description">
       <h2>Description</h2>
 
-      <p>A mixture of unrelated and related individuals
-were originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
+      <p>A mixture of unrelated and related individuals 
+was originally simulated in FFBSKAT R package to test methods of the variant-collapsing approach.
 50 synthetic SNPs were generated for the association study.
 A custom kinship matrix is used to express the relationships among individuals.
-This data set is used here to test the ability of SOLAR
+This data set is used here to test the ability of SOLAR 
 to work with a custom kinship matrix in both polygenic and association analyses.</p>
   
     </div>
@@ -119,10 +127,14 @@ str(phenodata)
  $ age  : int  80 77 56 44 75 79 75 82 77 76 ...
  $ trait: num  -1.763 -1.423 -0.805 0.268 -1.334 ...
 </div>
-<div class='input'>plotKinship2(2*kin)
+<div class='input'>
+
+plotKinship2(2*kin)
 </div>
 <p><img src='dat50-4.png' alt='' width='540' height='400' /></p>
-<div class='input'>str(genodata)
+<div class='input'>
+
+str(genodata)
 </div>
 <div class='output'> chr [1:66, 1:50] &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; ...
  - attr(*, &quot;dimnames&quot;)=List of 2
@@ -139,7 +151,9 @@ genodata[1:5, 1:5]
 4 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot;
 5 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
 </div>
-<div class='input'>str(genocovdata)
+<div class='input'>
+
+str(genocovdata)
 </div>
 <div class='output'> int [1:66, 1:50] 0 0 0 1 1 0 0 0 0 0 ...
  - attr(*, &quot;dimnames&quot;)=List of 2
@@ -156,7 +170,7 @@ genocovdata[1:5, 1:5]
 4  1  0  0  1  1
 5  1  0  0  0  0
 </div>
-<div class='input'>
+<div class='input'> 
 # compare with the genotypes
 genodata[1:5, 1:5]
 </div>
@@ -167,7 +181,9 @@ genodata[1:5, 1:5]
 4 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/2&quot; &quot;1/2&quot;
 5 &quot;1/2&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot; &quot;1/1&quot;
 </div>
-<div class='input'>str(snpdata)
+<div class='input'>
+
+str(snpdata)
 </div>
 <div class='output'>&#39;data.frame&#39;:	50 obs. of  4 variables:
  $ name    : chr  &quot;s1&quot; &quot;s2&quot; &quot;s3&quot; &quot;s4&quot; ...
@@ -185,14 +201,15 @@ head(snpdata)
 11   s4     1  2108138 gene1
 15   s5     1  2109262 gene1
 20   s6     1  2110294 gene1
-</div></pre>
+</div>
+<div class='input'></div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
       <li>genocovdata</li><li>genodata</li><li>kin</li><li>phenodata</li><li>snpdata</li>
     </ul>
     <ul>
-      <li>datasets</li>
+      
     </ul> -->
       
         

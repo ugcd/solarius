@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>solarAssoc. solarius 0.2.3</title>
+<title>solarAssoc. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>solarAssoc(formula, data, dir, kinship, traits, covlist&nbsp;=&nbsp;"1", snpformat, snpdata, snpcovdata, snpmap, snplist, snpind, genocov.files, snplists.files, snpmap.files, assoc.outformat&nbsp;=&nbsp;c("df", "outfile", "outfile.gz"), assoc.outdir, cores&nbsp;=&nbsp;getOption("cores"), ..., verbose&nbsp;=&nbsp;0)</div></pre>
+    <pre><div>solarAssoc(formula, data, dir, kinship, traits, covlist&nbsp;=&nbsp;"1", snpformat, snpdata, snpcovdata, snpmap, snplist, snpind, genocov.files, snplists.files, snpmap.files, mga.files, plink.ped, plink.map, plink.raw, assoc.outformat&nbsp;=&nbsp;c("df", "outfile", "outfile.gz"), assoc.outdir, assoc.options&nbsp;=&nbsp;"", cores&nbsp;=&nbsp;getOption("cores"), batch.size&nbsp;=&nbsp;1000, ..., verbose&nbsp;=&nbsp;0)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -48,18 +60,18 @@
       <dd>an object of class <code>formula</code> or one that can be coerced to that class.
 It is a symbolic description of fixed effects (covariates) to be fitted.</dd>
       <dt>data</dt>
-      <dd>A data frame containing the variables in the model,
+      <dd>A data frame containing the variables in the model, 
 including ID fields needed to construct random effects: genetic and house-hold (both optional).
 Other classes such as list, environment or object coercible by <code>as.data.frame</code> to a data frame
 are not supported.</dd>
       <dt>dir</dt>
       <dd>an optional character string, the name of directory,
 where SOLAR performs the analysis.
-In this case, the analysis within related input/output files is
+In this case, the analysis within related input/output files is 
 conducted in the given folder instead of a temporary one
 (the default work flow).</dd>
       <dt>kinship</dt>
-      <dd>A matrix of the kinship coefficients (custom kinship matrix).
+      <dd>A matrix of the kinship coefficients (custom kinship matrix). 
 The IDs are required to be in row and column names.</dd>
       <dt>traits</dt>
       <dd>a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.</dd>
@@ -72,11 +84,11 @@ The default value is <code>"1"</code>.</dd>
 Currently, this argument is not used.</dd>
       <dt>snpdata</dt>
       <dd>A matrix of SNP data.
-SNPs are given in the columns, and individuals correspond to the rows.
+SNPs are given in the columns, and individuals correspond to the rows. 
 The IDs of individuals are required to be in row and column names.</dd>
       <dt>snpcovdata</dt>
       <dd>A matrix of SNP data, which are converted to covariates (numeric format).
-SNPs are given in the columns, and individuals correspond to the rows.
+SNPs are given in the columns, and individuals correspond to the rows. 
 The IDs of individuals are required to be in row and column names.</dd>
       <dt>snpmap</dt>
       <dd>A data.frame of annotation for SNPs.</dd>
@@ -92,6 +104,20 @@ This argument may be used when a subset of SNPs is of the interest.</dd>
       <dd>A vector of characters, the file paths to <code>snplists</code> SOLAR files.</dd>
       <dt>snpmap.files</dt>
       <dd>A vector of characters (optional), the file paths to <code>snpmap</code> SOLAR files.</dd>
+      <dt>mga.files</dt>
+      <dd>A list with 2-3 elements, where each element is a vector of characters.
+This argument is an alternative to the other three
+<code>genocov.files</code>, <code>snplists.files</code> and <code>snpmap.files</code>.
+The element 3 of the list is optional.</dd>
+      <dt>plink.ped</dt>
+      <dd>A character, the file path to genotype data in plink .ped format.
+Two columns are used per genotype.</dd>
+      <dt>plink.map</dt>
+      <dd>A character, the file path to genotype annotation data in plink .map format.
+param plink.raw
+   A character, the file path to genotype data in allele-dosage plink format 
+   (an example plink command: <code>plink --noweb --file dat50  --recodeA</code>).
+   One column is used per genotype.</dd>
       <dt>assoc.outformat</dt>
       <dd>A character, the output format.
 Possible values are <code>"df"</code>, <code>"outfile"</code> and <code>"outfile.gz"</code>.
@@ -109,11 +135,11 @@ If the default value is <code>NULL</code> then the number of cores is <code>1</c
 For example, one of such arguments may be <code>polygenic.settings = "option EnableDiscrete 0"</code>.
 Arguments of <code>solarMultipoint</code>,
 which are also passed to <code><a href='solarPolygenic.html'>solarPolygenic</a></code>,
-include <code>formula</code>, <code>data</code>, <code>dir</code>,
+include <code>formula</code>, <code>data</code>, <code>dir</code>, 
 <code>kinship</code>, <code>traits</code> and <code>covlist</code>.</dd>
       <dt>verbose</dt>
       <dd>An non-negative integer of the verbose level.
-   The default value is <code>0</code>.</dd>
+The default value is <code>0</code>.</dd>
     </dl>
     
     <div class="Description">
@@ -121,16 +147,30 @@ include <code>formula</code>, <code>data</code>, <code>dir</code>,
 
       <p>The association analysis is conducted in the following sequence:
 parse input files of SNP markers,
-export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function,
+export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function, 
 run the polygenic analysis in a directory,
 run the association analysis on the top of the polygenic analysis,
-parse output files and
+parse output files and 
 store results in an object of <code>solarAssoc</code> class (see <code><a href='solarAssocClass.html'>solarAssocClass</a></code>).</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p><code>solarAssoc</code> function accepts input genetic data in three formats:
+ SOLAR (<code>genocov.files</code>, <code>snplists.files</code>, <code>snpmap.files</code> and <code>param mga.files</code> arguments),
+ R data frame or matrix (<code>snpdata</code>, <code>snpcovdata</code> and <code>snpmap</code> arguments),
+ and plink (<code>plink.ped</code>, <code>plink.map</code> and <code>plink.raw</code> arguments).</p>
+  
+      <p>For large-size problems, the user is recommended to prepare the genetic data in SOLAR format
+ and to split them into batches of size, for example, 1,000 markers.
+ The use of the other two R and plink formats is not optimized for large-scale scenarios.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>### load data
+    <pre class="examples"><div class='input'>### load data 
 data(dat50)
 dim(phenodata)
 </div>
@@ -145,12 +185,12 @@ dim(phenodata)
 <div class='output'>[1] 66 50
 </div>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # ### basic (univariate) association model with a custom kinship
 # mod &lt;- solarAssoc(trait~age+sex, phenodata,
 #   kinship = kin, snpdata = genodata)
 # mod$snpf # table of results for 50 SNPs
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">

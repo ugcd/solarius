@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>annotateSNPs. solarius 0.2.3</title>
+<title>annotateSNPs. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -40,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>annotateSNPs(x, mode&nbsp;=&nbsp;c("significant", "top", "all"), alpha&nbsp;=&nbsp;0.05, num.top&nbsp;=&nbsp;10, capture.output&nbsp;=&nbsp;FALSE, ...)</div></pre>
+    <pre><div>annotateSNPs(x, mode&nbsp;=&nbsp;c("significant", "top", "all"), alpha&nbsp;=&nbsp;0.05, num.top&nbsp;=&nbsp;10, query.size&nbsp;=&nbsp;500, verbose&nbsp;=&nbsp;0, ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -57,9 +69,6 @@ Corresponds to <code>mode</code> equal to <code>"significant"</code>.</dd>
       <dd>An integer value, the number of top SNPs to be annotated.
 Corresponds to <code>mode</code> equal to <code>"top"</code>.
 The default value is 10.</dd>
-      <dt>capture.output</dt>
-      <dd>Logical, indicates whether to capture the output from <code>AnnotateSNPList</code> function.
-The default value is FALSE.</dd>
       <dt>...</dt>
       <dd>Additional arguments.</dd>
     </dl>

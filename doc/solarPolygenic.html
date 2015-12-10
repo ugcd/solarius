@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>solarPolygenic. solarius 0.2.3</title>
+<title>solarPolygenic. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -46,22 +58,22 @@
     <dl>
       <dt>formula</dt>
       <dd>an object of class <code>formula</code> or one that can be coerced to that class.
-It is a symbolic description of fixed effects (covariates) to be fitted.
-If the model does not have any covariates, then the formula looks like
+It is a symbolic description of fixed effects (covariates) to be fitted. 
+If the model does not have any covariates, then the formula looks like 
 <code>trait ~ 1</code>, where <code>1</code> means the trait mean parameter.</dd>
       <dt>data</dt>
-      <dd>A data frame containing the variables in the model,
+      <dd>A data frame containing the variables in the model, 
 including ID fields needed to construct random effects: genetic and house-hold (both optional).
 Other classes such as list, environment or object coercible by <code>as.data.frame</code> to a data frame
 are not supported.</dd>
       <dt>dir</dt>
       <dd>an optional character string, the name of directory,
 where SOLAR performs the analysis.
-In this case, the analysis within related input/output files is
+In this case, the analysis within related input/output files is 
 conducted in the given folder instead of a temporary one
 (the default work flow).</dd>
       <dt>kinship</dt>
-      <dd>A matrix of the kinship coefficients (custom kinship matrix).
+      <dd>A matrix of the kinship coefficients (custom kinship matrix). 
 The IDs are required to be in row and column names.
 Currently, it does not work for unrelated individuals (SOLAR issue).</dd>
       <dt>traits</dt>
@@ -88,11 +100,11 @@ The default value is <code>FALSE</code>.</dd>
 The default value is <code>as.logical(NA)</code>, that means the following behavior in SOLAR.
 If <code>data</code> has <code>hhid</code> or similar column,
 then the house-hold effect is added to the model and tested by SOLAR.
-Otherwise, there is no any variable indicating the house-hold effect
+Otherwise, there is no any variable indicating the house-hold effect 
 neither in <code>data</code> nor in the model.
-If <code>household</code> is <code>TRUE</code>, then <code>polygenic</code> SOLAR command is called
+If <code>household</code> is <code>TRUE</code>, then <code>polygenic</code> SOLAR command is called 
 with <code>-keephouse</code> option.
-If <code>household</code> is <code>FALSE</code>, then <code>house</code> SOLAR command
+If <code>household</code> is <code>FALSE</code>, then <code>house</code> SOLAR command 
 is not called previously to calling <code>polygenic</code> SOLAR command
 (modeling of the house-hold effect is omitted).</dd>
       <dt>transforms</dt>
@@ -124,8 +136,8 @@ The default value is <code>""</code>.</dd>
 The default value is <code>0</code>.</dd>
       <dt>...</dt>
       <dd>additional parameters to be passed to other functions called inside of <code>solarPolygenic</code>.
-   For example, it might be a parameter <code>log.base</code> for <code><a href='transformTrait.html'>transformTrait</a></code> function
-   in the case <code>transform</code> is equal to <code>"log"</code>.</dd>
+For example, it might be a parameter <code>log.base</code> for <code><a href='transformTrait.html'>transformTrait</a></code> function
+in the case <code>transform</code> is equal to <code>"log"</code>.</dd>
     </dl>
     
     <div class="Value">
@@ -141,10 +153,10 @@ An object of <code>solarPolygenic</code> class. See <code><a href='solarPolygeni
       <h2>Description</h2>
 
       <p>The polygenic analysis is conducted in the following sequence:
-export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function,
+export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function, 
 form a SOLAR call with a list of settings and options,
-execute SOLAR by <code><a href='solar.html'>solar</a></code> function,
-parse output files and
+execute SOLAR by <code><a href='solar.html'>solar</a></code> function, 
+parse output files and 
 store results in an object of <code>solarPolygenic</code> class (see <code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>).</p>
   
     </div>
@@ -158,12 +170,12 @@ matchIdNames(names(dat30))
    &quot;ID&quot; &quot;FAMID&quot;    &quot;MO&quot;    &quot;FA&quot;   &quot;SEX&quot; 
 </div>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # ### basic (univariate) polygenic model
-# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30)
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30) 
 # 
 # ### (univariate) polygenic model with parameters
-# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE) 
 # mod$cf # look at test statistics for covariates
 # 
 # ### basic (bivariate) polygenic model
@@ -181,14 +193,15 @@ matchIdNames(names(dat30))
 # mod &lt;- mod &lt;- solarPolygenic(trait1 ~ 1, dat30, transforms = &quot;log&quot;)
 # 
 # ### transforms for (bivariate) polygenic model
-# mod &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30,
+# mod &lt;- solarPolygenic(trait1 + trait2 ~ 1, dat30, 
 #    transforms = c(trait1 = &quot;log&quot;, trait2 = &quot;inormal&quot;))
 # 
 # ### SOLAR format of introducing covariates
 # mod &lt;- solarPolygenic(traits = &quot;trait1&quot;, covlist = &quot;age^1,2,3#sex&quot;, data =  dat30)
 # mod$cf # 8 covariate terms will be printed
 # 
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
+
 </div></pre>
   </div>
   <div class="span4">

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. solarius 0.2.3</title>
+<title>Index. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -111,6 +123,12 @@
         <code><a href="solarAssocClass.html">solarAssocClass</a></code>(plot.solarAssoc, print.solarAssoc, summary.solarAssoc)<br />S3 class solarAssoc.</li>
             
       <li>
+        <code><a href="solarBaeysAvgPolygenic.html">solarBaeysAvgPolygenic</a></code><br />solarBaeysAvgPolygenic</li>
+            
+      <li>
+        <code><a href="solarBaeysAvgPolygenicClass.html">solarBaeysAvgPolygenicClass</a></code>(print.solarBaeysAvgPolygenic, summary.solarBaeysAvgPolygenic)<br />S3 class solarBaeysAvgPolygenic</li>
+            
+      <li>
         <code><a href="solariusPackage.html">solariusPackage</a></code>(solariusPackage-package)<br />solarius: an R package wrapper to SOLAR.</li>
             
       <li>
@@ -120,7 +138,16 @@
         <code><a href="solarMultipoint.html">solarMultipoint</a></code><br />Run multipoint linkage analysis.</li>
             
       <li>
-        <code><a href="solarMultipointClass.html">solarMultipointClass</a></code>(plot.solarMultipoint, print.solarMultipoint, summary.solarMultipoint)<br />S3 class solarMultipoint.</li>
+        <code><a href="solarMultipointClass.html">solarMultipointClass</a></code>(plot.solarMultipoint, print.solarMultipoint, summary.solarMultipoint, tabplot.solarMultipoint)<br />S3 class solarMultipoint.</li>
+            
+      <li>
+        <code><a href="solarMultivarClass.html,solarMultivar.html">solarMultivar</a></code>(print.solarMultivar)<br /></li>
+            
+      <li>
+        <code><a href="solarMultivarClass.html,solarMultivar.html">solarMultivar</a></code>(print.solarMultivar)<br /></li>
+            
+      <li>
+        <code><a href="solarPolyAssoc.html">solarPolyAssoc</a></code>(print.solarPolyAssoc)<br />Run association analysis via polygenic model.</li>
             
       <li>
         <code><a href="solarPolygenic.html">solarPolygenic</a></code><br />Run polygenic analysis.</li>
@@ -144,10 +171,10 @@
         
     <h2>Dependencies</h2>
     <ul>
-      <li><strong>Depends</strong>: </li>
+      
       <li><strong>Imports</strong>: methods, plyr, ggplot2, data.table</li>
-      <li><strong>Suggests</strong>: kinship2, scales, Matrix, gdata, doParallel, iterators, parallel, qqman</li>
-      <li><strong>Extends</strong>: </li>
+      <li><strong>Suggests</strong>: tools, kinship2, scales, Matrix, gdata, doParallel, iterators, parallel, qqman, rsnps, grid, gridExtra</li>
+      
     </ul>
     <h2>Authors</h2>
     <ul>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>solarMultipoint. solarius 0.2.3</title>
+<title>solarMultipoint. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -48,18 +60,18 @@
       <dd>an object of class <code>formula</code> or one that can be coerced to that class.
 It is a symbolic description of fixed effects (covariates) to be fitted.</dd>
       <dt>data</dt>
-      <dd>A data frame containing the variables in the model,
+      <dd>A data frame containing the variables in the model, 
 including ID fields needed to construct random effects: genetic and house-hold (both optional).
 Other classes such as list, environment or object coercible by <code>as.data.frame</code> to a data frame
 are not supported.</dd>
       <dt>dir</dt>
       <dd>an optional character string, the name of directory,
 where SOLAR performs the analysis.
-In this case, the analysis within related input/output files is
+In this case, the analysis within related input/output files is 
 conducted in the given folder instead of a temporary one
 (the default work flow).</dd>
       <dt>kinship</dt>
-      <dd>A matrix of the kinship coefficients (custom kinship matrix).
+      <dd>A matrix of the kinship coefficients (custom kinship matrix). 
 The IDs are required to be in row and column names.</dd>
       <dt>traits</dt>
       <dd>a vector of characters to specify trait(s) in the model. It is alternative to the formula interface.</dd>
@@ -106,11 +118,11 @@ If the default value is <code>NULL</code> then the number of cores is <code>1</c
 For example, one of such arguments may be <code>polygenic.settings = "option EnableDiscrete 0"</code>.
 Arguments of <code>solarMultipoint</code>,
 which are also passed to <code><a href='solarPolygenic.html'>solarPolygenic</a></code>,
-include <code>formula</code>, <code>data</code>, <code>dir</code>,
+include <code>formula</code>, <code>data</code>, <code>dir</code>, 
 <code>kinship</code>, <code>traits</code> and <code>covlist</code>.</dd>
       <dt>verbose</dt>
       <dd>An non-negative integer of the verbose level.
-   The default value is <code>0</code>.</dd>
+The default value is <code>0</code>.</dd>
     </dl>
     
     <div class="Description">
@@ -118,21 +130,31 @@ include <code>formula</code>, <code>data</code>, <code>dir</code>,
 
       <p>The linkage analysis is conducted in the following sequence:
 parse input files of multipoint IBD matrices,
-export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function,
+export data to a directory by <code><a href='df2solar.html'>df2solar</a></code> function, 
 run the polygenic analysis in a directory,
 run the linkage analysis on the top of the polygenic analysis,
-parse output files and
+parse output files and 
 store results in an object of <code>solarMultipoint</code> class (see <code><a href='solarMultipointClass.html'>solarMultipointClass</a></code>).</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>The user is responsible for computation of the MIBD matrices 
+ required by <code>solarMultipoint</code> function via <code>mibddir</code> argument.
+ Estimation of the IBD matrices is out of the scope of <code>solarius</code> package.
+ More information is available in <a href = 'http://helix.nih.gov/Documentation/solar-6.6.2-doc/05.chapter.html'>http://helix.nih.gov/Documentation/solar-6.6.2-doc/05.chapter.html</a>.</p>
   
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>### load phenotype data
+    <pre class="examples"><div class='input'>### load phenotype data 
 data(dat30)
 
 ### load marker data
 mibddir &lt;- system.file(&#39;extdata&#39;, &#39;solarOutput&#39;,
-  &#39;solarMibdsCsv&#39;, package = &#39;solarius&#39;)
+  &#39;solarMibdsCsv&#39;, package = &#39;solarius&#39;) 
 list.files(mibddir)
 </div>
 <div class='output'> [1] &quot;mibd.2.0.gz&quot; &quot;mibd.2.1.gz&quot; &quot;mibd.2.2.gz&quot; &quot;mibd.2.3.gz&quot; &quot;mibd.2.4.gz&quot;
@@ -140,7 +162,7 @@ list.files(mibddir)
 [11] &quot;mibd.5.4.gz&quot; &quot;mibd.5.5.gz&quot;
 </div>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # ### basic (univariate) linkage model
 # mod &lt;- solarMultipoint(trait1 ~ 1, dat30,
 #   mibddir = mibddir, chr = 5)
@@ -158,7 +180,7 @@ list.files(mibddir)
 # mod$lodf # table of results (LOD scores, 1 pass) (the highest 2.74)
 # mod$lodf2 # table of results (LOD scores, 2 pass) (all nearly zero LOD scores)
 # 
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
 </div></pre>
   </div>
   <div class="span4">

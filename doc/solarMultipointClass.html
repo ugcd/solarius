@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>solarMultipointClass. solarius 0.2.3</title>
+<title>solarMultipointClass. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -41,8 +53,9 @@
   <div class="span8">
     <h2>Usage</h2>
     <pre><div>"print"(x, ...)</div>
-<div>"plot"(x, pass&nbsp;=&nbsp;1, ...)</div>
-<div>"summary"(object, ...)</div></pre>
+<div>"plot"(x, pass&nbsp;=&nbsp;1, main, xlab, faceting&nbsp;=&nbsp;TRUE, ...)</div>
+<div>"summary"(object, ...)</div>
+<div>"tabplot"(object, LOD.thr&nbsp;=&nbsp;1.5, plot.null&nbsp;=&nbsp;TRUE, ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -51,7 +64,7 @@
       <dt>...</dt>
       <dd>Additional arguments.</dd>
       <dt>pass</dt>
-      <dd>Integer argument for <code>plot</code> method,
+      <dd>Integer argument for <code>plot</code> method, 
 indicating whether which pass in multi-passs linkage scan to be plotted.
 The default value is 1.</dd>
       <dt>object</dt>
@@ -67,7 +80,7 @@ The default value is 1.</dd>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>plot.solarMultipoint</li><li>print.solarMultipoint</li><li>solarMultipointClass</li><li>summary.solarMultipoint</li>
+      <li>plot.solarMultipoint</li><li>print.solarMultipoint</li><li>solarMultipointClass</li><li>summary.solarMultipoint</li><li>tabplot.solarMultipoint</li>
     </ul>
     <ul>
       

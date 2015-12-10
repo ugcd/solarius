@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>dat30. solarius 0.2.3</title>
+<title>dat30. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -39,10 +51,6 @@
 
 <div class="row">
   <div class="span8">
-    <h2>Usage</h2>
-    <pre><div>dat30</div>
-<div>genocovdat30</div>
-<div>mapdat30</div></pre>
         
     <div class="Format">
       <h2>Format</h2>
@@ -88,9 +96,11 @@ Row names are IDs of individuals, column names are names of SNPs.</p>
   
     </div>
 
-    <div class="dat30 data set adapted from multic R package">
-      <h2>dat30 data set adapted from multic R package</h2>
+    <div class="Source">
+      <h2>Source</h2>
 
+      <p><a href = 'http://cran.r-project.org/web/packages/multic/'>http://cran.r-project.org/web/packages/multic/</a></p>
+  
     </div>
 
     <div class="Description">
@@ -99,7 +109,7 @@ Row names are IDs of individuals, column names are names of SNPs.</p>
       <p>29 first families were selected from the complete data set of 12000 individuals.
 For a resulted subset of 174 individuals,
 a hundred of synthetic SNPs were randomly generated.
-Annotation information also was generated,
+Annotation information also was generated, 
 mainly in order to plot the association results with Manhattan plot.</p>
   
     </div>
@@ -131,17 +141,16 @@ str(dat30)
 <div class='input'>
 plotPed(dat30, 2) # plot the pedigree tree for family #2
 </div>
-<strong class='message'>Loading required package: kinship2</strong>
-<strong class='message'>Loading required package: Matrix</strong>
-<strong class='message'>Loading required package: quadprog</strong>
-<p><img src='dat30-7.png' alt='' width='540' height='400' /></p>
+<p><img src='dat30-4.png' alt='' width='540' height='400' /></p>
 <div class='input'>
-## &lt;strong&gt;Not run&lt;/strong&gt;: 
+## Not run: 
 # kin2 &lt;- solarKinship2(dat30)
-# plotKinship2(kin2)
+# plotKinship2(kin2) 
 # plotKinship2(kin2[1:30, 1:30])
 # 
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
+
+
 str(genocovdat30)
 </div>
 <div class='output'> num [1:174, 1:100] 1.978 0.795 0.231 0.139 0.487 ...
@@ -159,7 +168,9 @@ genocovdat30[1:5, 1:5]
 14 0.1394974 0.99711827 0.7149236 0.6051847 0.4434309
 15 0.4874988 1.44298075 1.5332879 1.7050956 1.3768445
 </div>
-<div class='input'>str(mapdat30)
+<div class='input'>
+
+str(mapdat30)
 </div>
 <div class='output'>&#39;data.frame&#39;:	100 obs. of  4 variables:
  $ SNP : Factor w/ 100 levels &quot;snp_1&quot;,&quot;snp_10&quot;,..: 1 12 23 34 45 47 48 49 50 2 ...
@@ -177,14 +188,15 @@ head(mapdat30)
 4 snp_4   1 2108138 gene1
 5 snp_5   1 2109262 gene1
 6 snp_6   1 2110294 gene1
-</div></pre>
+</div>
+<div class='input'></div></pre>
   </div>
   <div class="span4">
     <!-- <ul>
       <li>dat30</li><li>genocovdat30</li><li>mapdat30</li>
     </ul>
     <ul>
-      <li>datasets</li>
+      
     </ul> -->
       
         

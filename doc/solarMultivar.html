@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>annotate. solarius 0.2.4</title>
+<title>solarMultivar. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,61 +47,28 @@
         
       </header>
       
-      <h1>Annotate SNPs in association study</h1>
+      <h1>Run multivariate analysis and report results.</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>annotate(x, mode&nbsp;=&nbsp;c("significant", "top", "all"), alpha&nbsp;=&nbsp;0.05, num.top&nbsp;=&nbsp;10, ...)</div></pre>
-    
-    <h2>Arguments</h2>
-    <dl>
-      <dt>x</dt>
-      <dd>An object of class <code>solarAssoc</code> or a character vector of SNPs.</dd>
-      <dt>mode</dt>
-      <dd>A character with the mode of SNPs selection.
-Possible values are <code>"significant"</code>, <code>"top"</code> and <code>"all"</code>.
-The default value is <code>"significant"</code>.</dd>
-      <dt>alpha</dt>
-      <dd>A numeric value from 0 to 1, the significance level after Bonferroni multiple-test correction.
-Corresponds to <code>mode</code> equal to <code>"significant"</code>.</dd>
-      <dt>num.top</dt>
-      <dd>An integer value, the number of top SNPs to be annotated.
-Corresponds to <code>mode</code> equal to <code>"top"</code>.
-The default value is 10.</dd>
-      <dt>...</dt>
-      <dd>Additional arguments passed to <code>annotateSNPs</code>.</dd>
-    </dl>
-    
-    <div class="Value">
-      <h2>Value</h2>
-
-      <p><dl>
-A data table with annotation results.
-</dl></p>
-  
-    </div>
-
+    <pre><div>solarMultivar(formula, data, traits, covlist&nbsp;=&nbsp;"1", na.rm&nbsp;=&nbsp;FALSE, ..., verbose&nbsp;=&nbsp;0)</div></pre>
+        
     <div class="Description">
       <h2>Description</h2>
 
-      <p>The function calls <code><a href='annotateSNPs.html'>annotateSNPs</a></code> function,
-which does the job.</p>
+      <p>Run multivariate analysis and report results.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>annotate</li>
+      <li>solarMultivar</li>
     </ul>
     <ul>
       
     </ul> -->
       
-    <h2>See also</h2>
-    
-<code><a href='annotateSNPs.html'>annotateSNPs</a></code>
-
         
   </div>
 </div>

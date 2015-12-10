@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plotKinship2. solarius 0.2.3</title>
+<title>plotKinship2. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -50,8 +62,8 @@
       <dd>A square matrix of double kinship coefficients.</dd>
       <dt>y</dt>
       <dd>A character, the type of the plot.
-   Possible values are <code>"image"</code> and <code>"hist"</code>.
-   The default value is <code>"image"</code>.</dd>
+Possible values are <code>"image"</code> and <code>"hist"</code>. 
+The default value is <code>"image"</code>.</dd>
     </dl>
     
     <div class="Description">
@@ -82,7 +94,9 @@ plotKinship2(kin2) # equivalent to `imageKinship2(kin2)`
 <div class='input'>
 plotKinship2(kin2, &quot;hist&quot;) # equivalent to `histKinship2(kin2)`
 </div>
-<p><img src='plotKinship2-4.png' alt='' width='540' height='400' /></p></pre>
+<strong class='message'>stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.</strong>
+<p><img src='plotKinship2-5.png' alt='' width='540' height='400' /></p>
+<div class='input'></div></pre>
   </div>
   <div class="span4">
     <!-- <ul>

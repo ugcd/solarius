@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>plotRes. solarius 0.2.3</title>
+<title>plotRes. solarius 0.2.4</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -14,13 +14,25 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
   </head>
 
   <body>
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.3</a>
+      <a class="brand" href="#">solarius 0.2.4</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -48,9 +60,9 @@
       <dt>x</dt>
       <dd>An object of class <code>solarPolygenic</code>.</dd>
       <dt>labels</dt>
-      <dd>A logical value for <code>plotRes</code> function, indicating if the labels of IDs
+      <dd>A logical value for <code>plotRes</code> function, indicating if the labels of IDs 
 (which residuals are outside the 3 * sd interval) are to be plotted.
-A logical value for <code>plotResQQ</code> function,
+A logical value for <code>plotResQQ</code> function, 
 indicating if the samples (their IDs) outside the confidence intervals are to be plotted.</dd>
       <dt>text.size</dt>
       <dd>An integer, the text size of labels.</dd>
@@ -84,15 +96,17 @@ i.e. house-hold, genetic and residuals itself.</p>
     </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+    <pre class="examples"><div class='input'>
+## Not run: 
 # ### basic (univariate) polygenic model
-# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30)
+# mod &lt;- solarPolygenic(trait1 ~ age + sex, dat30) 
 # 
 # plotRes(mod)
 # 
 # plotResQQ(mod)
 # 
-# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+# ## End(Not run)
+
 </div></pre>
   </div>
   <div class="span4">
