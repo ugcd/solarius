@@ -159,3 +159,65 @@ check_assoc_files_exist <- function(genocov.files, snplists.files, snpmap.files)
   return(invisible())  
 }
   
+#----------------------------------
+# Plink files
+#----------------------------------
+
+read_plink_raw <- function(plink.raw)
+{
+  tab <- fread(plink.raw, select = 2, stringsAsFactors = FALSE, colClasses = "character")
+  ids <- tab$IID
+
+  snpcovdata <- fread(plink.raw, drop = 1:6, header = TRUE, colClasses = "numeric", na.strings = "NA")
+  snpcovdata <- as.matrix(snpcovdata)
+    
+  rownames(snpcovdata) <- ids
+  return(snpcovdata)
+}
+
+read_plink_map <- function(plink.map)
+{
+  snpmap <- fread(plink.map, header = FALSE)
+  stopifnot(ncol(snpmap) == 4)
+  
+  setnames(snpmap, 1:4, c("chr", "snp", "cM", "bp")) 
+
+  return(snpmap)
+}
+
+read_plink_ped <- function(plink.ped, plink.map)
+{
+  tab <- fread(plink.ped, select = 2, stringsAsFactors = FALSE, colClasses = "character")
+  ids <- tab$V2
+
+  map <- fread(plink.map, select = 2, header = FALSE, colClasses = "character")
+  snps <- map$V2
+
+  ped <- fread(plink.ped, drop = 1:6, header = FALSE, colClasses = "character", na.strings = "0", data.table = FALSE)
+  stopifnot(nrow(ped) == length(ids))
+  stopifnot(ncol(ped) == 2 * length(snps))
+  
+  # transform alleles to genotype in a loop for all individuals
+  snpdata <- matrix(as.character(NA), nrow = length(ids), ncol = length(snps))
+  for(i in 1:length(ids)) {
+    alleleA <- ped[i, seq(1, by = 2, length.out = length(snps))]
+    alleleB <- ped[i, seq(2, by = 2, length.out = length(snps))]
+    
+    ind.na <- which(is.na(alleleA) | is.na(alleleB))
+            
+    genotype <- paste(alleleA, alleleB, sep = "/")
+    if(length(ind.na)) {
+      genotype[ind.na] <- as.character(NA)
+    }
+    
+    snpdata[i, ] <- genotype
+  }
+  
+  # add colnames/rownames
+  rownames(snpdata) <- ids
+  colnames(snpdata) <- snps
+  
+  return(snpdata)
+}
+
+  

@@ -31,7 +31,6 @@ pdat <- data.frame(FAMID = 0, ID = phenodata$id, PA = 0, MO = 0,
   SEX = phenodata$sex, # Sex (1=male; 2=female; other=unknown)
   aff = 0) # Affection (0=unknown; 1=unaffected; 2=affected))
 
-
 gdat <- matrix(character(), nrow = nrow(genodata), ncol = 2 * ncol(genodata) + 1)
 for(i in 1:ncol(genodata)) {
   ind <- seq(2 * i, by = 1, length = 2) - 1
@@ -54,6 +53,8 @@ dat <- merge(pdat, gdat, by = "ID")
 # ...
 #  [105] "s50_A1" "s50_A2"
 
+dat <- dat[, c(2, 1, seq(3, ncol(dat)))]
+
 write.table(dat, file.ped,
   row.names = FALSE, col.names = FALSE,
   sep = " ", quote = FALSE, na = "")
@@ -74,6 +75,12 @@ ret2 <- system("plink --noweb --file dat50 --recode --transpose", intern = TRUE)
 # recode
 ret3 <- system("plink --noweb --file dat50  --recodeA", intern = TRUE)  
 
+tab <- fread("plink.raw")
+cnames <- names(tab)
 
+snames <- grep("_2", cnames, value = TRUE)
+snames.new <- gsub("_2", "", snames)
+setnames(tab, snames, snames.new)
 
-
+write.table(tab, "plink.raw", 
+  quote = FALSE, sep = " ", row.names = FALSE, col.names = TRUE)

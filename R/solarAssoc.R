@@ -101,6 +101,7 @@ solarAssoc <- function(formula, data, dir,
   snplist, snpind,
   genocov.files, snplists.files, snpmap.files,
   mga.files,
+  plink.ped, plink.map, plink.raw, 
   # output data from association
   assoc.outformat = c("df", "outfile", "outfile.gz"), assoc.outdir, 
   # SOLAR options/settings
@@ -119,15 +120,24 @@ solarAssoc <- function(formula, data, dir,
   ### check if input files exist
   ret <- check_assoc_files_exist(genocov.files, snplists.files, snpmap.files)
   
-  # missing parameters
+  # 1.1 missing parameters
   #if(missing(snpformat)) snpformat <- "012"
   
   missing.genocov.files <- missing(genocov.files)
   missing.snplists.files <- missing(snplists.files)
   missing.snpmap.files <- missing(snpmap.files)
+  
   missing.mga.files <- missing(mga.files)
 
-  # process `mga.files` 
+  missing.snpdata <- missing(snpdata)
+  missing.snpmap <- missing(snpmap)
+  missing.snpcovdata <- missing(snpcovdata)
+  
+  missing.plink.ped <- missing(plink.ped)
+  missing.plink.map <- missing(plink.map)
+  missing.plink.raw <- missing(plink.raw)
+
+  # 1.2 process `mga.files` 
   if(!missing.mga.files & !missing.genocov.files) {
     stop("Error in `solarAssoc`: input SNP data must be given by either `mga.files` or `genocov.files` argument.")
   }
@@ -151,12 +161,57 @@ solarAssoc <- function(formula, data, dir,
     }
   }
 
-  # check for input data argument
-  if(missing(snpdata) & missing(snpcovdata) & missing.genocov.files) {
+  # 1.3 process `plink.raw`
+  if(!missing.plink.raw & !missing.snpcovdata) {
+    stop("Error in `solarAssoc`: input SNP covariate data must be given by either `plink.raw` or `snpcovdata` argument.")
+  }
+  
+  if(!missing.plink.raw) {
+    stopifnot(length(plink.raw) == 1)
+    stopifnot(file.exists(plink.raw))
+    
+    # read data into `snpcovdata`
+    missing.snpcovdata <- FALSE
+    snpcovdata <- read_plink_raw(plink.raw)
+  }
+
+  # 1.4 process `plink.map`
+  if(!missing.plink.map & !missing.snpmap) {
+    stop("Error in `solarAssoc`: input SNP covariate data must be given by either `plink.map` or `snpmap` argument.")
+  }
+  
+  if(!missing.plink.map) {
+    stopifnot(length(plink.map) == 1)
+    stopifnot(file.exists(plink.map))
+    
+    # read data into `snpcovdata`
+    missing.snpmap <- FALSE
+    snpmap <- read_plink_map(plink.map)
+  }
+
+  # 1.4 process `plink.ped`
+  if(!missing.plink.ped & !missing.snpdata) {
+    stop("Error in `solarAssoc`: input SNP covariate data must be given by either `plink.ped` or `snpdata` argument.")
+  }
+  
+  if(!missing.plink.ped) {
+    if(missing.plink.map) {
+      stop("Error in `solarAssoc`: both `plink.ped` & `plink.map` must be specified.")
+    }    
+    stopifnot(length(plink.ped) == 1)
+    stopifnot(file.exists(plink.ped))
+    
+    # read data into `snpcovdata`
+    missing.snpdata <- FALSE
+    snpdata <- read_plink_ped(plink.ped, plink.map)
+  }
+    
+  # 1.5 check for input data argument
+  if(missing.snpdata & missing.snpcovdata & missing.genocov.files) {
     stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata`/`snpcovdata` or `genocov.files` argument.")
   }
 
-  if(!missing(snpdata) & !missing(snpcovdata)) {
+  if(!missing.snpdata & !missing.snpcovdata) {
     stop("Error in `solarAssoc`: input SNP data must be given by either `snpdata` or `snpcovdata` or `genocov.files` argument.")
   }
 
@@ -177,8 +232,8 @@ solarAssoc <- function(formula, data, dir,
   }
 
   assoc.informat <- ifelse(!missing.genocov.files, "genocov.file",
-    ifelse(!missing(snpdata), "snpdata",
-    ifelse(!missing(snpcovdata), "snpcovdata",
+    ifelse(!missing.snpdata, "snpdata",
+    ifelse(!missing.snpcovdata, "snpcovdata",
     stop("ifelse error in processing `assoc.informat`"))))
   if(assoc.informat == "genocov.file") {
     if(length(genocov.files) > 1) {
@@ -187,7 +242,7 @@ solarAssoc <- function(formula, data, dir,
   }
 
   # check map files
-  if(!missing(snpmap) & !missing.snpmap.files) {
+  if(!missing.snpmap & !missing.snpmap.files) {
     stop("Error in `solarAssoc`: input SNP maps must be given by either `snpmap` or `snpmap.files` arguments.")
   }
   if(!missing.genocov.files & !missing.snpmap.files) {
@@ -200,7 +255,7 @@ solarAssoc <- function(formula, data, dir,
   }  
   
   assoc.mapformat <- ifelse(!missing.snpmap.files, "snpmap.file",
-    ifelse(!missing(snpmap), "snpmap", "default"))
+    ifelse(!missing.snpmap, "snpmap", "default"))
   if(!missing.genocov.files & !missing.snpmap.files) {
     if(length(genocov.files) > 1) {
       if(assoc.mapformat == "snpmap.file") {
@@ -211,10 +266,10 @@ solarAssoc <- function(formula, data, dir,
   }
     
   # check for matrix format  
-  if(!missing(snpdata)) {
+  if(!missing.snpdata) {
     stopifnot(class(snpdata) == "matrix")
   }
-  if(!missing(snpcovdata)) {
+  if(!missing.snpcovdata) {
     stopifnot(class(snpcovdata) == "matrix")
   }
   
@@ -320,7 +375,7 @@ solarAssoc <- function(formula, data, dir,
   # maps (load previously to loading snp data)
   # -- SOLAR does not use this info. in assoc. analysis 
   #    neither output to the results file
-  #if(!missing(snpmap)) {
+  #if(!missing.snpmap) {
   #  ret <- snpmap2solar(snpmap, dir)
   #}
   

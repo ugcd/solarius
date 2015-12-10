@@ -1,3 +1,18 @@
+solarius 0.2.4
+==================
+
+* Changes in response to the Reviewers' comments (the manuscript submitted to Bioinformatics).
+    * `NCBI2R` package is replaced by `rsnps` package.
+    * Support for Windows OS is depreciated because of SOLAR issues with Windows.
+      `OS_type: unix` line is added to DESCRIPTION file.
+
+solarius 0.2.3
+==================
+
+* Changes for the official release on CRAN.
+    * `doMC` package is preferred to `doParallel` package (suggestion from CRAN maintainers).
+    * `require` command is replaced by `requireNamespace` command.
+
 solarius 0.2.2
 ==================
 
