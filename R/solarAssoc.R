@@ -8,6 +8,16 @@
 #' parse output files and 
 #' store results in an object of \code{solarAssoc} class (see \code{\link{solarAssocClass}}).
 #'
+#' @note
+#'  \code{solarAssoc} function accepts input genetic data in three formats:
+#'  SOLAR (\code{genocov.files}, \code{snplists.files}, \code{snpmap.files} and \code{param mga.files} arguments),
+#'  R data frame or matrix (\code{snpdata}, \code{snpcovdata} and \code{snpmap} arguments),
+#'  and plink (\code{plink.ped}, \code{plink.map} and \code{plink.raw} arguments).
+#'
+#'  For large-size problems, the user is recommended to prepare the genetic data in SOLAR format
+#'  and to split them into batches of size, for example, 1,000 markers.
+#'  The use of the other two R and plink formats is not optimized for large-scale scenarios.
+#'
 #'@param formula
 #'  an object of class \code{formula} or one that can be coerced to that class.
 #'  It is a symbolic description of fixed effects (covariates) to be fitted. 
@@ -56,6 +66,20 @@
 #'    A vector of characters, the file paths to \code{snplists} SOLAR files.
 #'@param snpmap.files
 #'    A vector of characters (optional), the file paths to \code{snpmap} SOLAR files.
+#'@param mga.files
+#'    A list with 2-3 elements, where each element is a vector of characters.
+#'    This argument is an alternative to the other three
+#'    \code{genocov.files}, \code{snplists.files} and \code{snpmap.files}.
+#'    The element 3 of the list is optional.
+#'@param plink.ped
+#'    A character, the file path to genotype data in plink .ped format.
+#'    Two columns are used per genotype.
+#'@param plink.map
+#'    A character, the file path to genotype annotation data in plink .map format.
+#'param plink.raw
+#'    A character, the file path to genotype data in allele-dosage plink format 
+#'    (an example plink command: \code{plink --noweb --file dat50  --recodeA}).
+#'    One column is used per genotype. 
 #'@param assoc.outformat
 #'    A character, the output format.
 #'    Possible values are \code{"df"}, \code{"outfile"} and \code{"outfile.gz"}.
