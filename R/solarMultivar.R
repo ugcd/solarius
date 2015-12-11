@@ -1,6 +1,6 @@
-#' Run multivariate analysis and report results.
-#'
-#' @export
+# Run multivariate analysis and report results.
+#
+# @export
 solarMultivar <- function(formula, data, traits, covlist = "1",
   na.rm = FALSE,
   ...,
@@ -150,6 +150,7 @@ solarMultivar <- function(formula, data, traits, covlist = "1",
   }
 
   # intesect ids & fix `na.rm`
+  tnum <- NULL # fix `no visible binding`
   ids.tnum <- llply(unique(data2$tnum), function(x) subset(data2, tnum == x, id.var, drop = TRUE))
   ids <- do.call(intersect, ids.tnum)
   
@@ -250,8 +251,11 @@ solarMultivar <- function(formula, data, traits, covlist = "1",
 
 #' S3 class solarMultivar.
 #'
-#' @name solarMultivar
+#' @name solarMultivarClass
 #' @rdname solarMultivarClass
+#'
+#' @param x 
+#'    An object of class \code{solarMultivar}.
 #'
 #' @exportClass solarMultivar
 

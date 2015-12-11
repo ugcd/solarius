@@ -178,6 +178,7 @@ read_map <- function(file, remove.prefix = FALSE)
     
     # manually remove `snp_` prefix in `SNP` column
     if(remove.prefix) {
+      SNP <- NULL # fix `no visible binding`
       tab[, SNP := gsub("^snp_", "", SNP)]
     }
           

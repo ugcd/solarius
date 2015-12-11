@@ -1,6 +1,6 @@
-#' solarBaeysAvgPolygenic
-#'
-#' @export
+# solarBaeysAvgPolygenic
+#
+# @export
 solarBaeysAvgPolygenic <- function(traits, covlist = "1", covlist.test,
   household = as.logical(NA),
   data, dir,
@@ -106,6 +106,11 @@ solarBaeysAvgPolygenic <- function(traits, covlist = "1", covlist.test,
 #' @name solarBaeysAvgPolygenicClass
 #' @rdname solarBaeysAvgPolygenicClass
 #'
+#' @param x 
+#'    An object of class \code{solarBaeysAvgPolygenic}.
+#' @param object
+#'    An object of class \code{solarBaeysAvgPolygenic}.
+#'
 #' @exportClass solarBaeysAvgPolygenic
 
 #--------------------
@@ -126,8 +131,8 @@ print.solarBaeysAvgPolygenic <- function(x, ...)
 
 #' @rdname solarBaeysAvgPolygenicClass
 #' @export
-summary.solarBaeysAvgPolygenic <- function(x, ...)
+summary.solarBaeysAvgPolygenic <- function(object, ...)
 {
   cat("\nFile bayesavg_cov.out:\n")
-  l_ply(x$solar$bayesavg$files$bayesavg_cov.out, function(x) cat(x, "\n"))
+  l_ply(object$solar$bayesavg$files$bayesavg_cov.out, function(x) cat(x, "\n"))
 }

@@ -112,10 +112,11 @@ tabplot <- function(object,...) UseMethod("tabplot")
 #' @export
 tabplot.solarMultipoint <- function(object, LOD.thr = 1.5, plot.null = TRUE, ...)
 {
-  stopifnot(require("gridExtra"))
-  stopifnot(require("grid"))  
+  stopifnot(requireNamespace("gridExtra", quietly = TRUE))
+  stopifnot(requireNamespace("grid", quietly = TRUE))
   
   # `sf`
+  pos <- LOD <- NULL # fix `no visible binding`
   sf <- ddply(object$lodf, "chr", summarize, 
     pos = pos[which.max(LOD)],
     LOD.max = max(LOD))
@@ -130,7 +131,8 @@ tabplot.solarMultipoint <- function(object, LOD.thr = 1.5, plot.null = TRUE, ...
       
     N <- min(15, nrow(sf))
     sf <- sf[1:N, ]      
-      
+    
+    LOD.max <- NULL # fix `no visible binding` 
     sf <- mutate(sf,
       LOD.max = round(LOD.max, 2))
     

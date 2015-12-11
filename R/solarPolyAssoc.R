@@ -1,6 +1,6 @@
-#' Run association analysis via polygenic model.
-#'
-#' @export
+# Run association analysis via polygenic model.
+#
+# @export
 solarPolyAssoc <- function(formula, data, dir, kinship, 
   traits, covlist = "1",
   # input data to association 
@@ -103,11 +103,12 @@ solarPolyAssoc <- function(formula, data, dir, kinship,
 
   parallel <- (cores > 1)
   if(parallel) {
-    stopifnot(requireNamespace("doMC", quietly = TRUE))
+    # load required R package doParallel
+    stopifnot(requireNamespace("doParallel", quietly = TRUE))
     
-    doMC::registerDoMC(cores = cores)
+    doParallel::registerDoParallel(cores = cores)
   }
-  
+
   if(!parallel) {
     snpf <- run_poly_assoc(out, dir, out$assoc$snps)
   } else {
@@ -383,6 +384,9 @@ paste0("proc poly_assoc2 {model} {\
 #'
 #' @name solarPolyAssoc
 #' @rdname solarPolyAssoc
+#'
+#' @param x 
+#'    An object of class \code{solarPolyAssoc}.
 #'
 #' @exportClass solarPolyAssoc
 

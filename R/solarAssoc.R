@@ -76,7 +76,7 @@
 #'    Two columns are used per genotype.
 #'@param plink.map
 #'    A character, the file path to genotype annotation data in plink .map format.
-#'param plink.raw
+#'@param plink.raw
 #'    A character, the file path to genotype data in allele-dosage plink format 
 #'    (an example plink command: \code{plink --noweb --file dat50  --recodeA}).
 #'    One column is used per genotype. 
@@ -88,10 +88,15 @@
 #'@param assoc.outdir
 #'    a character, the path to the output directory.
 #'    Currently, this argument is not used.
+#'@param assoc.options
+#'    A character, specific options to be passed to \code{mga} SOLAR command.
 #'@param cores
 #'    A positive integer, the number of cores for parallel computing.
 #'    The default value is taken from \code{getOption("cores")}.
 #'    If the default value is \code{NULL} then the number of cores is \code{1}.
+#'@param batch.size
+#'    An integer, the number of SNPs per batch for parallel computation.
+#'    The default value is \code{1000}.
 #'@param ...
 #'    Arguments to be passed to  \code{\link{solarPolygenic}} function.
 #'    For example, one of such arguments may be \code{polygenic.settings = "option EnableDiscrete 0"}.

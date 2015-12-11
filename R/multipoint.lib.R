@@ -72,12 +72,12 @@ solarMIBD <- function(mibddir, verbose = 0, chr, nmibd, cores = 1)
   parallel <- (cores > 1)
 
   if(parallel) {
-    ret <- require(doMC)
-    if(!ret) {
-      stop("`doMC` package is required for parallel calculations")
-    }
-    doMC::registerDoMC(cores)
+    # load required R package doParallel
+    stopifnot(requireNamespace("doParallel", quietly = TRUE))
+    
+    doParallel::registerDoParallel(cores = cores)
   }
+
   
   ### var
   files <- list.files(mibddir, full.names = TRUE)

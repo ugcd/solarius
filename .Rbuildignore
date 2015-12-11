@@ -3,6 +3,7 @@
 notes
 projects
 reports
+learn
 
 vignettes
 
@@ -10,6 +11,4 @@ inst/scripts
 inst/staticdocs
 inst/web
 
-solarius\.Rcheck
-solarius_*\.gz
-
+solarius*

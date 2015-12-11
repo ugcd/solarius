@@ -119,6 +119,15 @@ solar_assoc <- function(dir, out, genocov.files, snplists.files, out.dir, out.fi
 #'    An integer value, the number of top SNPs to be annotated.
 #'    Corresponds to \code{mode} equal to \code{"top"}.
 #'    The default value is 10.
+#' @param query.size
+#'    An integer, the maximum number of SNPs allowed for a single query to the NCBI database.
+#'    The default value is \code{500}.
+#'    See also the help page for \code{NCBI_snp_query} function in \code{rsnps} package.
+#'    If the number of SNPs is greater than \code{query.size}, 
+#'    then the query is split into batches automatically.
+#' @param verbose
+#'    An integer, the verbose level.
+#'    The default value is \code{0}.
 #' @param ...
 #'    Additional arguments.
 #' @return
@@ -132,6 +141,9 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
   verbose = 0,
   ...)
 {
+  ### inc
+  stopifnot(requireNamespace("rsnps"))
+  
   ### args
   mode <- match.arg(mode)
 
@@ -183,14 +195,14 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
     for(i in seq(1, num.queries)) {
       if(verbose) cat(" * query", i, "/", num.queries, "\n")
   
-      out[[i]] <- try(NCBI_snp_query(snplist[ind[jnd == i]]))
+      out[[i]] <- try(rsnps::NCBI_snp_query(snplist[ind[jnd == i]]))
     }
     knd <- (laply(out, class) == "data.frame")
     out <- out[knd]
 
     annot <- ldply(out, rbind)
   } else {
-    annot <- NCBI_snp_query(snplist)
+    annot <- rsnps::NCBI_snp_query(snplist)
   }
   # > annot  
   #      Query Chromosome    Marker Class Gene Alleles Major Minor   MAF        BP

@@ -34,7 +34,7 @@
 #'   \item{gene}{Gene.}
 #' }
 #'
-#' @source \url{http://cran.r-project.org/web/packages/multic/}
+#' @source \url{https://cran.r-project.org/web/packages/multic/index.html}
 #'
 #' @name dat30
 #' @rdname dat30

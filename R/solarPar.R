@@ -3,6 +3,18 @@
 # Main functions (out.globals)
 #------------------------------
 
+#' Get a parameter value from SOLAR model files.
+#'
+#' @name solarPar
+#' @rdname solarPar
+#'
+#' @param mod
+#'    An object of \code{solarPolygenic} class. See \code{\link{solarPolygenicClass}}.
+#' @param par
+#'    A character, the parameter name.
+#' @return 
+#'    A value of the given parameter.
+#'
 #' @export
 solarPar <- function(mod, par)
 {
@@ -20,30 +32,39 @@ solarPar <- function(mod, par)
   )
 }
 
+#' @rdname solarPar
 #' @export
 solarParIndividuals <- function(mod) extract_out_globals(mod, "SOLAR_Individuals")
 
+#' @rdname solarPar
 #' @export
 solarParH2rP <- function(mod) extract_out_globals(mod, "SOLAR_H2r_P")
 
+#' @rdname solarPar
 #' @export
 solarParKurtosis <- function(mod) extract_out_globals(mod, "SOLAR_Kurtosis")
 
+#' @rdname solarPar
 #' @export
 solarParCovlistP <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_P")
 
+#' @rdname solarPar
 #' @export
 solarParCovlistChi <- function(mod) extract_out_globals(mod, "SOLAR_Covlist_Chi")
 
+#' @rdname solarPar
 #' @export
 solarParRhoP <- function(mod) extract_out_globals(mod, "SOLAR_RhoP")
 
+#' @rdname solarPar
 #' @export
 solarParRhoPSE <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_SE")
 
+#' @rdname solarPar
 #' @export
 solarParRhoPP <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_P")
 
+#' @rdname solarPar
 #' @export
 solarParRhoPOK <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_OK")
 
@@ -52,6 +73,13 @@ solarParRhoPOK <- function(mod) extract_out_globals(mod, "SOLAR_RhoP_OK")
 # Main functions (files *.mod)
 #------------------------------
 
+#' @rdname solarPar
+#'
+#' @param modelname
+#'    A character, the file name of a model.
+#'    The default value is \code{"null0.mod"}.
+#'    This argument is only for \code{solarParPvar} function.
+#'
 #' @export
 solarParPvar <- function(mod, modelname = "null0.mod") extract_mod_pvar(mod, modelname)
 
@@ -59,6 +87,13 @@ solarParPvar <- function(mod, modelname = "null0.mod") extract_mod_pvar(mod, mod
 # Derived functions (explained variance)
 #------------------------------
 
+#' Get explained variances for a group of SOLAR models.
+#'
+#' @param mod
+#'    An object of \code{solarPolygenic} class. See \code{\link{solarPolygenicClass}}.
+#' @return 
+#'    A data frame with two columns \code{covariate} and \code{explainedVarProp}.
+#'
 #' @export
 explainedVarProp <- function(mod)
 {
