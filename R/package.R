@@ -6,5 +6,7 @@
 #' @import plyr
 #' @import ggplot2
 #' @import data.table
+#' @importFrom graphics abline plot
+#' @importFrom stats median na.omit ppoints qchisq qnorm quantile residuals sd
+#' @importFrom utils head read.fwf read.table tail write.table
 {}
-
