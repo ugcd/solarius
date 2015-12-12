@@ -4,7 +4,7 @@
 
 #' Alternative to system.file
 #'
-#' The function worsk as \code{system.file},
+#' The function works as \code{system.file},
 #' but takes care when the package is a local folder.
 #' 
 #' The use case is when some data file or direcotry is needed to be loaded,

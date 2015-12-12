@@ -59,7 +59,7 @@ solar_multipoint <- function(dir, out, out.dir, out.chr)
 # mibd functions
 #----------------------------------
 
-#' @export
+# @export
 solarMIBD <- function(mibddir, verbose = 0, chr, nmibd, cores = 1)
 {
   ### inc

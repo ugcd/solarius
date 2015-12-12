@@ -138,8 +138,7 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
   alpha = 0.05,
   num.top = 10, 
   query.size = 500,
-  verbose = 0,
-  ...)
+  verbose = 0)
 {
   ### inc
   stopifnot(requireNamespace("rsnps"))

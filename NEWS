@@ -1,10 +1,19 @@
+solarius 0.3.0
+==================
+
+* Support for Windows OS is depreciated because of SOLAR issues with Windows.
+  `OS_type: unix` line is added to DESCRIPTION file.
+
 solarius 0.2.4
 ==================
 
 * Changes in response to the Reviewers' comments (the manuscript submitted to Bioinformatics).
     * `NCBI2R` package is replaced by `rsnps` package.
-    * Support for Windows OS is depreciated because of SOLAR issues with Windows.
-      `OS_type: unix` line is added to DESCRIPTION file.
+* Added two series of functions `solarPar*` and `solarModel*` to extract 
+  parameters of SOLAR and solarius models, respectively.
+* Added `tabplot` S3 method for `solarAssoc` class.
+* Initiated new SOLAR models: `solarPolyAssoc`, `solarBayesAvg` and `solarMultivar`.
+  Still under development.
 
 solarius 0.2.3
 ==================

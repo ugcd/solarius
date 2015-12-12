@@ -13,6 +13,6 @@ test_that("two custom kinship matrices", {
   h2r1 <- with(mod1$vcf, Var[varcomp == "h2r"])
   h2r2 <- with(mod2$vcf, Var[varcomp == "h2r"])
 
-  expect_more_than(h2r1, h2r2)
+  expect_true(h2r1 > h2r2)
 })
 

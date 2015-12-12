@@ -387,6 +387,8 @@ paste0("proc poly_assoc2 {model} {\
 #'
 #' @param x 
 #'    An object of class \code{solarPolyAssoc}.
+#' @param ...
+#'    Additional arguments.
 #'
 #' @exportClass solarPolyAssoc
 

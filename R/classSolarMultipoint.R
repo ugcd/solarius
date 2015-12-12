@@ -11,6 +11,12 @@
 #'    Integer argument for \code{plot} method, 
 #'    indicating whether which pass in multi-passs linkage scan to be plotted.
 #'    The default value is 1.
+#' @param LOD.thr
+#'    An argument for \code{tabplot} method.
+#'    The default value is \code{1.5}.
+#' @param plot.null
+#'    An argument for \code{tabplot} method.
+#'    The default value is \code{TRUE}.
 #' @param ...
 #'    Additional arguments.
 #'
@@ -40,6 +46,13 @@ print.solarMultipoint <- function(x, ...)
 }
 
 #' @rdname solarMultipointClass
+#' @param main
+#'    An argument for \code{plot} method.
+#' @param xlab
+#'    An argument for \code{plot} method.
+#' @param faceting
+#'    An argument for \code{plot} method.
+#'    The default value is \code{TRUE}.
 #' @export
 plot.solarMultipoint <- function(x, 
   pass = 1, main, xlab,
@@ -103,7 +116,12 @@ summary.solarMultipoint <- function(object, ...)
   cat("  -- position:", object$lodf$pos[ind], "cM\n")
 }
 
-
+#' S3 method tabplot
+#'
+#' @param object
+#'  An object.
+#' @param ...
+#'  Additional arguments.
 ##' @export
 tabplot <- function(object,...) UseMethod("tabplot") 
 

@@ -256,6 +256,8 @@ solarMultivar <- function(formula, data, traits, covlist = "1",
 #'
 #' @param x 
 #'    An object of class \code{solarMultivar}.
+#' @param ...
+#'    Additional arguments.
 #'
 #' @exportClass solarMultivar
 

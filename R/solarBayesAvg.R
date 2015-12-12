@@ -110,7 +110,8 @@ solarBaeysAvgPolygenic <- function(traits, covlist = "1", covlist.test,
 #'    An object of class \code{solarBaeysAvgPolygenic}.
 #' @param object
 #'    An object of class \code{solarBaeysAvgPolygenic}.
-#'
+#' @param ...
+#'    Additional arguments.
 #' @exportClass solarBaeysAvgPolygenic
 
 #--------------------

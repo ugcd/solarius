@@ -84,6 +84,9 @@ transformData <- function(transforms, data, transform.prefix = "tr_", ...)
 #' @param transform
 #'    a character vector, the name of transformation.
 #'    Possible values are returned by \code{\link{availableTransforms}} function.
+#' @param mult
+#'    A numeric, the multiplicator for the transformed value of a trait.
+#'    The default value is \code{1}.
 #' @param ...
 #'    additional parameters passed to internal \code{transform_trait_*} functions.
 #'    Possible parameters might be \code{log.base}, \code{log.intercept} (\code{"log"} transformation).
