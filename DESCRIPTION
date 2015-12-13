@@ -1,7 +1,7 @@
 Package: solarius
 Type: Package
 Title: An R Interface to SOLAR
-Version: 0.3.0.1
+Version: 0.3.0.2
 Date: 2015-12-12
 Authors@R: c(
     person("Andrey", "Ziyatdinov", email = "andrey.ziyatdinov@upc.edu", role = c("cre", "aut")),
