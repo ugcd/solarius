@@ -232,13 +232,15 @@ annotate <- function(x, mode = c("significant", "top", "all"),
 
   ### Case 2: annotate the selected SNPs
   annot <- data.table(annot)
-  setnames(annot, "Query", "SNP")
+  if(nrow(annot) > 0 & class(x)[1] == "solarAssoc") {
+    setnames(annot, "Query", "SNP")
   
-  SNP <- NULL # fix `no visible binding`
-  setkey(x$snpf, SNP)
-  setkey(annot, SNP)
+    SNP <- NULL # fix `no visible binding`
+    setkey(x$snpf, SNP)
+    setkey(annot, SNP)
 
-  annot <- merge(x$snpf, annot, all.x = FALSE, all.y = TRUE) # names of `x$snpf` go first
-
+    annot <- merge(x$snpf, annot, all.x = FALSE, all.y = TRUE) # names of `x$snpf` go first
+  }
+  
   return(annot)  
 }

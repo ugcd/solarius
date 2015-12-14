@@ -1,3 +1,8 @@
+solarius 0.3.1
+==================
+
+* Fix `annotateSNPs` function when no rs* SNPs are given.
+
 solarius 0.3.0
 ==================
 

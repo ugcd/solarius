@@ -1,5 +1,5 @@
 ---
-title: "Minimal example for `solarius` R package"
+title: "Minimal examples for `solarius` R package"
 author: "Andrey Ziyatdinov"
 date: "`r Sys.Date()`"
 output:
@@ -17,6 +17,12 @@ output:
 ```{r chunk_opt, echo = FALSE}
 #opts_chunk$set(eval = TRUE)
 #opts_chunk$set(fig.path = "figures-minimal/")
+```
+
+# `dat30` data set 
+
+```{r, eval = FALSE}
+help(dat30, package = "solarius")
 ```
 
 # All code in one block
@@ -78,7 +84,7 @@ The model with covariates can be fitted in the following way.
 mod0 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 ```
 
-`print` method applied to `mod0` shows that none of the covariates are significant.
+`print` method applied to `mod0` shows that none of the covariates is significant.
 
 ```{r}
 mod0
@@ -170,18 +176,15 @@ plotQQ(assoc)
 This call is equavalent to `plot(assoc, "qq")`,
 as `plot` method (applied to `assoc` object) with the second argument equal to `"qq"` calls `plotQQ` function.
 
-The procedure of SNPs annotation is possible if the user loads `NCBI2R` R package.
+The procedure of SNPs annotation is possible via `rsnps` R package (loaded by `annotate` function invisibly to the user).
 
-```{r}
-library(NCBI2R)
-```
-
-```{r}
+```{r annot_assoc}
 tab <- annotate(assoc)
+tab
 ```
 
-Annotation of the synthetic SNPs generated for `dat30` data sets fails,
-since the names expected by `NCBI2R` R package must begin with *rs* symbols.
+Annotation of the synthetic SNPs generated for `dat30` data sets returns an empty data frame,
+since the names expected by `rsnps` R package must begin with *rs* symbols.
 
 Meantime, annotation of the genome-wide significant SNPs 
 from [GWAS of FXIc phenotype in GAIT1 data set](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html#fxi)
@@ -189,7 +192,7 @@ from [GWAS of FXIc phenotype in GAIT1 data set](http://ugcd.github.io/solarius/v
 
 ```{r annot_F11_gait1, cache = TRUE}
 snps <- c("rs710446", "rs4241824", "rs4253399")
-tab <- annotate(snps, capture.output = TRUE)
+tab <- annotate(snps)
 tab
 ```
 

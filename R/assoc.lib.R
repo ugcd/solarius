@@ -183,6 +183,9 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
   ### annotate
   # fitler out not-rs SNPs
   snplist <- grep("^rs", snplist, value = TRUE)
+  if(length(snplist) == 0) {
+    return(data.frame())
+  }
   
   # break down `snplist` into batches of size 500, if it necessary
   if(length(snplist) > query.size) {
@@ -201,7 +204,11 @@ annotateSNPs <- function(x, mode = c("significant", "top", "all"),
 
     annot <- ldply(out, rbind)
   } else {
-    annot <- rsnps::NCBI_snp_query(snplist)
+    annot <- try(rsnps::NCBI_snp_query(snplist))
+    if(class(annot)[1] == "try-error") {
+      warning("annotateSNPs: rsnps::NCBI_snp_query threw an error.")
+      annot <- data.frame()
+    }
   }
   # > annot  
   #      Query Chromosome    Marker Class Gene Alleles Major Minor   MAF        BP
