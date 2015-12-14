@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>matchMapNames. solarius 0.3.1</title>
+<title>solarPar. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,24 +47,40 @@
         
       </header>
       
-      <h1>Match map column names</h1>
+      <h1>Get a parameter value from SOLAR model files.</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>matchMapNames(fields)</div></pre>
+    <pre><div>solarPar(mod, par)</div>
+<div>solarParIndividuals(mod)</div>
+<div>solarParH2rP(mod)</div>
+<div>solarParKurtosis(mod)</div>
+<div>solarParCovlistP(mod)</div>
+<div>solarParCovlistChi(mod)</div>
+<div>solarParRhoP(mod)</div>
+<div>solarParRhoPSE(mod)</div>
+<div>solarParRhoPP(mod)</div>
+<div>solarParRhoPOK(mod)</div>
+<div>solarParPvar(mod, modelname&nbsp;=&nbsp;"null0.mod")</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>fields</dt>
-      <dd>The name of fields or colulm names in data frame, which are candidates to be map fields.</dd>
+      <dt>mod</dt>
+      <dd>An object of <code>solarPolygenic</code> class. See <code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>.</dd>
+      <dt>par</dt>
+      <dd>A character, the parameter name.</dd>
+      <dt>modelname</dt>
+      <dd>A character, the file name of a model.
+The default value is <code>"null0.mod"</code>.
+This argument is only for <code>solarParPvar</code> function.</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-A named character vector, that can be directly passed to <code>rename</code> function of <code>plyr</code> package.
+A value of the given parameter.
 </dl></p>
   
     </div>
@@ -72,22 +88,13 @@ A named character vector, that can be directly passed to <code>rename</code> fun
     <div class="Description">
       <h2>Description</h2>
 
-      <p>The function searches for fields that correspond to those 
-in SOLAR format of marker map file.</p>
+      <p>Get a parameter value from SOLAR model files.</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'> data(dat50)
- matchMapNames(names(snpdata))
-</div>
-<div class='output'>    name position    chrom 
-   &quot;SNP&quot;    &quot;pos&quot;    &quot;chr&quot; 
-</div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
-      <li>matchMapNames</li>
+      <li>solarPar</li><li>solarParCovlistChi</li><li>solarParCovlistP</li><li>solarParH2rP</li><li>solarParIndividuals</li><li>solarParKurtosis</li><li>solarParPvar</li><li>solarParRhoP</li><li>solarParRhoPOK</li><li>solarParRhoPP</li><li>solarParRhoPSE</li>
     </ul>
     <ul>
       

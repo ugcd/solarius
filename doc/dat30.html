@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>dat30. solarius 0.2.4</title>
+<title>dat30. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.4</a>
+      <a class="brand" href="#">solarius 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -99,7 +99,7 @@ Row names are IDs of individuals, column names are names of SNPs.</p>
     <div class="Source">
       <h2>Source</h2>
 
-      <p><a href = 'http://cran.r-project.org/web/packages/multic/'>http://cran.r-project.org/web/packages/multic/</a></p>
+      <p><a href = 'https://cran.r-project.org/package=multic'>https://cran.r-project.org/package=multic</a></p>
   
     </div>
 
@@ -141,7 +141,10 @@ str(dat30)
 <div class='input'>
 plotPed(dat30, 2) # plot the pedigree tree for family #2
 </div>
-<p><img src='dat30-4.png' alt='' width='540' height='400' /></p>
+<strong class='message'>Loading required package: kinship2</strong>
+<strong class='message'>Loading required package: Matrix</strong>
+<strong class='message'>Loading required package: quadprog</strong>
+<p><img src='dat30-7.png' alt='' width='540' height='400' /></p>
 <div class='input'>
 ## Not run: 
 # kin2 &lt;- solarKinship2(dat30)

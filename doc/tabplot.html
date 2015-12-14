@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>matchMapNames. solarius 0.3.1</title>
+<title>tabplot. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,47 +47,31 @@
         
       </header>
       
-      <h1>Match map column names</h1>
+      <h1>S3 method tabplot</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>matchMapNames(fields)</div></pre>
+    <pre><div>tabplot(object, ...)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>fields</dt>
-      <dd>The name of fields or colulm names in data frame, which are candidates to be map fields.</dd>
+      <dt>object</dt>
+      <dd>An object.</dd>
+      <dt>...</dt>
+      <dd>Additional arguments.</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
-
-      <p><dl>
-A named character vector, that can be directly passed to <code>rename</code> function of <code>plyr</code> package.
-</dl></p>
-  
-    </div>
-
     <div class="Description">
       <h2>Description</h2>
 
-      <p>The function searches for fields that correspond to those 
-in SOLAR format of marker map file.</p>
+      <p>S3 method tabplot</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'> data(dat50)
- matchMapNames(names(snpdata))
-</div>
-<div class='output'>    name position    chrom 
-   &quot;SNP&quot;    &quot;pos&quot;    &quot;chr&quot; 
-</div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
-      <li>matchMapNames</li>
+      <li>tabplot</li>
     </ul>
     <ul>
       

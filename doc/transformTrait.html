@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>transformTrait. solarius 0.2.4</title>
+<title>transformTrait. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.4</a>
+      <a class="brand" href="#">solarius 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -61,6 +61,9 @@
       <dt>transform</dt>
       <dd>a character vector, the name of transformation.
 Possible values are returned by <code><a href='availableTransforms.html'>availableTransforms</a></code> function.</dd>
+      <dt>mult</dt>
+      <dd>A numeric, the multiplicator for the transformed value of a trait.
+The default value is <code>1</code>.</dd>
       <dt>...</dt>
       <dd>additional parameters passed to internal <code>transform_trait_*</code> functions.
 Possible parameters might be <code>log.base</code>, <code>log.intercept</code> (<code>"log"</code> transformation).</dd>
@@ -85,7 +88,15 @@ A numeric vector, which contains the transformed values (of a trait).
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'>library(plyr)
 library(ggplot2)
+</div>
+<strong class='message'>
+Attaching package: ‘ggplot2’
+</strong>
+<strong class='message'>The following object is masked from ‘package:solarius’:
 
+    annotate
+</strong>
+<div class='input'>
 data(dat30)
 dat &lt;- mutate(dat30,
    inormal_trait1 = transformTrait(trait1, &quot;inormal&quot;))
@@ -93,11 +104,11 @@ dat &lt;- mutate(dat30,
 ggplot(dat, aes(trait1)) + geom_histogram()
 </div>
 <strong class='message'>stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.</strong>
-<p><img src='transformTrait-3.png' alt='' width='540' height='400' /></p>
+<p><img src='transformTrait-6.png' alt='' width='540' height='400' /></p>
 <div class='input'>ggplot(dat, aes(inormal_trait1)) + geom_histogram()
 </div>
 <strong class='message'>stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.</strong>
-<p><img src='transformTrait-6.png' alt='' width='540' height='400' /></p>
+<p><img src='transformTrait-9.png' alt='' width='540' height='400' /></p>
 <div class='input'></div></pre>
   </div>
   <div class="span4">

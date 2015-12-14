@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>solarAssoc. solarius 0.2.4</title>
+<title>solarAssoc. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.4</a>
+      <a class="brand" href="#">solarius 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -113,11 +113,11 @@ The element 3 of the list is optional.</dd>
       <dd>A character, the file path to genotype data in plink .ped format.
 Two columns are used per genotype.</dd>
       <dt>plink.map</dt>
-      <dd>A character, the file path to genotype annotation data in plink .map format.
-param plink.raw
-   A character, the file path to genotype data in allele-dosage plink format 
-   (an example plink command: <code>plink --noweb --file dat50  --recodeA</code>).
-   One column is used per genotype.</dd>
+      <dd>A character, the file path to genotype annotation data in plink .map format.</dd>
+      <dt>plink.raw</dt>
+      <dd>A character, the file path to genotype data in allele-dosage plink format 
+(an example plink command: <code>plink --noweb --file dat50  --recodeA</code>).
+One column is used per genotype.</dd>
       <dt>assoc.outformat</dt>
       <dd>A character, the output format.
 Possible values are <code>"df"</code>, <code>"outfile"</code> and <code>"outfile.gz"</code>.
@@ -126,10 +126,15 @@ That means the table of results is stored in <code>snpf</code> slot of a returne
       <dt>assoc.outdir</dt>
       <dd>a character, the path to the output directory.
 Currently, this argument is not used.</dd>
+      <dt>assoc.options</dt>
+      <dd>A character, specific options to be passed to <code>mga</code> SOLAR command.</dd>
       <dt>cores</dt>
       <dd>A positive integer, the number of cores for parallel computing.
 The default value is taken from <code>getOption("cores")</code>.
 If the default value is <code>NULL</code> then the number of cores is <code>1</code>.</dd>
+      <dt>batch.size</dt>
+      <dd>An integer, the number of SNPs per batch for parallel computation.
+The default value is <code>1000</code>.</dd>
       <dt>...</dt>
       <dd>Arguments to be passed to  <code><a href='solarPolygenic.html'>solarPolygenic</a></code> function.
 For example, one of such arguments may be <code>polygenic.settings = "option EnableDiscrete 0"</code>.

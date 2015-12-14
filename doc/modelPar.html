@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>matchMapNames. solarius 0.3.1</title>
+<title>modelPar. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -47,24 +47,36 @@
         
       </header>
       
-      <h1>Match map column names</h1>
+      <h1>Get a parameter value from <code>solarius</code> models.</h1>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>matchMapNames(fields)</div></pre>
+    <pre><div>modelPar(mod, par, ...)</div>
+<div>modelParCPUtime(mod, format&nbsp;=&nbsp;"sec", ...)</div>
+<div>modelParCores(mod)</div>
+<div>modelParNumBatches(mod)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>fields</dt>
-      <dd>The name of fields or colulm names in data frame, which are candidates to be map fields.</dd>
+      <dt>mod</dt>
+      <dd>An object of <code>solarPolygenic</code>, <code>solarMultipoint</code> or <code>solarAssoc</code> classes. 
+See <code><a href='solarPolygenicClass.html'>solarPolygenicClass</a></code>, <code><a href='solarMultipointClass.html'>solarMultipointClass</a></code> and <code><a href='solarAssocClass.html'>solarAssocClass</a></code>.</dd>
+      <dt>par</dt>
+      <dd>A character, the parameter name.</dd>
+      <dt>...</dt>
+      <dd>Additional arguments.</dd>
+      <dt>format</dt>
+      <dd>A character, the format of the time value.
+The default value is <code>"sec"</code>. The second possible value is <code>"POSIX"</code>.
+This argument is only for <code>modelParCPUtime</code> function.</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-A named character vector, that can be directly passed to <code>rename</code> function of <code>plyr</code> package.
+A value of the given parameter.
 </dl></p>
   
     </div>
@@ -72,22 +84,13 @@ A named character vector, that can be directly passed to <code>rename</code> fun
     <div class="Description">
       <h2>Description</h2>
 
-      <p>The function searches for fields that correspond to those 
-in SOLAR format of marker map file.</p>
+      <p>Get a parameter value from <code>solarius</code> models.</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'> data(dat50)
- matchMapNames(names(snpdata))
-</div>
-<div class='output'>    name position    chrom 
-   &quot;SNP&quot;    &quot;pos&quot;    &quot;chr&quot; 
-</div></pre>
-  </div>
+      </div>
   <div class="span4">
     <!-- <ul>
-      <li>matchMapNames</li>
+      <li>modelPar</li><li>modelParCPUtime</li><li>modelParCores</li><li>modelParNumBatches</li>
     </ul>
     <ul>
       

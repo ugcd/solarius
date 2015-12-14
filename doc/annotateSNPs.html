@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>annotateSNPs. solarius 0.2.4</title>
+<title>annotateSNPs. solarius 0.3.1</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -32,7 +32,7 @@
     <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">solarius 0.2.4</a>
+      <a class="brand" href="#">solarius 0.3.1</a>
       <div class="nav">
         <ul class="nav">
           <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
@@ -52,7 +52,7 @@
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre><div>annotateSNPs(x, mode&nbsp;=&nbsp;c("significant", "top", "all"), alpha&nbsp;=&nbsp;0.05, num.top&nbsp;=&nbsp;10, query.size&nbsp;=&nbsp;500, verbose&nbsp;=&nbsp;0, ...)</div></pre>
+    <pre><div>annotateSNPs(x, mode&nbsp;=&nbsp;c("significant", "top", "all"), alpha&nbsp;=&nbsp;0.05, num.top&nbsp;=&nbsp;10, query.size&nbsp;=&nbsp;500, verbose&nbsp;=&nbsp;0)</div></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -69,6 +69,15 @@ Corresponds to <code>mode</code> equal to <code>"significant"</code>.</dd>
       <dd>An integer value, the number of top SNPs to be annotated.
 Corresponds to <code>mode</code> equal to <code>"top"</code>.
 The default value is 10.</dd>
+      <dt>query.size</dt>
+      <dd>An integer, the maximum number of SNPs allowed for a single query to the NCBI database.
+The default value is <code>500</code>.
+See also the help page for <code>NCBI_snp_query</code> function in <code>rsnps</code> package.
+If the number of SNPs is greater than <code>query.size</code>, 
+then the query is split into batches automatically.</dd>
+      <dt>verbose</dt>
+      <dd>An integer, the verbose level.
+The default value is <code>0</code>.</dd>
       <dt>...</dt>
       <dd>Additional arguments.</dd>
     </dl>
