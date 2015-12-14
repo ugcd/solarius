@@ -402,8 +402,8 @@ can be found in the `SOLAR` manual, for example, [@SOLARDOC, Apendix 1, [mga](ht
 # Software
 
 The idea of the proposed software (the R package `solarius`) 
-is to perform the calculus in `SOLAR` at back-end
-and to offer the user interface in R at front-end. 
+is to perform the calculus in `SOLAR` at the back-end
+and to offer the user interface in R at the front-end. 
 The table given below shows a basic description of the software
 via implementation of the main three models: polygenic, association and linkage.
 
@@ -445,7 +445,7 @@ and the practical guide of using the functions is presented in the next section 
 Meantime, some points should to be stressed to describe some other features and drawbacks of the `solarius` package.
 
 * The `solarius` functions, by default, do not create any directories visible to the user,
-  while the analysis flow in `SOLAR` is heavily based on storing the data in directories and files.
+  though the analysis flow in `SOLAR` is heavily based on storing the data in directories and files.
   However, the input phenotype and genotype data might be stored in CSV data format and passed to the functions.
   The user can specify a special directory (`dir` argument for the `solarPolygenic`, `solarAssoc` and `solarMultipoint` functions), 
   where the `SOLAR` output will be saved in addition to the output R object.
@@ -497,7 +497,7 @@ is required to obtain a registration key,
 as it is explained by the message that appears when `SOLAR` program starts.
 The registration key has to be stored in `.solar_reg` file in the home directory of the user.
 
-Once both installation an registration processes are finished,
+Once both installation and registration processes are finished,
 something similar to the following message will be displayed when `SOLAR` is executed.
 
 ```
@@ -507,6 +507,19 @@ Enter help for help, exit to exit, doc to browse documentation.
 
 solar>
 ```
+
+### Installation problems with SOLAR
+
+**SOLAR version for Windows**. Currently, SOLAR does not have an appropriated version for Windows. 
+As stated in the official web page of SOLAR [http://solar.txbiomedgenetics.org/solarwindows.html](http://solar.txbiomedgenetics.org/solarwindows.html):
+
+>Because SOLAR requires a Unix OS or equivalent, we have prepared a VMware Virtual Machine containing SOLAR plus the Xubuntu edition of linux which runs on Windows XP or later using the free VMware Player. Beware this requires a very large multi 1.4 Gb download, and will require more than 10 gigabytes free disc space during installation. 
+
+
+This is a clear limitation of `solarius` package that comes from the dependency on SOLAR.
+Starting from version 3.*, `solarius` is not supported for Windows.
+[DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file
+has a line `OS_type: unix`.
 
 ### `solarius` installation
 
@@ -528,6 +541,26 @@ The installation commands are the following.
 library(devtools)
 install_github("ugcd/solarius")
 ```
+
+### Installation problems with solarius
+
+`solarius` has several R packages as dependencies
+(that can be seen in [DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file).
+Installation of these packages should be straightforward using the standard R function `install.packages`.
+
+In the case of problems in the installation process, web pages of the packages are the main source of information.
+
+Imported packages:
+
+* [https://github.com/hadley/plyr](https://github.com/hadley/plyr) for `plyr`.
+* [https://github.com/hadley/ggplot2](https://github.com/hadley/ggplot2) for `ggplot2`.
+* [https://github.com/Rdatatable/data.table](https://github.com/Rdatatable/data.table) for `data.table`.
+    * See also [CRAN_Release.cmd](https://github.com/Rdatatable/data.table/blob/master/CRAN_Release.cmd) document.
+
+
+**Installation of data.table R package**. 
+If the user experiences problems installing `data.table` package,
+we recommend to upgrade the R environment to the latest stable version.
 
 ## `solarius` R package structure
 
@@ -1147,13 +1180,13 @@ plot(L1)
 ```
 
 The results for chromosomes 2 and 5 are identical,
-since the IBD matrices for chromosome 2 are duplicated of the matrices for chromosome 5.
+since the IBD matrices for chromosome 2 are duplicates of the matrices for chromosome 5.
 
 ### Linkage options
 
 The following code shows an example of a custom linkage analysis.
 In particular, the linkage is run on chromosome 5 with a 2 cM interval,
-Fine mapping is disabled and the second pass will is parametrized
+Fine mapping is disabled and the second pass is enables via `multipoint.options` argument.
 
 ```{r L2, cache = TRUE}
 L2 <- solarMultipoint(trait1 ~ 1, dat30, mibddir = mibddir, chr = 5, interval = 2, 
