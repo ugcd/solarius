@@ -10,7 +10,7 @@
 
 <meta name="author" content="Andrey Ziyatdinov" />
 
-<meta name="date" content="2015-12-14" />
+<meta name="date" content="2016-01-11" />
 
 <title>Minimal examples for solarius R package</title>
 
@@ -64,7 +64,7 @@ img {
 <div id="header">
 <h1 class="title">Minimal examples for <code>solarius</code> R package</h1>
 <h4 class="author"><em>Andrey Ziyatdinov</em></h4>
-<h4 class="date"><em>2015-12-14</em></h4>
+<h4 class="date"><em>2016-01-11</em></h4>
 </div>
 
 <div id="TOC">
@@ -77,6 +77,7 @@ img {
 <li><a href="#linkage-model"><span class="toc-section-number">6</span> Linkage model</a></li>
 <li><a href="#asssociation-model"><span class="toc-section-number">7</span> Asssociation model</a></li>
 <li><a href="#r-session-info"><span class="toc-section-number">8</span> R session info</a></li>
+<li><a href="#license"><span class="toc-section-number">9</span> License</a></li>
 </ul>
 </div>
 
@@ -298,11 +299,16 @@ tab</code></pre>
 <p>Annotation of the synthetic SNPs generated for <code>dat30</code> data sets returns an empty data frame, since the names expected by <code>rsnps</code> R package must begin with <em>rs</em> symbols.</p>
 <p>Meantime, annotation of the genome-wide significant SNPs from <a href="http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html#fxi">GWAS of FXIc phenotype in GAIT1 data set</a> (real data) is accomplished as following.</p>
 <pre class="r"><code>snps &lt;- c(&quot;rs710446&quot;, &quot;rs4241824&quot;, &quot;rs4253399&quot;)
-tab &lt;- annotate(snps)</code></pre>
-<pre><code>## Warning in annotateSNPs(x, mode = mode, alpha = alpha, num.top = num.top, :
-## annotateSNPs: rsnps::NCBI_snp_query threw an error.</code></pre>
-<pre class="r"><code>tab</code></pre>
-<pre><code>## Null data.table (0 rows and 0 cols)</code></pre>
+tab &lt;- annotate(snps)
+tab</code></pre>
+<pre><code>##        Query Chromosome    Marker Class Gene Alleles Major Minor    MAF
+## 1:  rs710446          3  rs710446   snp KNG1     A/G     A     G 0.4153
+## 2: rs4241824          4 rs4241824   snp  F11     A/G     A     G 0.4129
+## 3: rs4253399          4 rs4253399   snp  F11     G/T     T     G 0.2638
+##           BP
+## 1: 186742137
+## 2: 186270632
+## 3: 186266939</code></pre>
 <p>In this case <code>annotate</code> function takes a vector of characters as its first argument.</p>
 </div>
 <div id="r-session-info" class="section level1">
@@ -310,7 +316,7 @@ tab &lt;- annotate(snps)</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.2.2 (2015-08-14)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 14.04.1 LTS
+## Running under: Ubuntu 14.04.3 LTS
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -337,6 +343,11 @@ tab &lt;- annotate(snps)</code></pre>
 ## [29] codetools_0.2-14 htmltools_0.2.6  rsnps_0.1.6      MASS_7.3-44     
 ## [33] colorspace_1.2-6 labeling_0.3     stringi_1.0-1    RCurl_1.95-4.7  
 ## [37] doParallel_1.0.8 munsell_0.4.2    chron_2.3-47</code></pre>
+</div>
+<div id="license" class="section level1">
+<h1><span class="header-section-number">9</span> License</h1>
+<p>This document is licensed under the Creative Commons Attribution 4.0 International Public License.</p>
+<p><a href="http://creativecommons.org/licenses/by/4.0/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAAAfCAYAAABjyArgAAAFOklEQVRo3u1aTU8bRxj2OVIs7lw4hhttlR5TpPQHkB+QiH9Q1FskqqCIVIpUCVmuoubQUKm3JrDG5sNfeA1rY3vX9noh5MpP4Ce81fOu32V2WfAHzhoTRhqx3pmdHZ595nk/ZmJEFI/FYnRfR1+J8Kf7Yye/TXvFXcqVslQ8KFDJKNFBtUxG3aAjs0r1Zo0arQZZbZOatkXNTtOttkWWbZLZanAf9K3UDX5WN0o8Vq6U47Hxjkw2TVt7KUrtaLS5vUEbmU9cP6U/0set/+5MVYC+ADev52j/sEjlik5G7ZDBarTqDGDbaVHnxCbnc4eOT4/p5Itbce18drgNfSzb4mfwLMYoV3UeE2MHQdZ2Nj2QAfAdBTnmB7daZgbWrBqzFaAB1NU3q/T056f0MP7w0lLAPbSt/r7KfdvHbf4oYHSlUWE27x/u+0BOZ7cotau5IGc2Rsbil8svaXZ29tIccQ9tYwEYsqCCC2CaHYtZmUgmaHp6um/dQd/Enwl+FhICNlc9kIueXGznMpTec0EeBYuTfyXp0ewjbx7z8/O0tLTEFddyH33QN1KAoZOQhQtwm8zEhWcLPvCmpqZocXGRVlZWSNd1rrjGPbSpffFspWZQy3FBBpMhF64mZ2m3sOOXihuweP3fDxSPx933LizQ2dkZBQvuoQ190DcKkD2AYdCgl5AFMDcILsADkOfn53RdWV9f9wENtgBkfDB8OLwDhq9QzlN2f8+VihAWD/qPCHPxodWiWHPfHGVukQGM5QujBM3F0lbBnZubC2XEVQUfAc+oTMaY0GS840IqFBbvpkjb3hxKJqCrwtwvp6c9AUYRJn9tTfYANlga6mzQoLkquL1Y2w/I0GQYPpaKukF6xWUxa3He1WKRiUEBFoM2CAnQVwxfJAAze22TpUEMGpa6bds0bAHIIhcYE2PDhRMWFw9cFqsexTAyIQYtWCAX8oGD0oEihi8SgKGPLafFrphMCpp70yJ6hwoXDitEtLjUddtUmRgWYHgKwRISVfkKnokMYERo9onNvqywV5UGeAvQLXx1VBX8YNva2prvHxEWY2xoMSK+SzKRy7jehKLDdwpgGDcsYQki1CUFAMP8XYCpaVpom/q8LFWMjYgPUlTtumyFcoG9CeiwuGt3UiKQTzg+dbwJqSwUYzUzM8PGAYDjGstf2sTTAODSFiYTCKubPh0u+Ny1YQC+zshdxd7IjRx8X+QVZEIAMTjJME3uR6/VFYB3wCc+Mo9GBrDqpvULcORu2iQDPGigIdobaaDRr0TA8MF1wzVAVSUi2BaVRExEqHydkbvOkPVj5IQxrpHr8LtGaeRUkNVkDz465oH3q0HPWJI94qZJiAzXKrjMr3LTALLcD7ahgNGqm9ZQ3LS8fnM3bSLSlRJoqGFy0J8dZaBx2A00kLqUQOOmCZ9bnXCvNsJD5UHi+3GFyhMBsJrs+fDP36NP9iQTPDaSPXiXpCzVxPuwyZ6JABh1+dWyl658/uK5D+RBkj5gfWi6sm3S6zevv8Xd5YsfS7/+wm5UZ4iEO9rQR024P/7xMUsD/Gx8wG90+95/47dXyxwMAGSVycNsGQHcVqdJ796/i+ocQmiQEewzVoA9kG130xOaPPCmZ1I2Pa3IwA2CF3Y9BnDDARa5ULftAVqvbXvsXPC2Pc5HtM3IZaFXuvJWSIRav//hO9LSGrtw8JNt7+CJoxw8cfieevAkldHoyU9PxnFU6TZJQ2+ApQKst3+8pWK5qByd6lYcnWqb3IY+4wB2Yhl8X0dQiejBPRBf73Tl/8YjNDN/aKmsAAAAAElFTkSuQmCC" alt="Creative Commons License" /></a></p>
 </div>
 
 
