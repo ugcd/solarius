@@ -86,19 +86,19 @@ mod0 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
 
 `print` method applied to `mod0` shows that none of the covariates is significant.
 
-```{r}
+```{r print_mod0}
 mod0
 ```
 
 The test statistics and p-values for the covariates are stored in `cf` (**c**covariate **f**rame) slot.
 
-```{r cf}
+```{r mod0_cf}
 mod0$cf
 ```
 
 The estimations of heritabilities in `mod0` and `mod1` models are slightly different.
 
-```{r}
+```{r mod1}
 mod1
 ```
 
@@ -106,19 +106,19 @@ mod1
 
 The `print` method applied to `mod2` shows estimation of the main parameters of the model.
 
-```{r}
+```{r mod2}
 mod2
 ```
 
 The same values printed above are extracted and saved into `vcf` (**v**ariance **c**omponent **f**rame) slot .
 
-```{r}
+```{r mod2_vcf}
 mod2$vcf
 ```
 
 The information about the test statistic and p-values are given in `lf` (**l**ikelihood **f**rame) slot.
 
-```{r}
+```{r mod2_lf}
 mod2$lf
 ```
 
@@ -126,13 +126,13 @@ mod2$lf
 
 Table of the results with LOD scores and marker information is stored in `lodf` (**LOD** scores **f**rame) slost.
 
-```{r}
+```{r link}
 link$lodf
 ```
 
 Summary method reports the maximum LOD score.
 
-```{r}
+```{r sum_link}
 summary(link)
 ```
 
@@ -146,13 +146,13 @@ plot(link)
 
 `summary` method applies the Bonferroni correction with a given value of `alpha` (the default value is 0.05).
 
-```{r}
+```{r assoc}
 summary(assoc, alpha = 0.05)
 ```
 
 Table of the results is stored in `snpf` (**SNP** **f**rame) slot.
 
-```{r}
+```{r assoc_snpf}
 head(assoc$snpf)
 ```
 
@@ -203,4 +203,10 @@ In this case `annotate` function takes a vector of characters as its first argum
 ```{r session_info}
 sessionInfo()
 ```
+
+# License
+
+This document is licensed under the Creative Commons Attribution 4.0 International Public License. 
+
+[![Creative Commons License](http://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 

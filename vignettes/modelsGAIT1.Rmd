@@ -24,7 +24,11 @@ bibliography: gait.bib
 library(devtools)
 load_all("~/git/ugcd/solarius")
 #library(solarius)
+```
+
+```{r inc, message = FALSE}
 library(gait)
+library(plyr)
 ```
 
 ```{r load_hidden_andrey, echo = FALSE, eval = TRUE, cache = TRUE}
@@ -271,5 +275,12 @@ plot(L.aff.bmi)
 ```
 
 We observe, again, a significant peak of linkage at the 13q34 locus. This supports the hyposthesis proposed in @Souto2014 of combined linkage between that region and BMI/thrombosis risk.
+
+
+# License
+
+This document is licensed under the Creative Commons Attribution 4.0 International Public License. 
+
+[![Creative Commons License](http://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 
 # References

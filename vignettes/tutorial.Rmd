@@ -1254,4 +1254,11 @@ A list of references given on the official web page of `SOLAR`
 sessionInfo()
 ```
 
+# License
+
+This document is licensed under the Creative Commons Attribution 4.0 International Public License. 
+
+[![Creative Commons License](http://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
+
+
 # References
