@@ -17,10 +17,24 @@ R package wrapper to SOLAR
 
 ### Install package
 
+Install the official release from [CRAN](https://cran.r-project.org/package=solarius):
+
+```
+install.packages("solarius")
+```
+
+Install the latest development version from source on GitHub (master branch): 
+
 ```
 library(devtools)
 install_github("ugcd/solarius")
 ```
+
+_Note_: Starting from version 3.*, `solarius` is not supported for Windows. [DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file has a line `OS_type: unix`.
+This is a limitation of the `solarius` package that comes from the dependency on SOLAR.
+See more details on the web page of SOLAR [for Windows](http://solar.txbiomedgenetics.org/solarwindows.html).
+
+More information about the installation process of both, SOLAR and solarius, is given in the correspondent [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
 
 ## References
 
