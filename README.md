@@ -1,6 +1,6 @@
 ## solarius
 
-_Note_: Manuscript of the package entitled as "solarius: an R interface to SOLAR for variance component analysis in pedigrees" is under revision in _Bioinformatics_ journal. The [preprint](http://biorxiv.org/content/early/2015/12/25/035378) is available.
+_Note_: Manuscript of the package entitled as "solarius: an R interface to SOLAR for variance component analysis in pedigrees" is under revision in _Bioinformatics_ journal. The [preprint](http://biorxiv.org/content/early/2015/12/25/035378) is available on biorxiv.
 
 `solarius` is an R package, wrapper to SOLAR.
 
