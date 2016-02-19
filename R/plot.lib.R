@@ -19,12 +19,13 @@
 #' plotPed(dat30, 1)
 #'
 #' @export
-plotPed <- function(data, ped)
+plotPed <- function(data, ped, affected)
 {
   # checks
   stopifnot(!missing(data))
   stopifnot(class(data) == "data.frame")
   stopifnot(!missing(ped))
+  missing.affected <- missing(affected)
 
   # load required R package kinship2
   stopifnot(requireNamespace("kinship2", quietly = TRUE))
@@ -85,8 +86,17 @@ plotPed <- function(data, ped)
   })
 
   # make `pedigree` object
-  ped <- with(df, 
-    kinship2::pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  
+  if(missing.affected) {
+    ped <- with(df, 
+      kinship2::pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = ""))  
+  } else {
+    stopifnot(all(affected %in% names(df)))
+    
+    af <- as.matrix(subset(df, select = affected, drop = FALSE))
+    ped <- with(df, 
+      kinship2::pedigree(id = ID, dadid = FA, momid = MO, sex = SEX, famid = FAMID, missid = "",
+          affected = af))  
+  }
 
   plot(ped[1])
 }
