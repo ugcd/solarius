@@ -35,10 +35,11 @@
 #'    A data frame of phenotype data merged from two phen and ped files (merged by ID filed).
 #'
 #' @export
-readPhen <- function(phen.file, sep.phen = ",",
-  ped.file, sep.ped = ",", 
-  header = TRUE, stringsAsFactors = FALSE,
-  id.unique = TRUE, sex.optional)
+readPhen <- function(phen.file, ped.file, 
+  id.unique = TRUE, sex.optional,
+  # arguments for `read.table`
+  sep.phen = ",", sep.ped = ",", 
+  header = TRUE, stringsAsFactors = FALSE, na.strings = c("NA", ""))
 {
   stopifnot(!missing(phen.file) | !missing(ped.file)) 
   
@@ -55,7 +56,8 @@ readPhen <- function(phen.file, sep.phen = ",",
   if(!missing(phen.file)) {
     sep <- sep.phen
     phen1 <- read.table(phen.file, nrows = 1,
-      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors,
+      na.strings = na.strings)
     new.names <- matchIdNames(names(phen1), sex.optional = sex.optional)
     old.names <- names(new.names)
   
@@ -64,7 +66,8 @@ readPhen <- function(phen.file, sep.phen = ",",
     colClasses[ind] <- "character"
   
     phen <- read.table(phen.file, colClasses = colClasses,
-      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors,
+      na.strings = na.strings)
   
     phen <- rename(phen, new.names)
   
@@ -79,7 +82,8 @@ readPhen <- function(phen.file, sep.phen = ",",
   
     sep <- sep.ped  
     ped <- read.table(ped.file, colClasses = "character",
-      sep = sep, header = header, stringsAsFactors = stringsAsFactors)
+      sep = sep, header = header, stringsAsFactors = stringsAsFactors,
+      na.strings = na.strings)
    
     new.names <- matchIdNames(names(ped))
     ped <- rename(ped, new.names)
