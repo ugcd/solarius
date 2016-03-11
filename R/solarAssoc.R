@@ -201,7 +201,7 @@ solarAssoc <- function(formula, data, dir,
     
     # read data into `snpcovdata`
     missing.snpcovdata <- FALSE
-    snpcovdata <- read_plink_raw(plink.raw)
+    snpcovdata <- read_plink_raw(plink.raw, ...)
   }
 
   # 1.4 process `plink.map`

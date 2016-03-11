@@ -167,7 +167,7 @@ check_assoc_files_exist <- function(genocov.files, snplists.files, snpmap.files)
 # Plink files
 #----------------------------------
 
-read_plink_raw <- function(plink.raw, plink.raw.append = FALSE)
+read_plink_raw <- function(plink.raw, plink.raw.append = TRUE, ...)
 {
   tab <- fread(plink.raw, select = 2, stringsAsFactors = FALSE, colClasses = "character")
   ids <- tab$IID
