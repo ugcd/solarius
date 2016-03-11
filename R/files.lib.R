@@ -167,14 +167,27 @@ check_assoc_files_exist <- function(genocov.files, snplists.files, snpmap.files)
 # Plink files
 #----------------------------------
 
-read_plink_raw <- function(plink.raw)
+read_plink_raw <- function(plink.raw, plink.raw.append = FALSE)
 {
   tab <- fread(plink.raw, select = 2, stringsAsFactors = FALSE, colClasses = "character")
   ids <- tab$IID
 
   snpcovdata <- fread(plink.raw, drop = 1:6, header = TRUE, colClasses = "numeric", na.strings = "NA")
   snpcovdata <- as.matrix(snpcovdata)
-    
+  
+  # fix colnames
+  if(!plink.raw.append) {
+    cnames <- colnames(snpcovdata)
+    cnames2 <- laply(cnames, function(x) {
+      ind <- as.numeric(gregexpr("_", x)[[1]])
+      
+      ifelse(ind[1] == -1, x, substr(x, 1, max(ind) - 1))
+    })
+    stopifnot(length(cnames) == length(cnames2))
+    colnames(snpcovdata) <- cnames2
+  }
+  
+  # add rownames  
   rownames(snpcovdata) <- ids
   return(snpcovdata)
 }
