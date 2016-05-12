@@ -27,15 +27,17 @@ plotPed <- function(data, ped, affected)
   stopifnot(!missing(ped))
   missing.affected <- missing(affected)
 
-  # load required R package kinship2
-  stopifnot(requireNamespace("kinship2", quietly = TRUE))
-  
-  ret <- NULL # R CMD check: no visible binding
-  cmd <- "ret <- require(kinship2)"
-  eval(parse(text = cmd))
-  if(!ret) {
-    stop("`kinship2` package is required for plotting pedigrees.")
-  }
+  # Now, kinship2 R package is imported. (See DESCRIPTION file.)
+  #
+  ## load required R package kinship2
+  #stopifnot(requireNamespace("kinship2", quietly = TRUE))
+  # 
+  #ret <- NULL # R CMD check: no visible binding
+  #cmd <- "ret <- require(kinship2)"
+  #eval(parse(text = cmd))
+  #if(!ret) {
+  #  stop("`kinship2` package is required for plotting pedigrees.")
+  #}
       
   renames <- matchIdNames(names(data))
   data <- rename(data, renames)

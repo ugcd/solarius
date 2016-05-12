@@ -29,10 +29,10 @@ Imports:
     methods,
     plyr (>= 1.8.1),
     ggplot2,
-    data.table
+    data.table,
+    kinship2
 Suggests:
     tools,
-    kinship2,
     scales,
     Matrix,
     gdata,
