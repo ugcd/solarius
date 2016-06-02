@@ -7,7 +7,7 @@
 
 
 _Note_: Manuscript of the package is published in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/early/2016/03/09/bioinformatics.btw080). 
-Preprint is available on [biorxiv]((http://biorxiv.org/content/early/2015/12/25/035378).
+Preprint is available on [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378).
 
 `solarius` is an R package, wrapper to SOLAR.
 
