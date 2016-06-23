@@ -9,9 +9,8 @@
 
 ![](docs/figures/solarius-models.png)
 
-SOLAR is known as one of the standard software programs to perform linkage and association qtl mappings in pedigrees or related individuals. `solarius` is an interface between R and SOLAR.
-
-The R package `solarius` provides the access to the main three models of SOLAR: polygenic, association and linkage.
+SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping in pedigrees.
+`solarius` is an interface between R and SOLAR, that allows the user to access easily to the main three models of SOLAR: polygenic, association and linkage.
 
 | Model |	SOLAR command |	`solarius` function |	`solarius` S3 classes | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
@@ -19,9 +18,9 @@ The R package `solarius` provides the access to the main three models of SOLAR: 
 | Association | mga | solarAssoc |	solarAssoc, solarPolygenic | Automatic or custom (by SNP file) |
 |Linkage | multipoint | solarMultipoint | solarMultipoint, solarPolygenic | Custom (by chromosome) |
 
-On the side of SOLAR, the SOLAR commands `polygenic`, `mga` and `multipoint` do all the hard job on estimating the variance component models with control via a set of parameters and settings. On the side of R, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint` prepare the input data for the analysis, pass the arguments to the commands and set up other necessary settings, and finally read the output SOLAR files and store the results into R objects of S3 classes in R.
+On the side of SOLAR, the SOLAR commands `polygenic`, `mga` and `multipoint` do all the hard job on estimating the variance component models. On the side of R, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint` prepare the input data for the analysis, pass the arguments to the commands and set up other necessary settings, and finally read the output SOLAR files and store the results into R objects of S3 classes in R.
 
-The main advantage of using `solaius` instead of only SOLAR is that each analysis is conduced by only one function call, while the same analysis in SOLAR could require typing more commands with appropriate options and settings (to be learned from the SOLAR manual). The `solarius` functions just automate the analysis flow and keep configuration options via the R function arguments, if such configuration is required. Another advantage of using the R package `solarius` is that the results are stored in objects of especially designed S3 classes with associated methods like print, summary, plot and others.
+The main advantage of using `solarius` instead of using only SOLAR is that each analysis is conduced by one function call, while the same analysis in SOLAR might require typing more commands with appropriate options and settings (to be learned from the SOLAR manual). The `solarius` functions just automate the analysis flow and keep configuration options via the R function arguments, if such configuration is required. Another advantage of using the R package `solarius` is that the results are stored in objects of especially designed S3 classes with associated methods like print, summary, plot and others.
 
 _Note_: Manuscript of the package is published in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/early/2016/03/09/bioinformatics.btw080). 
 Preprint is available on [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378).
