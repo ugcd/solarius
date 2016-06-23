@@ -9,7 +9,7 @@
 
 ![](docs/figures/solarius-models.png)
 
-SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping field.
+SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping field ([>2600](https://scholar.google.es/citations?view_op=view_citation&hl=en&user=AjEIQ3MAAAAJ&citation_for_view=AjEIQ3MAAAAJ:u5HHmVD_uO8C) citations).
 The SOLAR software implements variance components or linear mixed models
 for the analysis of related individuals in pedigrees.
 
