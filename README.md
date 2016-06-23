@@ -7,13 +7,26 @@
 
 ### About 
 
+![](docs/figures/solarius-models.png)
+
+SOLAR is known as one of the standard software programs to perform linkage and association qtl mappings in pedigrees or related individuals. `solarius` is an interface between R and SOLAR.
+
+The R package `solarius` provides the access to the main three models of SOLAR: polygenic, association and linkage.
+
+| Model |	SOLAR command |	`solarius` function |	`solarius` S3 classes | Parallel computation |
+|-------|---------------|---------------------|-----------------------|----------------------|
+| Polygenic | polygenic | solarPolygenic | solarPolygenic | None |
+| Association | mga | solarAssoc |	solarAssoc, solarPolygenic | Automatic or custom (by SNP file) |
+|Linkage | multipoint | solarMultipoint | solarMultipoint, solarPolygenic | Custom (by chromosome) |
+
+On the side of SOLAR, the SOLAR commands `polygenic`, `mga` and `multipoint` do all the hard job on estimating the variance component models with control via a set of parameters and settings. On the side of R, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint` prepare the input data for the analysis, pass the arguments to the commands and set up other necessary settings, and finally read the output SOLAR files and store the results into R objects of S3 classes in R.
+
+The main advantage of using `solaius` instead of only SOLAR is that each analysis is conduced by only one function call, while the same analysis in SOLAR could require typing more commands with appropriate options and settings (to be learned from the SOLAR manual). The `solarius` functions just automate the analysis flow and keep configuration options via the R function arguments, if such configuration is required. Another advantage of using the R package `solarius` is that the results are stored in objects of especially designed S3 classes with associated methods like print, summary, plot and others.
+
 _Note_: Manuscript of the package is published in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/early/2016/03/09/bioinformatics.btw080). 
 Preprint is available on [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378).
 
-![](docs/figures/solarius-models.png)
-
-
-`solarius` is an R package, wrapper to SOLAR.
+### solarius references
 
 * Package on [CRAN](https://cran.r-project.org/package=solarius)
 * Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/)
@@ -47,7 +60,7 @@ See more details on the web page of SOLAR [for Windows](http://solar.txbiomedgen
 
 More information about the installation process of both, SOLAR and solarius, is given in the correspondent [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
 
-## References
+## SOLAR references
 
 * [Appendix 1. SOLAR Command Descriptions](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html)
 * [SOLAR web page at txbiomedgenetics.org](http://solar.txbiomedgenetics.org/)
@@ -102,28 +115,4 @@ More information about the installation process of both, SOLAR and solarius, is 
 
 ## Quick start
 
-```
-# load library
-library(solarius)
-
-# load data set for running polygenic and linkage models
-data(dat30)
-
-# univariate polygenic model
-mod1 <- solarPolygenic(trait1 ~ age + sex, dat30, covtest = TRUE)
- 
-# bivariate polygenic model
-mod2 <- solarPolygenic(trait1 + trait2 ~ 1, dat30,
-  polygenic.options = '-testrhoe -testrhog')
-
-# specify directory with IBD matrices and run linkage model
-mibddir <- system.file('extdata', 'solarOutput',
-  'solarMibdsCsv', package = 'solarius') 
-link <- solarMultipoint(trait1 ~ 1, dat30,
-  mibddir = mibddir, chr = 5)
-
-# load data set and run association model in parallel
-data(dat50)
-assoc <- solarAssoc(trait ~ age + sex, phenodata,
-  kinship = kin, snpdata = genodata, cores = 2)
-```  
+Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
