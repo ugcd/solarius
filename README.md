@@ -15,11 +15,11 @@ for the analysis of related individuals in pedigrees.
 
 `solarius` is an interface between R and SOLAR, that allows the user to access easily to the main three models: polygenic, association and linkage.
 
-| Model |	SOLAR command |	`solarius` function |	`solarius` S3 classes | Parallel computation |
+| Model |	SOLAR cmd |	`solarius` fun. |	`solarius` S3 classes | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
-| Polygenic | polygenic | solarPolygenic | solarPolygenic | None |
-| Association | mga | solarAssoc |	solarAssoc, solarPolygenic | Automatic or custom (by SNP file) |
-|Linkage | multipoint | solarMultipoint | solarMultipoint, solarPolygenic | Custom (by chromosome) |
+| [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | solarPolygenic | None |
+| [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | solarMultipoint, solarPolygenic | Custom  |
+| [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	solarAssoc, solarPolygenic | Automatic or custom |
 
 On the side of SOLAR, the SOLAR commands `polygenic`, `mga` and `multipoint` do all the hard job on estimating the variance component models. On the side of R, the `solarius` functions `solarPolygenic`, `solarAssoc` and `solarMultipoint` prepare the input data for the analysis, pass the arguments to the commands and set up other necessary settings, and finally read the output SOLAR files and store the results into R objects of S3 classes in R.
 
