@@ -15,7 +15,7 @@ for the analysis of related individuals in pedigrees.
 
 `solarius` is an interface between R and SOLAR, that allows the user to access easily to the main three models: polygenic, association and linkage.
 
-| Model |	SOLAR cmd |	`solarius` fun. |	`solarius` S3 classes | Parallel computation |
+| Model |	SOLAR cmd |	`solarius` fucntion |	`solarius` S3 classes | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
 | [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | solarPolygenic | None |
 | [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | solarMultipoint, solarPolygenic | Custom  |
