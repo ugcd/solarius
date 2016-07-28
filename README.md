@@ -1,5 +1,3 @@
-
-
 [![cran version](http://www.r-pkg.org/badges/version/solarius)](https://cran.r-project.org/web/packages/solarius)
 [![downloads](http://cranlogs.r-pkg.org/badges/solarius)](http://cranlogs.r-pkg.org/badges/solarius)
 [![total downloads](http://cranlogs.r-pkg.org/badges/grand-total/solarius)](http://cranlogs.r-pkg.org/badges/grand-total/solarius)
@@ -8,14 +6,11 @@
 ## Table of content
 
 * [solarius](#solarius)
-  * [About](#about)
   * [solarius references](#solarius-references)
   * [Install package](#install-package)
-* SOLAR references
-* Motivation
-  * On the SOLAR side
-  * On the R side
-* Quick start
+* [SOLAR references](#solar-references)
+* [Motivation](#motivation)
+* [Quick start](#quick-start)
 
 ## solarius
 
