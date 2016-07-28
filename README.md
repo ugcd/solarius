@@ -7,10 +7,10 @@
 
 ## Table of content
 
-* solarius
+* [solarius](#solarius)
   * [About](#about)
-  * solarius references
-  * Install package
+  * [solarius references](#solarius-references)
+  * [Install package](#install-package)
 * SOLAR references
 * Motivation
   * On the SOLAR side
