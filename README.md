@@ -1,9 +1,23 @@
-## solarius
+
 
 [![cran version](http://www.r-pkg.org/badges/version/solarius)](https://cran.r-project.org/web/packages/solarius)
 [![downloads](http://cranlogs.r-pkg.org/badges/solarius)](http://cranlogs.r-pkg.org/badges/solarius)
 [![total downloads](http://cranlogs.r-pkg.org/badges/grand-total/solarius)](http://cranlogs.r-pkg.org/badges/grand-total/solarius)
 [![research software impact](http://depsy.org/api/package/cran/solarius/badge.svg)](http://depsy.org/package/r/solarius)
+
+## Table of content
+
+* solarius
+  * [About](#about)
+  * solarius references
+  * Install package
+* SOLAR references
+* Motivation
+  * On the SOLAR side
+  * On the R side
+* Quick start
+
+## solarius
 
 ### About 
 
