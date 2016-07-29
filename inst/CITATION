@@ -6,7 +6,6 @@ citEntry(
   author = personList(
     as.person("Andrey Ziyatdinov"),
     as.person("Helena Brunel"),
-    as.person("Helena Brunel"),
     as.person("Angel Martinez-Perez"),
     as.person("Alfonso Buil"),
     as.person("Alexandre Perera"),

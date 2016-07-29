@@ -86,7 +86,7 @@ A BibTeX entry for LaTeX users is:
 ```
   @article{ziyatdinov2016solarius,
     title = {solarius: an R interface to SOLAR for variance component analysis in pedigrees},
-    author = {Andrey Ziyatdinov and Helena Brunel and Helena Brunel and Angel Martinez-Perez and Alfonso Buil and Alexandre Perera and Jose Manuel Soria},
+    author = {Andrey Ziyatdinov and Helena Brunel and Angel Martinez-Perez and Alfonso Buil and Alexandre Perera and Jose Manuel Soria},
     year = {2016},
     publisher = {Oxford Univ Press},
     journal = {Bioinformatics},
