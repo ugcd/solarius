@@ -161,7 +161,6 @@ A1: That depends on the type of analysis you are interested in. Some of the feat
 * Generally, SOLAR could be more stable and robust to illness models in the case of multi-trait analysis,
   because of many years of improvement in this direction.
   
-
 Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
 
 A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
