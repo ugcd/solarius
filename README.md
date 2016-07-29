@@ -73,30 +73,6 @@ Please see the Installation [section](http://ugcd.github.io/solarius/vignettes/t
 Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
 
 
-## FAQ
-
-Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
-
-A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
-
-In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some other analyses like GxE with custom tcl scripts using exclusively SOLAR).
-
-Q3: When I tried to install the package, this was the message I got:
-
-```
-> install.packages(“solarius”)
-
-Warning message:
-package ‘solarius’ is not available (for R version 3.2.2)
-``` 
-
-Could you please let me know what I have done wrong and correct way to install the package?
-
-A3: I suspect that you might have the Windows system, for which `solarius` is not supported. That is because of the dependence on SOLAR.
-
-Please see the installation notes on [http://ugcd.github.io/solarius/vignettes/tutorial.html#installation](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation). 
- 
-
 ### Citation
 
 To cite the `solarius` package in publications use:
@@ -166,6 +142,46 @@ On the R side:
 * Graphics
     * Plot residuals, QQ-plot, Manhattan plot
 * Parallel computing
+
+## FAQ
+
+Q1: I am currently using GEMMA. Are there any special reasons to switch to SOLAR / `solarius`?
+
+A1: That depends on the type of analysis you are interested in. Some of the features SOLAR has and GEMMA does not:
+
+* GEMMA allows for a single random effect (the additive genetic), while SOLAR is flexible in the number of such effects.
+  By default, a SOLAR model has (1) the additive genetic (ID/FA/MO fields); and (2) the house-hold grouping effect (HHID field).
+  The `solarius` package can be easily used to specify such models with the two random effects.
+  Note that if HHID variable is not measured in a sample under study, SOLAR and GEMMA perform the same modeling.
+  If one is interested in a more general model with >2 random effects, then `solarius` can help here 
+  and the only way is to deal with tcl scripts, etc.
+* SOLAR has the liability threshold (probit) model for binary traits, while GEMMA might not.
+  Consequently, a bi- or multi-variate trait model, where some traits are binary, is easy to define in SOLAR
+  (SOLAR computes conditional likelihoods).
+* Generally, SOLAR could be more stable and robust to illness models in the case of multi-trait analysis,
+  because of many years of improvement in this direction.
+  
+
+Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
+
+A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
+
+In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some other analyses like GxE with custom tcl scripts using exclusively SOLAR).
+
+Q3: When I tried to install the package, this was the message I got:
+
+```
+> install.packages(“solarius”)
+
+Warning message:
+package ‘solarius’ is not available (for R version 3.2.2)
+``` 
+
+Could you please let me know what I have done wrong and correct way to install the package?
+
+A3: I suspect that you might have the Windows system, for which `solarius` is not supported. That is because of the dependence on SOLAR.
+
+Please see the installation notes on [http://ugcd.github.io/solarius/vignettes/tutorial.html#installation](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation). 
 
 ## SOLAR references
 
