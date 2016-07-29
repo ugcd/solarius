@@ -150,7 +150,7 @@ Q1: I am currently using GEMMA. Are there any special reasons to switch to SOLAR
 A1: That depends on the type of analysis you are interested in. Some of the features SOLAR has and GEMMA does not:
 
 * GEMMA allows for a single random effect (the additive genetic), while SOLAR is flexible in the number of such effects.
-  By default, a SOLAR model has (1) the additive genetic (ID/FA/MO fields); and (2) the house-hold grouping (HHID field) effects.
+  By default, a SOLAR model has (1) the additive genetic (it is compulsory) (ID/FA/MO fields); and (2) the house-hold grouping (HHID field) effects.
   The `solarius` package can be easily used to specify such models with the two random effects.
   Note that if HHID variable is not measured in a sample under study, SOLAR and GEMMA perform the same modeling.
   If one is interested in a more general model with >2 random effects, then `solarius` can **not** help here 
