@@ -7,9 +7,9 @@
 
 * [About solarius](#about-solarius)
   * [solarius references](#solarius-references)
-  * [Rationale](#rationale)
   * [Install](#install)
   * [Quick start](#quick-start)
+  * [Rationale](#rationale)
 * [FAQ](faq)
 * [SOLAR references](#solar-references)
 
@@ -31,9 +31,9 @@ for the analysis of related individuals in pedigrees.
 
 ### solarius references
 
-* The stable version released on [CRAN](https://cran.r-project.org/package=solarius)
-* The article describing `solarius` in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/early/2016/03/09/bioinformatics.btw080). 
-    * Preprint is available in [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378).
+* The stable release on [CRAN](https://cran.r-project.org/package=solarius)
+* The article describing `solarius` in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/32/12/1901)
+    * The preprint version is available in [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378) (the content in Section 2 is different)
 * Vignettes 
   * R code [vignettes/](vignettes/)
   * hmlt output:
@@ -42,6 +42,34 @@ for the analysis of related individuals in pedigrees.
      3. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
 * Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/) (outdated)
 * Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/) (outdated)
+
+### Install
+
+To install the official release from [CRAN](https://cran.r-project.org/package=solarius):
+
+```
+install.packages("solarius")
+```
+
+To install the latest development version from source on GitHub (master branch): 
+
+```
+library(devtools)
+install_github("ugcd/solarius")
+```
+
+_Note 1_: Starting from version 3.*, `solarius` is not supported for Windows. 
+[DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file has a line `OS_type: unix`.
+This is a clear limitation of the `solarius` package that comes from the dependency on SOLAR.
+See also the [FAQ](http://solar-eclipse-genetics.org/faq.html) section 
+on the SOLAR web page.
+
+_Note 2_: The `solarius` user needs to install and _register_ SOLAR, that might the most annoying part of the installation process.
+More information is given in the correspondent [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
+
+### Quick start
+
+Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
 
 ### Rationale
 
@@ -87,34 +115,6 @@ On the R side:
 * Graphics
     * Plot residuals, QQ-plot, Manhattan plot
 * Parallel computing
-
-### Install
-
-To install the official release from [CRAN](https://cran.r-project.org/package=solarius):
-
-```
-install.packages("solarius")
-```
-
-To install the latest development version from source on GitHub (master branch): 
-
-```
-library(devtools)
-install_github("ugcd/solarius")
-```
-
-_Note 1_: Starting from version 3.*, `solarius` is not supported for Windows. 
-[DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file has a line `OS_type: unix`.
-This is a clear limitation of the `solarius` package that comes from the dependency on SOLAR.
-See also the [FAQ](http://solar-eclipse-genetics.org/faq.html) section 
-on the SOLAR web page.
-
-_Note 2_: The `solarius` user needs to install and _register_ SOLAR, that might the most annoying part of the installation process.
-More information is given in the correspondent [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
-
-### Quick start
-
-Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
 
 ## SOLAR references
 
