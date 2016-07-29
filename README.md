@@ -40,8 +40,8 @@ for the analysis of related individuals in pedigrees.
      1. [tutorial.html](http://ugcd.github.io/solarius/vignettes/tutorial.html)
      2. [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html)
      3. [modelsGAIT1.html](http://ugcd.github.io/solarius/vignettes/modelsGAIT1.html)
-* Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/) (outdated)
-* Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/) (outdated)
+* Documentation [http://ugcd.github.io/solarius/doc/](http://ugcd.github.io/solarius/doc/) (out of date)
+* Project web [http://ugcd.github.io/solarius/](http://ugcd.github.io/solarius/) (out of date)
 
 ### Install
 
@@ -59,19 +59,21 @@ install_github("ugcd/solarius")
 ```
 
 _Note 1_: Starting from version 3.*, `solarius` is not supported for Windows. 
-[DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file has a line `OS_type: unix`.
+[DESCRIPTION](https://github.com/ugcd/solarius/blob/master/DESCRIPTION) file has a special line `OS_type: unix`.
 This is a clear limitation of the `solarius` package that comes from the dependency on SOLAR.
-See also the [FAQ](http://solar-eclipse-genetics.org/faq.html) section 
-on the SOLAR web page.
+See also the SOLAR [FAQ](http://solar-eclipse-genetics.org/faq.html) 
+and the question 4 "Can SOLAR-Eclipse only be downloaded in the linux version?".
 
 _Note 2_: The `solarius` user needs to install and _register_ SOLAR, that might the most annoying part of the installation process.
-More information is given in the correspondent [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
+Please see the Installation [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
 
 ### Quick start
 
 Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
 
 ### Rationale
+
+The rationale behind the `solarius` software:
 
 * do not automate things in R, which `SOLAR` has already automated
     * call `SOLAR` by `system` R base function passing options/settings to SOLAR as parameters
