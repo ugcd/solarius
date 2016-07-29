@@ -145,7 +145,7 @@ On the R side:
 
 ## FAQ
 
-Q1: I am currently using GEMMA. Are there any special reasons to switch to SOLAR / `solarius`?
+Q1: I use GEMMA for my qtl mapping analysis. Are there any special reasons to switch to SOLAR / `solarius`?
 
 A1: That depends on the type of analysis you are interested in. Some of the features SOLAR has and GEMMA does not:
 
@@ -165,7 +165,7 @@ Q2: I was wondering whether there was any support for user-defined omega functio
 
 A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
 
-In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some other analyses like GxE with custom tcl scripts using exclusively SOLAR).
+In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some specific analyses like GxE with custom tcl scripts using exclusively SOLAR).
 
 Q3: When I tried to install the package, this was the message I got:
 
