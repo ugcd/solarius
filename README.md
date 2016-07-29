@@ -72,6 +72,31 @@ Please see the Installation [section](http://ugcd.github.io/solarius/vignettes/t
 
 Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
 
+
+## FAQ
+
+Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
+
+A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
+
+In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some other analyses like GxE with custom tcl scripts using exclusively SOLAR).
+
+Q3: When I tried to install the package, this was the message I got:
+
+```
+> install.packages(“solarius”)
+
+Warning message:
+package ‘solarius’ is not available (for R version 3.2.2)
+``` 
+
+Could you please let me know what I have done wrong and correct way to install the package?
+
+A3: I suspect that you might have the Windows system, for which `solarius` is not supported. That is because of the dependence on SOLAR.
+
+Please see the installation notes on [http://ugcd.github.io/solarius/vignettes/tutorial.html#installation](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation). 
+ 
+
 ### Citation
 
 To cite the `solarius` package in publications use:
@@ -119,10 +144,10 @@ The rationale behind the `solarius` software:
 On the SOLAR side:
 
 * Designed for the family-based studies (HHID, PROBND, FAMID descriptors of individuals)
-    * support for extended pedigrees
+    * support of extended pedigrees
 * Stable routines for optimization of VC models
 * Advanced polygenic models
-    * support for multivariate models
+    * support of multivariate models
     * liability threshold model (probit)
     * LRT applied to both covariates and variance components
 * Elaborated linkage models
