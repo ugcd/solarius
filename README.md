@@ -9,6 +9,7 @@
   * [solarius references](#solarius-references)
   * [Install](#install)
   * [Quick start](#quick-start)
+  * [Citation](#citation)
   * [Rationale](#rationale)
 * [FAQ](faq)
 * [SOLAR references](#solar-references)
@@ -70,6 +71,29 @@ Please see the Installation [section](http://ugcd.github.io/solarius/vignettes/t
 ### Quick start
 
 Please see the vignette [minimal.html](http://ugcd.github.io/solarius/vignettes/minimal.html).
+
+### Citation
+
+To cite the `solarius` package in publications use:
+
+```
+  Ziyatdinov et al., solarius: an R interface to SOLAR for variance
+  component analysis in pedigrees, Bioinformatics (2016)
+```
+
+A BibTeX entry for LaTeX users is:
+
+```
+  @article{ziyatdinov2016solarius,
+    title = {solarius: an R interface to SOLAR for variance component analysis in pedigrees},
+    author = {Andrey Ziyatdinov and Helena Brunel and Helena Brunel and Angel Martinez-Perez and Alfonso Buil and Alexandre Perera and Jose Manuel Soria},
+    year = {2016},
+    publisher = {Oxford Univ Press},
+    journal = {Bioinformatics},
+    pages = {btw080},
+    url = {http://bioinformatics.oxfordjournals.org/content/32/12/1901},
+  }
+```
 
 ### Rationale
 
