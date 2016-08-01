@@ -34,7 +34,7 @@ for the analysis of related individuals in pedigrees.
 
 * The stable release on [CRAN](https://cran.r-project.org/package=solarius)
 * The article describing `solarius` in [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/32/12/1901)
-    * The preprint version is available in [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378) (the content in Section 2 is different)
+    * The preprint version is available in [biorxiv](http://biorxiv.org/content/early/2015/12/25/035378) (the content of Section 2 is different)
 * Vignettes 
   * R code [vignettes/](vignettes/)
   * hmlt output:
@@ -65,7 +65,7 @@ This is a clear limitation of the `solarius` package that comes from the depende
 See also the SOLAR [FAQ](http://solar-eclipse-genetics.org/faq.html) 
 and the question 4 "Can SOLAR-Eclipse only be downloaded in the linux version?".
 
-_Note 2_: The `solarius` user needs to install and _register_ SOLAR, that might the most annoying part of the installation process.
+_Note 2_: The `solarius` user needs to install and _register_ SOLAR, that might be the most annoying part of the installation process.
 Please see the Installation [section](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation) of the tutorial vignette.
 
 ### Quick start
