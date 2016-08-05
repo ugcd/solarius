@@ -163,7 +163,9 @@ Q2: I was wondering whether there was any support for user-defined omega functio
 
 A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
 
-In future versions of `solarius`, we don't plan to include any complex models, mainly because the SOLAR environment is not as user-friendly as R, for example. In addition, GxE tcl scripts are not publicly available (in our group, we did some specific analyses like GxE with custom tcl scripts using exclusively SOLAR).
+In future versions of `solarius`, we are no going to include any complex models. The best solution here is to use SOLAR programming in tcl scripting language. In this sence, `solarius` is a partial port of SOLAR to R.
+
+Also note that GxE tcl scripts are not publicly available. In our group, we did some specific analyses like GxE with custom tcl scripts (requested from the SOLAR authors).
 
 Q3: When I tried to install the package, this was the message I got:
 
@@ -176,7 +178,7 @@ package ‘solarius’ is not available (for R version 3.2.2)
 
 Could you please let me know what I have done wrong and correct way to install the package?
 
-A3: I suspect that you might have the Windows system, for which `solarius` is not supported. That is because of the dependence on SOLAR.
+A3: I suspect that you might have the Windows system, for which `solarius` is not supported. That is because of SOLAR.
 
 Please see the installation notes on [http://ugcd.github.io/solarius/vignettes/tutorial.html#installation](http://ugcd.github.io/solarius/vignettes/tutorial.html#installation). 
 
