@@ -147,7 +147,7 @@ On the R side:
 
 Q1: I use GEMMA for my qtl mapping analysis. Are there any special reasons to switch to SOLAR / `solarius`?
 
-A1: That depends on the type of analysis you are interested in. Some of the features SOLAR has and GEMMA does not:
+A1: That depends on the type of analysis. Some of the features SOLAR has and GEMMA does not:
 
 * GEMMA allows for a single random effect (the additive genetic), while SOLAR is flexible in the number of such effects.
    * By default, a SOLAR model has (1) the additive genetic (it is compulsory) (ID/FA/MO fields); and (2) the house-hold grouping (HHID field) effects. The `solarius` package can be easily used to specify such models with the two random effects.
