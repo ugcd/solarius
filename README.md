@@ -163,7 +163,7 @@ Q2: I was wondering whether there was any support for user-defined omega functio
 
 A2: The `solarius` package supports the three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
 
-In future versions of `solarius`, we are **not** going to include any complex models. The best solution here is to use SOLAR programming in tcl scripting language. In this sence, `solarius` is a partial port of SOLAR to R.
+In future versions of `solarius`, we are **not** going to include any complex models. In this sence, `solarius` is a partial port of SOLAR into R.
 
 Also note that GxE tcl scripts are not publicly available. In our group, we did some specific analyses like GxE with custom tcl scripts (requested from the SOLAR authors).
 
