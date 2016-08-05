@@ -161,7 +161,7 @@ A1: That depends on the type of analysis you are interested in. Some of the feat
   
 Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
 
-A2: The `solarius` package supports only three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
+A2: The `solarius` package supports the three basic models: `polygenic`, `multipoint` and `mga` commands of SOLAR. 
 
 In future versions of `solarius`, we are no going to include any complex models. The best solution here is to use SOLAR programming in tcl scripting language. In this sence, `solarius` is a partial port of SOLAR to R.
 
