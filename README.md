@@ -156,7 +156,7 @@ A1: That depends on the type of analysis. Some of the features SOLAR has and GEM
 * SOLAR has the liability threshold (probit) model for binary traits, while GEMMA seems not.
   Consequently, a bi- or multi-variate trait model, where some traits are binary, is easy to define in SOLAR
   (SOLAR computes conditional likelihoods).
-* Generally, SOLAR could be more stable and robust to illness models in the case of multi-trait analysis,
+* Generally, SOLAR might be more stable and robust to ambiguous models in the case of multi-trait analysis,
   because of many years of improvement in this direction.
   
 Q2: I was wondering whether there was any support for user-defined omega functions, or any slightly more complicated variance components models (e.g. to allow different variance components for males and females, or to report results as variance components rather than proportions of variance)?  If not, are there any plans to incorporate these in future? 
