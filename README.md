@@ -22,9 +22,11 @@ SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping fie
 The SOLAR software implements variance components or linear mixed models
 for the analysis of related individuals in pedigrees.
 
-`solarius` is an R package to interface SOLAR and to run its main three models: polygenic, association and linkage. Another feature of `solarius` is a user-friendly parallel computation of association/linkage scans implemented by means of the standard R infrastructure.
+`solarius` is an R package to interface SOLAR and to run its main three models: polygenic, association and linkage. 
 
-| Model |	SOLAR cmd |	`solarius` function |	`solarius` S3 classe | Parallel computation |
+Another feature of `solarius` is a user-friendly parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation)/(linkage)[http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1] scans implemented by means of the standard R infrastructure.
+
+| Model |	SOLAR cmd |	`solarius` function |	`solarius` S3 class | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
 | [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | solarPolygenic | None |
 | [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | solarMultipoint, solarPolygenic | Custom  |
