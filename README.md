@@ -22,7 +22,7 @@ SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping fie
 The SOLAR software implements variance components or linear mixed models
 for the analysis of related individuals in pedigrees.
 
-`solarius` is an R package to interface SOLAR and run its main three models: polygenic, association and linkage.
+`solarius` is an R package to interface SOLAR and to run its main three models: polygenic, association and linkage. Another feature of `solarius` is a user-friendly parallel computation of association/linkage scans implemented by means of the standard R infrastructure.
 
 | Model |	SOLAR cmd |	`solarius` function |	`solarius` S3 classe | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
