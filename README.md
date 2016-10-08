@@ -24,7 +24,7 @@ for the analysis of related individuals in pedigrees.
 
 `solarius` is an R package to interface SOLAR and to run its main three models: polygenic, association and linkage. 
 
-Another feature of `solarius` is an user-friendly [parallel computation of association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation)/[linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1) scans implemented by the standard R packages.
+Another feature of `solarius` is an user-friendly [parallel computation of association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1) scans implemented by the standard R packages.
 
 | Model |	SOLAR cmd |	`solarius` function |	`solarius` S3 class | Parallel computation |
 |-------|---------------|---------------------|-----------------------|----------------------|
