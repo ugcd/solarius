@@ -28,9 +28,9 @@ Another feature of `solarius` is an user-friendly [parallel computation of assoc
 
 | Model |	SOLAR cmd |	`solarius` function |	Input data format |
 |-------|---------------|---------------------|-----------------------|
-| [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | phen: R data.frame (ID/FA/MO) |
+| [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | phen: R data.frame (ID/FA/MO pedigree-fields) |
 | [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | MIBD: SOLAR |
-| [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR PLINK (markers/imputed) |
+| [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR, PLINK (markers/imputed) |
 
 
 ### solarius references
