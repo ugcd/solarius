@@ -26,11 +26,11 @@ for the analysis of related individuals in pedigrees.
 
 Another feature of `solarius` is an user-friendly [parallel computation of association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1) scans implemented by the standard R packages.
 
-| Model |	SOLAR cmd |	`solarius` function |	Input data format | Parallel computation |
-|-------|---------------|---------------------|-----------------------|----------------------|
-| [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | phen: R data.frame (ID/FA/MO) | None |
-| [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | MIBD: SOLAR | Custom  |
-| [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR PLINK (markers/imputed) | Automatic or custom |
+| Model |	SOLAR cmd |	`solarius` function |	Input data format |
+|-------|---------------|---------------------|-----------------------|
+| [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | phen: R data.frame (ID/FA/MO) |
+| [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | MIBD: SOLAR |
+| [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR PLINK (markers/imputed) |
 
 
 ### solarius references
