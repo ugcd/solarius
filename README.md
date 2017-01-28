@@ -31,7 +31,7 @@ Variance components or linear mixed models are implemented in SOLAR especially f
 | [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR, PLINK (markers/imputed) |
 
 
-The `solarius` package enables parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1)
+The `solarius` package also enables parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1)
 models to make genome-wide scans more efficient.
 
 
