@@ -16,21 +16,23 @@
 
 ## About solarius
 
+![](docs/figures/solarius-models.png)
+
 SOLAR is known as the old-school player in the quantitative trait loci (QTLs) mapping field ([>2600](https://scholar.google.es/citations?view_op=view_citation&hl=en&user=AjEIQ3MAAAAJ&citation_for_view=AjEIQ3MAAAAJ:u5HHmVD_uO8C) citations).
 Variance components or linear mixed models are implemented in SOLAR especially for the analysis of related individuals in pedigrees.
 
 `solarius` is an R package to interface SOLAR and to run its main models: polygenic, association and linkage. 
 
-![](docs/figures/solarius-models.png)
-
-The `solarius` package enables parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1)
-models to make genome-wide scans more efficient.
 
 | Model |	SOLAR cmd |	`solarius` function |	Input data format |
 |-------|---------------|---------------------|-----------------------|
 | [Polygenic](http://ugcd.github.io/solarius/vignettes/tutorial.html#polygenic-model-in-solar) | [polygenic](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#polygenic) | solarPolygenic | phen: R data.frame (ID/FA/MO pedigree-fields) |
 | [Linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#linkage-model-in-solar) | [multipoint](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#multipoint) | solarMultipoint | MIBD: SOLAR |
 | [Association](http://ugcd.github.io/solarius/vignettes/tutorial.html#association-model-in-solar) | [mga](http://helix.nih.gov/Documentation/solar-6.6.2-doc/91.appendix_1_text.html#mga) | solarAssoc |	SNP: R matrix, SOLAR, PLINK (markers/imputed) |
+
+
+The `solarius` package enables parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1)
+models to make genome-wide scans more efficient.
 
 
 ### solarius references
