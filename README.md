@@ -16,15 +16,15 @@
 
 ## About solarius
 
+SOLAR is known as the old-school player in the quantitative trait loci (QTLs) mapping field ([>2600](https://scholar.google.es/citations?view_op=view_citation&hl=en&user=AjEIQ3MAAAAJ&citation_for_view=AjEIQ3MAAAAJ:u5HHmVD_uO8C) citations).
+Variance components or linear mixed models are implemented in SOLAR especially for the analysis of related individuals in pedigrees.
+
+`solarius` is an R package to interface SOLAR and to run its main models: polygenic, association and linkage. 
+
 ![](docs/figures/solarius-models.png)
 
-SOLAR is the old-school player in the quantitative trait loci (QTLs) mapping field ([>2600](https://scholar.google.es/citations?view_op=view_citation&hl=en&user=AjEIQ3MAAAAJ&citation_for_view=AjEIQ3MAAAAJ:u5HHmVD_uO8C) citations).
-The SOLAR software implements variance components or linear mixed models
-for the analysis of related individuals in pedigrees.
-
-`solarius` is an R package to interface SOLAR and to run its main three models: polygenic, association and linkage. 
-
-Another feature of `solarius` is an user-friendly [parallel computation of association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1) scans implemented by the standard R packages.
+The `solarius` package enables parallel computation of [association](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation) / [linkage](http://ugcd.github.io/solarius/vignettes/tutorial.html#parallel-computation-1)
+models to make genome-wide scans more efficient.
 
 | Model |	SOLAR cmd |	`solarius` function |	Input data format |
 |-------|---------------|---------------------|-----------------------|
