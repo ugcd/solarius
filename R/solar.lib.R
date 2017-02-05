@@ -351,8 +351,12 @@ snpmap2solar <- function(map, dir)
 #'    Additional arguments to be passed to \code{df2solar}.
 #'
 #' @export
-solarKinship2 <- function(df, dir, ...)
+solarKinship2 <- function(df, dir, coef = c("phi2", "delta7"), ...)
 {
+  ### args
+  coef <- match.arg(coef)
+  
+  ### dir
   is.tmpdir <- missing(dir)
   if(is.tmpdir) {
     dir <- tempfile(pattern = "solarKinship2-")
@@ -372,12 +376,12 @@ solarKinship2 <- function(df, dir, ...)
   kf <- read_phi2_gz(phi2.gz)
   N.diag <- with(kf, sum(IBDID1 == IBDID2))
   stopifnot(N == N.diag)
-    
+
   # create `index` 
   kf <- kf_match_pedindex(kf, pf)
   
-  kf <- subset(kf, select = c("IBDID1", "IBDID2", "ID1", "ID2", "phi2"))
-  kmat <- kf2kmat(kf)
+  kf <- subset(kf, select = c("IBDID1", "IBDID2", "ID1", "ID2", coef))
+  kmat <- kf2kmat(kf, coef = coef)
   
   ###clean
   if(is.tmpdir) {
@@ -387,10 +391,13 @@ solarKinship2 <- function(df, dir, ...)
   return(kmat)
 }
 
-kf2kmat <- function(kf)
+kf2kmat <- function(kf, coef = c("phi2", "delta7"))
 {
+  ### args
+  coef <- match.arg(coef)
+  
   stopifnot(class(kf) == "data.frame")
-  stopifnot(all(c("ID1", "ID2", "phi2") %in% names(kf)))
+  stopifnot(all(c("ID1", "ID2", coef) %in% names(kf)))
   
   ids <- unique(c(kf$ID1, kf$ID2))
   N <- length(ids)
@@ -400,8 +407,8 @@ kf2kmat <- function(kf)
   colnames(kmat) <- ids
   
   for(i in 1:nrow(kf)) {
-    kmat[kf$ID1[i], kf$ID2[i]] <- kf$phi2[i]
-    kmat[kf$ID2[i], kf$ID1[i]] <- kf$phi2[i]
+    kmat[kf$ID1[i], kf$ID2[i]] <- kf[i, coef]
+    kmat[kf$ID2[i], kf$ID1[i]] <- kf[i, coef]
   }
   
   return(kmat)
