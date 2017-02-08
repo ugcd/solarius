@@ -337,6 +337,9 @@ snpmap2solar <- function(map, dir)
 #' where the kinship coefficients multiplied 
 #' by 2 are stored by SOLAR.
 #' 
+#' See \url{http://www.biostat.wustl.edu/genetics/geneticssoft/manuals/solar210/08.chapter.html},
+#' "8.2 Kinship Coefficients: phi2.gz"
+#'
 #' @note
 #' IDs in \code{df} are assumed to be not duplicated. 
 #'
