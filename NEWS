@@ -1,3 +1,12 @@
+solarius 0.3.2
+==================
+
+* Added Z-scores and p-value based on Z-scores for bi-variate polygenic analysis 
+  (slot `vcf`, columns `Z` and `pvalZ`).
+  In general, it is not suggested to use Z-scores to derive p-values, 
+  but this info. can be useful, when the models are prone to convergence failure
+  and LRT is not possible.
+  
 solarius 0.3.1
 ==================
 

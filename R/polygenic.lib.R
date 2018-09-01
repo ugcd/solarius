@@ -277,7 +277,9 @@ extractVarCompFrame <- function(dir, out)
     vcf <- data.frame(varcomp = tab[-indSE, 1], Estimate = tab[-indSE, 2], SE = tab[indSE, 2])
     
     Estimate <- SE <- NULL # due to R CMD check: no visible binding
-    vcf <- mutate(vcf, zscore = Estimate / SE)
+    vcf <- mutate(vcf, 
+      Z = Estimate / SE,
+      pvalZ = pchisq(Z, df = 1, lower.tail = FALSE))
   }  
   
   return(vcf)
